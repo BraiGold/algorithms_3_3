@@ -35,21 +35,40 @@ bool aparece(vector<int> mapeo, vector<vector<int > > grafoGrande, int i, int j)
 	return respuesta;
 }
 
+bool yaEsta(vector<pair<int, int> > vec, int i, int j) {
+	//esta función es para verificar que no hayamos agregado la arista todavia, es decir, si agregamos (u, v), no queremos que se agregue (v, u) ya que son la misma 
+	bool res = false;
+	for (int k = 0; k < vec.size(); k++) {
+		if ( (vec[k].first == i && vec[k].second == j) || (vec[k].first == j && vec[k].second == i) ) {
+			res = true;
+		}
+	}
+	return res;
+}
+
 vector<pair<int, int> > calcularConjAristas(vector<int> mapeo, vector<vector<int > > grafoChico, vector<vector<int > > grafoGrande) {
 	vector<pair<int, int> > respuesta; //para este mapeo, cual es el subgrafo comun maximo
 	pair<int, int> arista;
+	//DEBUG//cerr << "----------------------------" << endl;
+	//DEBUG//cerr << "Calcular Conjunto de Aristas con Mapeo: " << endl;
+	//DEBUG//for (int h = 0; h < mapeo.size(); h++) {
+	//DEBUG//	cerr << "El nodo " << h << " del primer grafo es la " << mapeo[h] << " del segundo" << endl;
+	//DEBUG//}
 	for (int i = 0; i < grafoChico.size(); i++) { //nos fijamos si la arista que esta en el grafoChico, aparece en el grafoGrande (con este mapeo)
 		for (int j = 0; j < grafoChico[i].size(); j++) {
-			if (aparece(mapeo, grafoGrande, i, j)) {
+			if (aparece(mapeo, grafoGrande, i, grafoChico[i][j]) && !yaEsta(respuesta, i, grafoChico[i][j])) { //cambie j por grafoChico[i][j] y agregue "!yaEsta" . Manu
 				arista.first = i;
-				arista.second = j;
+				arista.second = grafoChico[i][j]; //cambie j por grafoChico[i][j]
 				respuesta.push_back(arista);
 			}
 		}
 	}
+	//DEBUG//cerr << "la respuesta para este mapeo es: " << endl;
+	//DEBUG//for (int h = 0; h < respuesta.size(); h++) {
+	//DEBUG//	cerr << "(" << respuesta[h].first << ", " << respuesta[h].second << ")" << endl;
+	//DEBUG//	}
 	return respuesta;
 }
-
 
 vector<pair<int, int > > MCS(vector<int> mapeo, vector<vector<int > > verticesPosibles, vector<pair<int, int> > mejorActual, int tamGrande, vector<vector<int > > grafoChico, vector<vector<int > > grafoGrande) { //en mejorActual tengo el conjunto de aristas que representa el MCS hasta el momento
 	if (estanTodosVacios(verticesPosibles)) {
@@ -92,7 +111,6 @@ vector<pair<int, int > > MCS(vector<int> mapeo, vector<vector<int > > verticesPo
 	}
 
 }
-
 
 int main() {
 	int m1, n1, m2, n2;
@@ -145,15 +163,23 @@ int main() {
 	}
 	
 	vector<pair<int, int> > mejorActual;
+	vector<pair<int, int> > maxcomsub;
 
 	//MCS(vector<int> mapeo, vector<vector<int > > verticesPosibles, vector<pair<int, int> > mejorActual, int tamGrande, vector<vector<int > > grafoChico, vector<vector<int > > grafoGrande)
 	if (n1 > n2) {
-		vector<pair<int, int> > maxcomsub = MCS(mapeo, verticesPosibles, mejorActual, n1, grafo2, grafo1);
+		mejorActual = calcularConjAristas(mapeo, grafo2, grafo1);
+		maxcomsub = MCS(mapeo, verticesPosibles, mejorActual, n1, grafo2, grafo1);
 	} else {
-		vector<pair<int, int> > maxcomsub = MCS(mapeo, verticesPosibles, mejorActual, n2, grafo1, grafo2);
+		mejorActual = calcularConjAristas(mapeo, grafo1, grafo2);
+		maxcomsub = MCS(mapeo, verticesPosibles, mejorActual, n2, grafo1, grafo2);
+
 	}
 
-	cerr 
+	cout << "Respuesta: " << endl;
+
+	for (int i = 0; i < maxcomsub.size(); i++) {
+		cout << "(" << maxcomsub[i].first << ", " << maxcomsub[i].second << ")" << endl; 
+	}
 
 	return 0;
 }
