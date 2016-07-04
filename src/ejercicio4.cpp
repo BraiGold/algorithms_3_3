@@ -277,7 +277,6 @@ int main() {
 		//el grafo grande es el 2
 		respuesta = MCSgoloso(grafo2, grafo1, gradosGrafo2, gradosGrafo1);
 		cout << n1 << " " << respuesta.size() << endl;
-
 	}
 
 
