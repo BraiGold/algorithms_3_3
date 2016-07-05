@@ -35,7 +35,7 @@ bool esta(int a, vector<int> vec) {
 	return res;
 }
 
-void ordenarGrafo(vector<vector<int> > &grafoOriginal, vector<pair<int, int> > grafoPorGrados) {
+vector<vector<int> > ordenarGrafo(vector<vector<int> > grafoOriginal, vector<pair<int, int> > grafoPorGrados) {
 	vector<vector<int> > grafoProvisorio;
 	vector<int> vacio;
 	for (int i = 0; i < grafoOriginal.size(); i++) {
@@ -48,11 +48,7 @@ void ordenarGrafo(vector<vector<int> > &grafoOriginal, vector<pair<int, int> > g
 			}
 		}
 	}
-	for (int i = 0; i < grafoOriginal.size(); i++) {
-		for (int j = 0; j < grafoOriginal[i].size(); j++) {
-			grafoOriginal[i][j] = grafoProvisorio[i][j];
-		}
-	}
+	return grafoProvisorio;
 
 }
 
@@ -86,7 +82,7 @@ vector<int> MCSgoloso(vector<vector<int> > grafoGrande, vector<vector<int> > gra
 	return mapeo;      
 }
 
-vector<int> hacerMCSgoloso(vector<vector<int> > grafo1, vector<vector<int> > grafo2, vector<vector<int> > grafo1ordenado, vector<vector<int> > grafo2ordenado, int n1, int n2) {
+vector<int> hacerMCSgoloso(vector<vector<int> > grafo1viejo, vector<vector<int> > grafo2viejo, vector<vector<int> > grafo1ordenado, vector<vector<int> > grafo2ordenado, int n1, int n2) {
 	vector<pair<int, int> > gradosGrafo1; //vector que en cada posicion tiene (nodo, grado). Al principio cada posicion i del vector tiene (nodo i, grado), pero luego lo ordenamos y esto se deja de cumplir. Pierdo info de aristas
 	vector<pair<int, int> > gradosGrafo2; //vector que en cada posicion tiene (nodo, grado). Al principio cada posicion i del vector tiene (nodo i, grado), pero luego lo ordenamos y esto se deja de cumplir.
 
@@ -94,21 +90,24 @@ vector<int> hacerMCSgoloso(vector<vector<int> > grafo1, vector<vector<int> > gra
 
 	for (int i = 0; i < n1; i++) {
 		nodoGrado.first = i;
-		nodoGrado.second = grafo1[i].size();
+		nodoGrado.second = grafo1viejo[i].size();
 		gradosGrafo1.push_back(nodoGrado);
 	}
 
 	for (int i = 0; i < n2; i++) {
 		nodoGrado.first = i;
-		nodoGrado.second = grafo2[i].size();
+		nodoGrado.second = grafo2viejo[i].size();
 		gradosGrafo2.push_back(nodoGrado);
 	}
 
 	sort (gradosGrafo1.begin(), gradosGrafo1.end(), comparacion); //ordeno los nodos por grado (de mayor a menor)
 	sort (gradosGrafo2.begin(), gradosGrafo2.end(), comparacion); //ordeno los nodos por grado (de mayor a menor)
 
-	ordenarGrafo(grafo1, gradosGrafo1); //cada posicion es un nodo, y adentro tiene la lista de sus vecinos. Ordenamos esa lista por grado. 
-	ordenarGrafo(grafo2, gradosGrafo2); //cada posicion es un nodo, y adentro tiene la lista de sus vecinos. Ordenamos esa lista por grado. 
+	vector<vector<int> > grafo1;
+	vector<vector<int> > grafo2;
+
+	grafo1 = ordenarGrafo(grafo1viejo, gradosGrafo1); //cada posicion es un nodo, y adentro tiene la lista de sus vecinos. Ordenamos esa lista por grado. 
+	grafo2 = ordenarGrafo(grafo2viejo, gradosGrafo2); //cada posicion es un nodo, y adentro tiene la lista de sus vecinos. Ordenamos esa lista por grado. 
 
 	vector<int> mapeoInicial;
 
@@ -118,6 +117,7 @@ vector<int> hacerMCSgoloso(vector<vector<int> > grafo1, vector<vector<int> > gra
 		//el grafo grande es el 2
 		mapeoInicial = MCSgoloso(grafo2, grafo1, gradosGrafo2, gradosGrafo1);
 	}
+	return mapeoInicial;
 
 }
 
