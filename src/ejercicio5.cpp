@@ -151,7 +151,7 @@ vector<vector<int> > calcularVecindadUnoTipoA(vector<int> mapeo) {
 	}
 	
 	vector<int> mapeoVecino;
-	int a, b, aux;
+	int a, b;
 	for (int i = 0; i < randoms.size(); i++) {
 		for (int j = 0; j < mapeo.size(); j++) { // mapeoVecino = mapeo
 			mapeoVecino.push_back(mapeo[j]);
@@ -160,9 +160,56 @@ vector<vector<int> > calcularVecindadUnoTipoA(vector<int> mapeo) {
 		a = randoms[i].first;
 		b = randoms[i].second;
 
-		aux = mapeoVecino[a];
-		mapeoVecino[a] = b;
-		mapeoVecino[b] = aux;
+		mapeoVecino[a] = mapeo[b];
+		mapeoVecino[b] = mapeo[a];
+
+		respuesta.push_back(mapeoVecino);
+	}	
+
+	return respuesta;
+
+}
+
+vector<vector<int> > calcularVecindadDosTipoA(vector<int> mapeo) {
+	vector<vector<int> > respuesta;
+
+	vector<pair<int, pair<int, int> > > randoms;
+	int r1, r2, r3;
+	pair<int, pair<int, int> > tripla;
+	for (int i = 0; i < mapeo.size(); i++) {
+		//peso = randombis() %  (max_peso - min_peso + 1) + min_peso;  
+		r1 = randombis() % (mapeo.size()); // entre 0 y mapeo.size() - 1
+		r2 = randombis() % (mapeo.size()); // entre 0 y mapeo.size() - 1
+		r3 = randombis() % (mapeo.size()); // entre 0 y mapeo.size() - 1
+
+		while(r1 == r2 || r1 == r3 || r2 == r3 || estaTripla(r1, r2, r3, randoms)) {
+			r1 = randombis() % (mapeo.size());
+			r2 = randombis() % (mapeo.size());
+			r3 = randombis() % (mapeo.size());
+
+		}
+		tripla.first = r1;
+		tripla.second.first = r2;
+		tripla.second.second = r3;
+
+		randoms.push_back(tripla);
+	}
+	
+	vector<int> mapeoVecino;
+	int a, b, c;
+	for (int i = 0; i < randoms.size(); i++) {
+		for (int j = 0; j < mapeo.size(); j++) { // mapeoVecino = mapeo
+			mapeoVecino.push_back(mapeo[j]);
+		}
+
+		a = randoms[i].first;
+		b = randoms[i].second.first;
+		c = randoms[i].second.second;
+
+
+		mapeoVecino[a] = mapeo[b];
+		mapeoVecino[b] = mapeo[c];
+		mapeoVecino[c] = mapeo[a];
 
 		respuesta.push_back(mapeoVecino);
 	}	
@@ -211,7 +258,7 @@ vector<pair<int, int> > calcularConjAristas(vector<int> mapeo, vector<vector<int
 	return respuesta;
 }
 
-vector<vector<int> > calcularVecindadUnoTipoB(vector<int> mapeo, int totalNodosGrafoGrande) {
+vector<vector<int> > calcularVecindadTipoB(vector<int> mapeo, int totalNodosGrafoGrande) {
 	vector<vector<int> > respuesta;
 
 	vector<pair<int, int> > randoms;
@@ -301,7 +348,7 @@ vector<int> MCSbusquedaLocalUno(vector<int> mapeo, vector<vector<int> > grafoChi
 	cerr << "entre a busqueda local" << endl;
 	vector<vector<int> > vecindadA = calcularVecindadUnoTipoA(mapeo);
 	cerr << "ya hice vecindad A" << endl;
-	vector<vector<int> > vecindadB = calcularVecindadUnoTipoB(mapeo, grafoGrande.size());
+	vector<vector<int> > vecindadB = calcularVecindadTipoB(mapeo, grafoGrande.size());
 	bool seguir = true;
 	while (seguir) {
 		cerr << "antes del mejor" << endl;
@@ -316,9 +363,29 @@ vector<int> MCSbusquedaLocalUno(vector<int> mapeo, vector<vector<int> > grafoChi
 		}
 	}
 	return mapeo;
-
-
 }
+
+vector<int> MCSbusquedaLocalDos(vector<int> mapeo, vector<vector<int> > grafoChico, vector<vector<int> > grafoGrande) {
+	cerr << "entre a busqueda local" << endl;
+	vector<vector<int> > vecindadA = calcularVecindadDosTipoA(mapeo);
+	cerr << "ya hice vecindad A" << endl;
+	vector<vector<int> > vecindadB = calcularVecindadTipoB(mapeo, grafoGrande.size());
+	bool seguir = true;
+	while (seguir) {
+		cerr << "antes del mejor" << endl;
+		vector<int> mapeoNuevo = dameElMejor(vecindadA, vecindadB, mapeo, grafoChico, grafoGrande);
+		cerr << "despues del mejor" << endl;
+		if (sonIguales(mapeoNuevo, mapeo)) {
+			seguir = false;
+		} else {
+			for (int i = 0; i < mapeo.size(); i++) {
+				mapeo[i] = mapeoNuevo[i];
+			}
+		}
+	}
+	return mapeo;
+}
+
 
 vector<vector<int> > grafo1;
 vector<vector<int> > grafo2;
