@@ -17,21 +17,8 @@ bool esta(int a, vector<int> vec) {
 	}
 	return res;
 }
-
-bool aparece(vector<int> mapeo, vector<vector<int > > grafoGrande, int i, int j) {
-	int vertice1 = mapeo[i];
-	int vertice2 = mapeo[j];
-	bool respuesta = false;
-	for (int i = 0; i < grafoGrande[vertice1].size(); i++) {
-		if (grafoGrande[vertice1][i] == vertice2) {
-			respuesta = true;
-		}
-	}
-	return respuesta;
-}
-
 bool yaEsta(vector<pair<int, int> > vec, int i, int j) {
-	//esta función es para verificar que no hayamos agregado la arista todavia, es decir, si agregamos (u, v), no queremos que se agregue (v, u) ya que son la misma 
+	//esta función es para verificar que no hayamos agregado la arista todavia, es decir, si agregamos (u, v), no queremos que se agregue (v, u) ya que son la misma ni que este (u,v)
 	bool res = false;
 	for (int k = 0; k < vec.size(); k++) {
 		if ( (vec[k].first == i && vec[k].second == j) || (vec[k].first == j && vec[k].second == i) ) {
@@ -41,28 +28,64 @@ bool yaEsta(vector<pair<int, int> > vec, int i, int j) {
 	return res;
 }
 
+bool aparece(vector<int> mapeo, vector<vector<int > > grafoGrande, int i, int j) {
+	int vertice1 = mapeo[i];
+	int vertice2 = mapeo[j];
+	bool respuesta = false;
+	for (int h = 0; h < grafoGrande[vertice1].size(); h++) {
+		if (grafoGrande[vertice1][h] == vertice2) {  // me voy al grafo grande y busco si esta la arista (vertice1, vertice2)
+			respuesta = true;
+		}
+	}
+	return respuesta;
+}
 
 vector<pair<int, int> > calcularConjAristas(vector<int> mapeo, vector<vector<int > > grafoChico, vector<vector<int > > grafoGrande) {
 	vector<pair<int, int> > respuesta; //para este mapeo, cual es el subgrafo comun maximo
 	pair<int, int> arista;
+/*
+	cerr << "grafoChico:" << endl;
+	for(int i = 0; i < grafoChico.size(); i++) {
+		for(int j = 0; j < grafoChico[i].size(); j++) {
+			cerr << "(" << i << ", " << grafoChico[i][j] << ")" << endl;
+		}
+	}
+
+	cerr << "grafoGrande:" << endl;
+	for(int i = 0; i < grafoGrande.size(); i++) {
+		for(int j = 0; j < grafoGrande[i].size(); j++) {
+			cerr << "(" << i << ", " << grafoGrande[i][j] << ")" << endl;
+		}
+	}
+*/
+	//cerr << "la respuesta esta llena de esta caca: " << endl;
+	//cerr << "la respuesta tiene tam: " << respuesta.size() <<  endl;
+
+	//for (int h = 0; h < respuesta.size(); h++) {
+	//cerr << "(" << respuesta[h].first << ", " << respuesta[h].second << ")" << endl;
+	//	}
 	//DEBUG//cerr << "----------------------------" << endl;
 	//DEBUG//cerr << "Calcular Conjunto de Aristas con Mapeo: " << endl;
 	//DEBUG//for (int h = 0; h < mapeo.size(); h++) {
 	//DEBUG//	cerr << "El nodo " << h << " del primer grafo es la " << mapeo[h] << " del segundo" << endl;
 	//DEBUG//}
 	for (int i = 0; i < grafoChico.size(); i++) { //nos fijamos si la arista que esta en el grafoChico, aparece en el grafoGrande (con este mapeo)
-		for (int j = 0; j < grafoChico[i].size(); j++) {
-			if (aparece(mapeo, grafoGrande, i, grafoChico[i][j]) && !yaEsta(respuesta, i, grafoChico[i][j])) { //cambie j por grafoChico[i][j] y agregue "!yaEsta" . Manu
-				arista.first = i;
-				arista.second = grafoChico[i][j]; //cambie j por grafoChico[i][j]
-				respuesta.push_back(arista);
+		if (mapeo[i] != -1) { 
+			for (int j = 0; j < grafoChico[i].size(); j++) {
+				if(mapeo[grafoChico[i][j]] != -1){ 
+					if (aparece(mapeo, grafoGrande, i, grafoChico[i][j]) && !yaEsta(respuesta, i, grafoChico[i][j])) {
+						arista.first = i;
+						arista.second = grafoChico[i][j]; 
+						respuesta.push_back(arista);
+					}
+				}
 			}
 		}
 	}
-	//DEBUG//cerr << "la respuesta para este mapeo es: " << endl;
-	//DEBUG//for (int h = 0; h < respuesta.size(); h++) {
-	//DEBUG//	cerr << "(" << respuesta[h].first << ", " << respuesta[h].second << ")" << endl;
-	//DEBUG//	}
+	/*cerr << "la respuesta para este mapeo es: " << endl;
+	for (int h = 0; h < respuesta.size(); h++) {
+		cerr << "(" << respuesta[h].first << ", " << respuesta[h].second << ")" << endl;
+		}*/
 	return respuesta;
 }
 
@@ -119,14 +142,16 @@ vector<int> DFS(vector<vector<int> > adyacencias) {
 
 	return orden; 
 }*/
+int EldeMayorGradoSinUsarDelGGrande(vector<int> mapeo, vector<pair<int, int> > gradosGrafoGrande) {
 
+}
 
 vector<pair<int, int> > MCSgoloso(vector<vector<int> > grafoGrande, vector<vector<int> > grafoChico, vector<pair<int, int> > gradosGrafoGrande, vector<pair<int, int> > gradosGrafoChico) {
 
 	//vector<int> pilaChico; //pila del grafo chico
 	//vector<int> pilaGrande; //pila del grafo grande
 	vector<int> mapeo;
-	vector<int> cola;
+	vector<int> pila;
 
 	for (int i = 0; i < grafoChico.size(); i++) {
 		mapeo.push_back(-1);
@@ -136,20 +161,32 @@ vector<pair<int, int> > MCSgoloso(vector<vector<int> > grafoGrande, vector<vecto
 	//pilaGrande.push_back(grafoGrande[0]);
 
 	mapeo[gradosGrafoChico[0].first] = gradosGrafoGrande[0].first;
-	cola.push_back(gradosGrafoChico[0].first);
+	pila.push_back(gradosGrafoChico[0].first);
 	int j;
+	int indice;
 
-	while(cola.size() > 0) { 
-		j = cola.back();
-		cola.pop_back();
+	while(noHayMapeoEnMenosUno(mapeo)){
 
-		for(int i = 0; i < min(grafoChico[j].size(), grafoGrande[mapeo[j]].size()); i++) {
-			if(mapeo[grafoChico[j][i]] == -1){ 
-				mapeo[grafoChico[j][i]] = grafoGrande[mapeo[j]][i];
-				cola.push_back(grafoChico[j][i]);
+		indice = buscarMayorGradoSinMapear(mapeo, gradosGrafoChico);
+		mapeo[inice] = EldeMayorGradoSinUsarDelGGrande(mapeo, gradosGrafoGrande);
+
+		while(pila.size() > 0) { 
+			j = pila.back();
+			pila.pop_back();
+			for(int i = 0; i < min(grafoChico[j].size(), grafoGrande[mapeo[j]].size()); i++) {//hasta el que tiene menos vecinos
+				if(mapeo[grafoChico[j][i]] == -1){ //mapeo los vecinos con los vecinos
+					mapeo[grafoChico[j][i]] = grafoGrande[mapeo[j]][i];
+					pila.push_back(grafoChico[j][i]);
+				}
 			}
 		}
-		
+
+	}
+
+	cerr << "----------------------------" << endl;
+	cerr << "Calcular Conjunto de Aristas con Mapeo: " << endl;
+	for (int h = 0; h < mapeo.size(); h++) {
+		cerr << "El nodo " << h << " del primer grafo es la " << mapeo[h] << " del segundo" << endl;
 	}
 
 	vector<pair<int, int> > respuesta;
@@ -190,19 +227,19 @@ int main() {
 	cin >> n1 >> m1 >> n2 >> m2;
 	vector<vector<int> > grafo1;
 	vector<vector<int> > grafo2;
-	vector<vector<int> > grafo1ordenado;
-	vector<vector<int> > grafo2ordenado;
+	//vector<vector<int> > grafo1ordenado;
+	//vector<vector<int> > grafo2ordenado;
 
 	vector<int> vacio;
 
 	for (int i = 0; i < n1; i++) {
 		grafo1.push_back(vacio);
-		grafo1ordenado.push_back(vacio);
+	//	grafo1ordenado.push_back(vacio);
 	}
 
 	for (int i = 0; i < n2; i++) {
 		grafo2.push_back(vacio);
-		grafo2ordenado.push_back(vacio);	
+	//	grafo2ordenado.push_back(vacio);	
 	}
 
 	int v1, v2;
@@ -239,7 +276,8 @@ int main() {
 	sort (gradosGrafo1.begin(), gradosGrafo1.end(), comparacion); //ordeno los nodos por grado (de mayor a menor)
 	sort (gradosGrafo2.begin(), gradosGrafo2.end(), comparacion); //ordeno los nodos por grado (de mayor a menor)
 
-/* DEBUG------------------------------------------------------------------
+
+/*// DEBUG------------------------------------------------------------------
 	cout << "Grafo 1 (nodos) ordenado por grados: " << endl;
 	for(int i = 0; i < n1; i++) {
 		cout << "(" << gradosGrafo1[i].first << ", " << gradosGrafo1[i].second << ")" << endl;
@@ -250,13 +288,13 @@ int main() {
 		cout << "(" << gradosGrafo2[i].first << ", " << gradosGrafo2[i].second << ")" << endl;
 	}
 
-	------------------------------------------------------------------ DEBUG */
+//	------------------------------------------------------------------ DEBUG */
 
 	ordenarGrafo(grafo1, gradosGrafo1); //cada posicion es un nodo, y adentro tiene la lista de sus vecinos. Ordenamos esa lista por grado. 
 	ordenarGrafo(grafo2, gradosGrafo2); //cada posicion es un nodo, y adentro tiene la lista de sus vecinos. Ordenamos esa lista por grado. 
 
 
-/* DEBUG------------------------------------------------------------------
+/*// DEBUG------------------------------------------------------------------
 
 	cout << "Grafo 1 ordenado por grados (con aristas tambien)" << endl;
 	for (int i = 0; i < grafo1.size(); i++) {
@@ -266,7 +304,16 @@ int main() {
 		}
 		cout << endl;
 	}
-	------------------------------------------------------------------ DEBUG */
+
+	cout << "Grafo 2 ordenado por grados (con aristas tambien)" << endl;
+	for (int i = 0; i < grafo2.size(); i++) {
+		cout << "Vecinos del nodo " << i << ":" << endl;
+		for (int j = 0; j < grafo2[i].size(); j++) {
+			cout << grafo2[i][j] << " - " ;
+		}
+		cout << endl;
+	}
+//	------------------------------------------------------------------ DEBUG */
 
 	vector<pair<int, int> > respuesta;
 

@@ -196,7 +196,11 @@ bool yaEsta(vector<pair<int, int> > vec, int i, int j) {
 vector<pair<int, int> > calcularConjAristas(vector<int> mapeo, vector<vector<int > > grafoChico, vector<vector<int > > grafoGrande) {
 	vector<pair<int, int> > respuesta; //para este mapeo, cual es el subgrafo comun maximo
 	pair<int, int> arista;
-	
+	cerr << "entre a calcularConjAristas" << endl;
+	for (int i = 0; i < mapeo.size(); i++) {
+		cerr << mapeo[i] << " " ;
+	}
+	cerr << endl;
 	for (int i = 0; i < grafoChico.size(); i++) { 
 		for (int j = 0; j < grafoChico[i].size(); j++) {
 			if (aparece(mapeo, grafoGrande, i, grafoChico[i][j]) && !yaEsta(respuesta, i, grafoChico[i][j])) { 
@@ -248,10 +252,13 @@ vector<vector<int> > calcularVecindadTipoB(vector<int> mapeo, int totalNodosGraf
 }
 
 vector<int> dameElMejor(vector<vector<int> > vecindadA, vector<vector<int> > vecindadB, vector<int> mapeo, vector<vector<int> > grafoChico, vector<vector<int> > grafoGrande){
+	cerr << "entre a dameElMejor" << endl;
 	int esVecindadA;
 	bool esDeLaA = false;
 	int esVecindadB;
+	cerr << "voy a entrar a calcularConjAristas" << endl;
 	vector<pair<int,int> > conjAristas = calcularConjAristas(mapeo, grafoChico, grafoGrande);
+	cerr << "ya calcule conjAristas" << endl;
 	int maximoTamano = conjAristas.size();
 	bool esDelMapeoInicial = true;
 	int cantAristas;
