@@ -1,0 +1,54 @@
+Pasos para hacer una búsqueda taboo bien bonita:
+
+	1) La búsqueda Taboo al igual que la búsqueda local, es una metaheurística que se basa en moverse de una solución otra.
+	   Por lo tanto el punto de partida puede ser el goloso (al igual que en búsqueda local)ç
+	2) El problema que tiene búsqueda local que taboo quiere solucionar es no estancarse en óptimos locales. Esto se soluciona de la siguiente manera:
+		a) Si estás parada en una solución y es un óptimo local, te podés mover al mejor de los vecinos AÚN SI EMPEORA.
+		b) Esto lleva a que si estoy en s óptimo local y me muevo a s' vecino de s tal que s' < s y el mejor vecino de s' es s, tu secuencia va a ser s -> s' -> s .... Cómo solucionamos esto? Con la lista taboo, que nos prohibe volver a donde venimos.
+		Además no alcanza con prohibir el último porque podría pasarte s -> s' -> s'' -> s... Entonces la lista taboo tiene varias soluciones. La estructura de una lista taboo es una cola donde cuando llega al tamaño límite la solución más vieja de la lista desaparece de la misma. Esto es porque la idea es que cuando nos movimos demasiado de la solución más vieja de la lista, se supone que ya estamos medio lejos entonces es difícil que volvamos.
+		c) También hay restricciones de tiempo y memoria, el problema de guardar todo en la lista taboo no es sólo de memoria sino que a la hora de verificar si una solución está o no en la lista Taboo hay que comparar con todas las de la lista y eso es costoso. Entonces mi consejo es que la lista taboo sea chiquita, por ejemplo 1000 sería un buen número, pero mejor aún sería algo que dependa del tamaño del grafo, como por ejemplo raiz(n). Prueben con ambas y digan cual les quedó mejor.
+		d) La lista taboo se usa en dos ocasiones, una para ver si algo está o no en la lista taboo, y otra para actualizarla (agregar soluciones, y si se llenó sacar la más vieja). En cada iteración la consulto para cada vecino y la actualizo una sóla vez. Entonces estaría bueno poder consultar la lista rápido para ver si una solución está o no en la lista, para eso se puede usar set<vector<int> > que busca soluciones en O(log cantSoluciones * tamaño de las soluciones), pero es medio incómoda esta estructura para saber cuál es el más viejo, en paralelo con el set, guardás la información también en un queue<vector<int> > (cola fifo). Comparar soluciones es preguntarle al set si la tiene, para saber si mapeo está en el set soluciones hacés if(soluciones.find(mapeo) == soluciones.end()) no está y si es != sí está. La cola la modificás haciendo cola.push(mapeo) para agregar mapeo al final, cola.pop() para sacar al primero y antes de sacarlo para saber cuál es y sacarlo del set hacés mapeoQueTengoQueSacar = cola.front() y después le tirás el cola.pop() y CREO que es soluciones.erase(mapeoQueTengoQueSacar) pero por las dudas googlealo porque por ahí el erase funciona sólo con iteradores, la verdad que no me acuerdo.
+		e) Como elijo el mejor vecino que NO esté en la lista Taboo? El pseudocódigo de la metaheurística que después se adapta a cada problema es el siguiente:
+			movermeAVecino(solucion s) // el paso en el que me muevo al mejor vecino que no está en la lista taboo
+				mejorVecino = vecinoRandom; // que no esté en Taboo
+				solucionMejorVecino = calcularSolucion(mejorVecino)
+				for(s': vecinos de s)
+				if(noEnTaboo(s'))
+					int bla = calcularSolucion(s')
+					if(bla es mejor que solucionMejorVecino)
+						solucionMejorVecino = bla
+						mejorVecino = s'
+				return mejorVecino
+		f) Esto puede tener un problema, s puede tener muchos vecinos, por ejemplo si n = 1000 y tus vecinos son cambiar el mapeo de 2 nodos, vas a tener aprox n tomados de a 2 vecinos que es como medio millón, es muy costoso verlos todos (y esto aplica también a búsqueda local) entonces ves sólo algunos. Ponele que la lista taboo mida raiz(n) y mirás n vecinos, claramente uno no va a estar en la lista taboo, además si tenés 500.000 vecinos, y la lista taboo mide 2000 y mirás 1000, te parece que justo de 500.000 vas a elegir 1000 de esos 2000? no, no pasa NUNCA eso. 
+
+		Diferencias con búsqueda local:
+
+			Búsqueda local: s => s' / s' > s && ParaTodo (s'' vecino de s) s' > s''
+			Taboo: s => s' / ParaTodo (s'' vecino de s que NO está en la lista Taboo) s' > s'' && s' NO está en la lista Taboo
+
+			Con lo que vimos en f) podemos relajar la condición de ParaTodo (s'' vecino de s) por ParaTodo (s'' dentro del subconjunto de vecinos de s que miramos).
+
+
+	Experimentación:
+
+		Si quiero variar m puedo dejar n fijo y variar m (por ejemplo entre n y n tomados de a 2)
+		Si quiero variar n, estaría bueno hacer que n sea variable y m sea f(n) entonces n define todo el grafo, pero m no es constante. Si probás m = n-1 yo te voy a decir "eso es un caso muy particular son los árboles, puede ser un caso borde" si probás con m = (n(n-1))/2 lo mismo, si hacés por ejemplo 4 pruebas con m = n-1, m = 3n m = n^2/10 y m = (n(n-1))/2 ya no te puedo decir eso porque probaste con varios casos y encima algunos de ellos (en particular los del medio) no dicen mucho como si dice que sea un árbol o un completo.
+		NO SE MATEN haciendo 20 gráficos.
+		SIEMPRE grafiquen la curva de complejidad calculada, y para poder graficar esta curva está bueno que las complejidades les queden en terminos de cosas de la pinta n2^n1 y no n2 tomados de a n1 que es una cuenta con factoriales que en principio solo los saben calcular para enteros.
+		SIEMPRE es importante que si prueban dos o tres (o dosmil, las que terminen probando, no es necesario que sean muchas) cosas distintas en un algoritmo, si ya lo tienen programado, aprovechen, guardenlo, después lo corren y ponen los tiempos de ejecución (y resultados en el caso de las heurísticas) en un mismo gráfico. Por ejemplo, tenés 4 versiones del backtracking que son muy parecidas y cambian en cosas menores que pensás que te hacen mejorar el tiempo, corré las 4, y graficá sus tiempos todos en un mismo gráfico junto con la curva de complejidad del que quieras ver que es el mejor/peor o de todos, eso manejenlo ustedes.
+
+	Ejercicio 7:
+
+		Comparar soluciones. Lo primero que hay que hacer es comparar heurísticas, agarrá las 5 heurísticas (si tenés más mejor pero no es necesario) y comparalas. Un gráfico con los tiempos de ejecución, otro gráfico con los resultados.
+
+		Si H1 es más rápida y da mejores resultados que H2, entonces podemos decir que H1 es mejor que H2, pero ojo, esto no está demostrado ni nada porque podemos decir que para nuestras instancias eso pasa y no sabemos nada de las otras. Si probamos con por ejemplo 3 tipos de instancias y en las tres pasa esto, entonces podemos concluir que PROBABLEMENTE sea así para todas las instancias pero no lo podemos asegurar.
+
+		instancias: Cn - Bipartito (al azar y bipartito completo, como Knm)- Kn - Árboles(son una clase particular de bipartitos) - Estrellas (también bipartitos, son K1n) - Cografos - Random
+
+		Si en cambio para algunas instancias gana H1 y para otras H2 entonces está bueno decir que va a depender de la instancia y hablar un poco de eso.
+
+		Ahora... estamos hablando de que instancia por instancia gana H1 o gana H2, qué pasa si H1 es más rápido pero da peores resultados que H2, entonces hay dos posibilidades, que uno tarde 10 veces más y de cosas un 2% mejor o al revés que tarde 2% más y de cosas 10 veces mejor dice que ese 2% lo podemos y lo vamos a querer pagar porque es poquito en comparación con un x10, ahora el problema es la otra posibilidad, tarda el doble y da un resultado doblemente mejor, cuál es mejor de las dos? Siempre depende DEL CONTEXTO. Dar ejemplos (cartero y 5 años).
+
+		Si pasa esto no podemos decir nada, entonces está bueno que podamos ver como comparar las heurísticas. Si tenemos dos valores x e y y nos quedan x1 > x2 y y1 < y2 no podemos comparar (x1,y1) con (x2,y2) porque no sabemos como ordenar esto. Ahora, qué es lo que si podemos ordenar? Un sólo número, si estamos en R^2 no hay orden pero en R si. Entonces estaría bueno tener un sólo parámetro y que el otro no cambie, por ejemplo si x1 = x2 podemos comparar y1 con y2. Nuestros parámetros son resultado y tiempo... Podemos manejar el resultado? Obviamente no porque si queremos que de 200 y en una iteración salta de 100 a 300 cagamos. Entonces, qué sí podemos controlar? El tiempo! Si tenemos dos heurísticas que una tarda 10 segundos y la otra 20, es medio forzoso decirle a la que tarda 10 que tarde 20 porque por ahí otro criterio de parada nos dijo que ya no tiene sentido seguir con la heurística, pero sí podemos a la que tarda 20 decirle "A los 10 (o lo que tarde la más rápida) cortá y dame lo que tengas". Así comparamos ante un mismo tiempo, resultados de dos heurísticas y ahí sí podemos decir que para cierta instancia una se comporta mejor que la otra.
+
+		Ya comparamos heurísticas y somos felices hasta que nos damos cuenta que si tenemos 5 heurísticas malísimas no podemos concluir que la mejor de las 5 es buena, y si tenemos 5 heurísticas geniales no podemos decir que la peor de esas es mala. Entonces agarremos la mejor heurística que nos queda de los experimentos y veamos qué tan buena es. Para saber esto hay que ver si la solución óptima es T y la solución de la heurística es H cuánto porcentaje de T es H. Entonces... corremos el ejercicio 2? Tiene sentido? Vamos a poder medir grafos chiquitos donde la heurística por ahí no se aprovecha demasiado de todo su potencial. Entonces tenemos dos opciones. Una es encontrar familias que sepas viendolo a mano cuánto dan sin correrles un algoritmo. Por ejemplo un ciclo simple con un bipartito completo (n,n) va a dar el ciclo simple si tiene <= 2n nodos y sino dará el camino simple de a lo sumo 2n nodos, así pueden buscar otras familias (no se maten! con 2 o 3 casos alcanza y realmente está lleno de casos que se pueden ver a mano cuánto dan sin correr el algoritmo fácilmente). Otro ejemplo, árbol binario completo de n niveles y ciclo simple. Estos casos que probamos a mano, son de grafos bien definidos que sabemos qué son, porque si tenemos una familia de grafos que son todos distintos y que para cada uno da una cosa distinta, no podemos hacer la cuenta a mano, y está bueno poder correr la heurística con más de uno de los grafos de una familia de este tipo. Qué familias conocés que puedas correrles un algoritmo más rápido que el del ejercicio 2 y que sea exacto? Cografos y completos!
