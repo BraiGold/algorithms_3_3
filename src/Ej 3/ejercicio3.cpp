@@ -99,6 +99,47 @@ vector<Vertice> complementar(vector<Vertice> g) { // Complementa el grafo g
   return g_complemento;
 }
 
+int generar_solucion(vector<int>* res, Cotree* root, int n) { // Devuelve la cantidad de aristas de la solucion, y modifica res con los nodos de la solucion
+  if(root->id >= 0) {
+    res->push_back(root->id);
+    return 0;
+  } else {
+    vector<int> solucion;
+    int maxGlobal=0;
+    for(int i = 0; i < min(root->hijos[0]->nodos.size(), root->hijos[1]->nodos.size()); i++) {
+      int indice_menor = (min(root->hijos[0]->nodos.size(), root->hijos[1]->nodos.size()) == root->hijos[0]->nodos.size())? 0 : 1;
+      vector<int> vecIzq;
+      int aristasIzq = generar_solucion(&vecIzq, root->hijos[indice_menor], i);
+      vector<int> vecDer;
+      int aristasDer = generar_solucion(&vecDer, root->hijos[(indice_menor+1)%2], min(n-i, (int)root->hijos[(indice_menor+1)%2]->nodos.size()));
+      if(aristasDer + aristasIzq >= maxGlobal) {
+        maxGlobal = aristasDer + aristasIzq;
+        if(root->id == -1) maxGlobal+=(i*(n-i));
+        solucion.clear();
+        vector<int>::iterator inicio = vecIzq.begin();
+        vector<int>::iterator fin = vecIzq.end();
+        while(inicio != fin) {
+          solucion.push_back(*inicio);
+          inicio++;
+        }
+        inicio = vecDer.begin();
+        fin = vecDer.end();
+        while(inicio != fin) {
+          solucion.push_back(*inicio);
+          inicio++;
+        }
+      }
+    }
+    vector<int>::iterator inicio = solucion.begin();
+    vector<int>::iterator fin = solucion.end();
+    while(inicio != fin) {
+      res->push_back(*inicio);
+      inicio++;
+    }
+    return maxGlobal;
+  }
+} 
+
 void make_cotree(vector<Vertice>* g, Cotree* root) { // Dado el grafo g, arma el cotree y lo guarda en root
   if(obtener_nodos_posta(g) == 1) { // Es un K_1
     root->id = dame_unico_nodo(g); // O(n)
@@ -180,6 +221,12 @@ void binarizar(Cotree* src) { // Binariza el cotree pasado por parámetro
     aux->id = src->id;
     for(int i = src->hijos.size()-1; i > 0; i--) {
       aux->hijos.push_back(src->hijos[i]);
+      vector<int>::iterator inicio = src->hijos[i]->nodos.begin();
+      vector<int>::iterator fin = src->hijos[i]->nodos.end();
+      while(inicio != fin) {
+        aux->nodos.push_back(*inicio);
+        inicio++;
+      }
       src->hijos.pop_back();
     }
     src->hijos.push_back(aux);
@@ -288,4 +335,24 @@ int main(int argc, char *argv[]) {
   cout << "Binarizo el cotree y lo imprimo:" << endl;
   binarizar(&raiz);
   imprimirCotree(raiz);
+
+  cout << "imprimo vector de nodos pertenecientes" << endl;
+  vector<int> sol;
+  int aristasMax = generar_solucion(&sol, &raiz, 3);
+  vector<int>::iterator inicio = sol.begin();
+  vector<int>::iterator fin = sol.end();
+  while(inicio != fin) {
+    cout << *inicio << " ";
+    inicio++;
+  }
+  cout << endl;
+  cout << "aristas max:" << aristasMax << endl;
+
+  //cout << raiz.hijos[1]->hijos[1]->hijos[1]->aristas;
+  /*vector<int>::iterator inicio = raiz.hijos[1]->hijos[1]->nodos.begin();
+  vector<int>::iterator fin = raiz.hijos[1]->hijos[1]->nodos.end();
+  while(inicio != fin) {
+    cout << *inicio << " ";
+    inicio++;
+  }*/
 }
