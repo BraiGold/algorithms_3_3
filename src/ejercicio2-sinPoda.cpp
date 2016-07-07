@@ -3,9 +3,9 @@
 
 using namespace std;
 
-bool estaRepetido(int j, vector<int> mapeo, int k) {
+bool EstaYaMapeado(int j, vector<int> mapeo) {
 	bool respuesta = false;
-	for (int h = 0; h < k; h++){
+	for (int h = 0; h < mapeo.size(); h++){
 		if (j == mapeo[h]) {
 			respuesta = true;
 		}
@@ -13,22 +13,13 @@ bool estaRepetido(int j, vector<int> mapeo, int k) {
 	return respuesta;
 }
 
-bool estanTodosVacios(vector<vector<int > > verticesPosibles) {
-	bool respuesta = true;
-	for (int i = 0; i < verticesPosibles.size(); i++) {
-		if (verticesPosibles[i].size() != 0) {
-			respuesta = false;
-		}
-	}
-	return respuesta;
-}
 
 bool aparece(vector<int> mapeo, vector<vector<int > > grafoGrande, int i, int j) {
 	int vertice1 = mapeo[i];
 	int vertice2 = mapeo[j];
 	bool respuesta = false;
-	for (int i = 0; i < grafoGrande[vertice1].size(); i++) {
-		if (grafoGrande[vertice1][i] == vertice2) {
+	for (int h = 0; h < grafoGrande[vertice1].size(); h++) {
+		if (grafoGrande[vertice1][h] == vertice2) {  // me voy al grafo grande y busco si esta la arista (vertice1, vertice2)
 			respuesta = true;
 		}
 	}
@@ -49,93 +40,92 @@ bool yaEsta(vector<pair<int, int> > vec, int i, int j) {
 vector<pair<int, int> > calcularConjAristas(vector<int> mapeo, vector<vector<int > > grafoChico, vector<vector<int > > grafoGrande) {
 	vector<pair<int, int> > respuesta; //para este mapeo, cual es el subgrafo comun maximo
 	pair<int, int> arista;
-	cerr << "----------------------------" << endl;
-	cerr << "Calcular Conjunto de Aristas con Mapeo: " << endl;
-	for (int h = 0; h < mapeo.size(); h++) {
-		cerr <<  mapeo[h];
-	}
-	cerr << endl;
+
 	for (int i = 0; i < grafoChico.size(); i++) { //nos fijamos si la arista que esta en el grafoChico, aparece en el grafoGrande (con este mapeo)
-		for (int j = 0; j < grafoChico[i].size(); j++) {
-			if (aparece(mapeo, grafoGrande, i, grafoChico[i][j]) && !yaEsta(respuesta, i, grafoChico[i][j])) { //cambie j por grafoChico[i][j] y agregue "!yaEsta" . Manu
-				arista.first = i;
-				arista.second = grafoChico[i][j]; //cambie j por grafoChico[i][j]
-				respuesta.push_back(arista);
+		if (mapeo[i] != -1) { 
+			for (int j = 0; j < grafoChico[i].size(); j++) {
+				if(mapeo[grafoChico[i][j]] != -1){ 
+					if (aparece(mapeo, grafoGrande, i, grafoChico[i][j]) && !yaEsta(respuesta, i, grafoChico[i][j])) {
+						arista.first = i;
+						arista.second = grafoChico[i][j]; 
+						respuesta.push_back(arista);
+					}
+				}
 			}
 		}
 	}
-	cerr << "el tamaño de la respuesta para este mapeo es: " << respuesta.size() << endl;
-
 	return respuesta;
 }
 
-vector<pair<int, int > > MCS(vector<int> mapeo, vector<vector<int > > verticesPosibles, vector<pair<int, int> > mejorActual, int tamGrande, vector<vector<int > > grafoChico, vector<vector<int > > grafoGrande) { //en mejorActual tengo el conjunto de aristas que representa el MCS hasta el momento
-	cerr << "entro a mcs" << endl;
-	cerr << "el tamaño de la respuesta hasta ahora es: " << mejorActual.size() << endl;
+vector<int> mejorSolucion;
+vector<pair<int, int> > aristasMejorSolucion;
 
-	if (estanTodosVacios(verticesPosibles)) {
-		cerr << "estan todos vacios" << endl;
-		return mejorActual;
-	} else {
-		if (verticesPosibles[verticesPosibles.size()-1].size() == 0) { // esta vacio el ultimo?
-			cerr << "el ultimo es vacio" << endl;
-			int ultimoNoVacio;
-			for (int i = verticesPosibles.size() - 1; i >= 0; i--) { //buscamos el ultimo no vacio
-				if (verticesPosibles[i].size() != 0) {
-					ultimoNoVacio = i;
-					break;
-				}
+void MCS(vector<int> mapeo, vector<vector<int> > grafoChico, vector<vector<int> > grafoGrande) { // O(n2+m2) 
+	// mapeo va a tener las cosas que mapeamos HASTA EL MOMENTO
+	// asumimos G1.size() <= G2.size() para no llenar nuestro codigo de IFs que son FEOS LOS IFs
+	if (mapeo.size() == grafoChico.size()) {// ya mapeamos todo
+		// Nos fijamos si mapeo es mejor que mejorSolucion y si lo es hacemos mejorSolucion = mapeo;
+		vector<pair<int, int> > solucionProvisoria = calcularConjAristas(mapeo, grafoChico, grafoGrande);
+		if (solucionProvisoria.size() > aristasMejorSolucion.size() ) {
+			for (int i = 0; i < aristasMejorSolucion.size(); i++) {
+				aristasMejorSolucion[i].first = solucionProvisoria[i].first;
+				aristasMejorSolucion[i].second = solucionProvisoria[i].second;
 			}
-			int dameUno = verticesPosibles[ultimoNoVacio].back();
-			verticesPosibles[ultimoNoVacio].pop_back(); //sinUno
-			mapeo[ultimoNoVacio] = dameUno;
-			for (int k = ultimoNoVacio + 1; k < mapeo.size(); k++) { //llenamos todos los conjuntos siguientes (ya que todos estan vacios)
-				for (int j = 0; j < tamGrande; j++) {
-					if (!estaRepetido(j, mapeo, k)) {
-						verticesPosibles[k].push_back(j);
-					}					
-				}
-				dameUno = verticesPosibles[k].back();
-				verticesPosibles[k].pop_back(); //sinUno
-				mapeo[k] = dameUno;
+			pair<int, int> arista;
+			for (int i = aristasMejorSolucion.size(); i < solucionProvisoria.size(); i++) {
+				arista.first = solucionProvisoria[i].first;
+				arista.second = solucionProvisoria[i].second;
+				aristasMejorSolucion.push_back(arista);
 			}
-		} else {
-			cerr << "el ultimo no es vacio" << endl;
-			int dameUno = verticesPosibles[verticesPosibles.size()-1].back();
-			verticesPosibles[verticesPosibles.size()-1].pop_back(); //sinUno
-			mapeo[verticesPosibles.size()-1] = dameUno;
-		}
-		cerr << "estoy por calcular conj aristas" << endl;
-		vector<pair<int, int> > nuevasAristas = calcularConjAristas(mapeo, grafoChico, grafoGrande);
-		cerr << "calcule conj aristas" << endl;
-		vector<pair<int, int > > respuesta;
-		if (nuevasAristas.size() > mejorActual.size() ) {
-			respuesta = MCS(mapeo, verticesPosibles,nuevasAristas,tamGrande, grafoChico, grafoGrande);
-		} else {
-			respuesta = MCS(mapeo, verticesPosibles,mejorActual,tamGrande, grafoChico, grafoGrande);
-		}
+			int tam = mejorSolucion.size();
+			for (int i = 0; i < tam; i++) {
+				mejorSolucion.pop_back();
+			}
+			for (int i = 0; i < mapeo.size(); i++) {
+				mejorSolucion.push_back(mapeo[i]);
+			}
 
-		cerr << "salgo de mcs" << endl;
-		return respuesta;
+		}
+		return;
 	}
 
+	for(int i = 0; i < grafoGrande.size(); i++) {
+		if(!EstaYaMapeado(i,mapeo)) {
+			mapeo.push_back(i);
+			MCS(mapeo,grafoChico,grafoGrande);
+			mapeo.pop_back();
+		}
+	}
+	return;
 }
 
+/*
+void MCS(vector<int> mapeo, vector<vector<int> > grafoChico, vector<vector<int> > grafoGrande)  // O(n2+m2) {
+	// mapeo va a tener las cosas que mapeamos HASTA EL MOMENTO
+	// asumimos G1.size() <= G2.size() para no llenar nuestro codigo de IFs que son FEOS LOS IFs
+	if(mapeo.size() == G1.size()) {// ya mapeamos todo
+		// Nos fijamos si mapeo es mejor que mejorSolucion y si lo es hacemos mejorSolucion = mapeo;
+		return;
+	}
+	for(int i=0;i<G2.size();i++) {
+		if(noEstaYaMapeado(i,mapeo)) {
+			mapeo.push_back(i);
+			MCS(mapeo,G1,G2); //O(1)
+			mapeo.pop_back();
+		}
+	}
+	return;
+}
+
+n2 tomado de a n1 = n2!/(n2-n1)!(n1)! esta en O(n2!/(n2-n1)!) = n2 (n2-1) (n2-2) ... (n2-n1+1) < n2 * n2 * n2... = (n2^n1)*n1 
+
+// voy a llamar a MCS(vacio,G1,G2);
+*/
 int main() {
 	int m1, n1, m2, n2;
 	cin >> n1 >> m1 >> n2 >> m2;
-	vector<vector<int> > grafo1;
-	vector<vector<int> > grafo2;
-
-	vector<int> vacio;
-
-	for (int i = 0; i < n1; i++) {
-		grafo1.push_back(vacio);
-	}
-
-	for (int i = 0; i < n2; i++) {
-		grafo2.push_back(vacio);
-	}
+	vector<vector<int> > grafo1(n1,vector<int>(0));
+	vector<vector<int> > grafo2(n2,vector<int>(0));
 
 	int v1, v2;
 
@@ -151,46 +141,31 @@ int main() {
 		grafo2[v2].push_back(v1);
 	}
 
-	vector<vector<int > > verticesPosibles;
 	vector<int> mapeo;
-	if (n1 < n2) {
-		for (int i = 0; i < n1; i++) {
-			mapeo.push_back(i);
-			verticesPosibles.push_back(vacio);
-			for (int k = i + 1; k < n2; k++) {
-				verticesPosibles[i].push_back(k);
-			}
-		}
-	} else {
-		for (int i = 0; i < n2; i++) {
-			mapeo.push_back(i);
-			verticesPosibles.push_back(vacio);
-			for (int k = i + 1; k < n1; k++) {
-				verticesPosibles[i].push_back(k);
-			}
-		}
-	}
-	
-	vector<pair<int, int> > mejorActual;
-	vector<pair<int, int> > maxcomsub;
-
-	//MCS(vector<int> mapeo, vector<vector<int > > verticesPosibles, vector<pair<int, int> > mejorActual, int tamGrande, vector<vector<int > > grafoChico, vector<vector<int > > grafoGrande)
+/*
 	if (n1 > n2) {
-		cerr << "n1 es mas grande" << endl;
-		mejorActual = calcularConjAristas(mapeo, grafo2, grafo1);
-		cerr << "ya calcule conj aristas" << endl;
-		maxcomsub = MCS(mapeo, verticesPosibles, mejorActual, n1, grafo2, grafo1);
-		cerr << "ya calcule mcs" << endl;
+		for (int i = 0; i < n2; i++) {
+			mapeo.push_back(-1);
+		}
 	} else {
-		mejorActual = calcularConjAristas(mapeo, grafo1, grafo2);
-		maxcomsub = MCS(mapeo, verticesPosibles, mejorActual, n2, grafo1, grafo2);
+		for (int i = 0; i < n1; i++) {
+			mapeo.push_back(-1);
+		}
+	}*/
+	
+	int chico;
 
+	if (n1 > n2) {
+		MCS(mapeo, grafo2, grafo1);
+		chico = n2;
+	} else {
+		MCS(mapeo, grafo1, grafo2);
+		chico = n1;
 	}
 
-	cout << "Respuesta: " << endl;
-
-	for (int i = 0; i < maxcomsub.size(); i++) {
-		cout << "(" << maxcomsub[i].first << ", " << maxcomsub[i].second << ")" << endl; 
+	cout << chico << " " << aristasMejorSolucion.size() << endl;
+	for (int i = 0; i < aristasMejorSolucion.size(); i++) {
+		cout << aristasMejorSolucion[i].first << " " << aristasMejorSolucion[i].second << endl; 
 	}
 
 	return 0;

@@ -2,6 +2,8 @@
 #include <iostream>
 #include <algorithm> //sort
 #include <sys/time.h>
+#include <stdio.h>      /* printf */
+
 
 using namespace std;
 timeval timeStart, timeEnd;
@@ -23,99 +25,97 @@ int randombis() {
 
 bool comparacion(pair<int, int> p1, pair<int, int> p2) {
 	return (p1.second > p2.second);
-}
+} //O(1)
 
-bool esta(int a, vector<int> vec) {
+bool aparece(vector<int> mapeo, vector<vector<int > > grafoGrande, int i, int j) {
+	int vertice1 = mapeo[i];
+	int vertice2 = mapeo[j];
+	bool respuesta = false;
+	for (int h = 0; h < grafoGrande[vertice1].size(); h++) {
+		if (grafoGrande[vertice1][h] == vertice2) {  // me voy al grafo grande y busco si esta la arista (vertice1, vertice2)
+			respuesta = true;
+		}
+	}
+	return respuesta;
+}//O(n2)
+
+bool yaEsta(vector<pair<int, int> > vec, int i, int j) {
+	//esta función es para verificar que no hayamos agregado la arista todavia, es decir, si agregamos (u, v), no queremos que se agregue (v, u) ya que son la misma 
 	bool res = false;
-	for (int j = 0; j < vec.size(); j++) {
-		if (vec[j] == a) {
+	for (int k = 0; k < vec.size(); k++) {
+		if ( (vec[k].first == i && vec[k].second == j) || (vec[k].first == j && vec[k].second == i) ) {
 			res = true;
 		}
 	}
 	return res;
-}
+}//O(n1)
 
-vector<vector<int> > ordenarGrafo(vector<vector<int> > grafoOriginal, vector<pair<int, int> > grafoPorGrados) {
-	vector<vector<int> > grafoProvisorio;
-	vector<int> vacio;
-	for (int i = 0; i < grafoOriginal.size(); i++) {
-		grafoProvisorio.push_back(vacio);
-	}
-	for (int i = 0; i < grafoOriginal.size(); i++) {
-		for (int j = 0; j < grafoPorGrados.size(); j++) {
-			if(esta(grafoPorGrados[j].first, grafoOriginal[i])) {
-				grafoProvisorio[i].push_back(grafoPorGrados[j].first);
+vector<pair<int, int> > calcularConjAristas(vector<int> mapeo, vector<vector<int > > grafoChico, vector<vector<int > > grafoGrande) {
+	vector<pair<int, int> > respuesta; //para este mapeo, cual es el subgrafo comun maximo
+	pair<int, int> arista;
+
+	for (int i = 0; i < grafoChico.size(); i++) { //nos fijamos si la arista que esta en el grafoChico, aparece en el grafoGrande (con este mapeo)
+		if (mapeo[i] != -1) { 
+			for (int j = 0; j < grafoChico[i].size(); j++) {
+				if(mapeo[grafoChico[i][j]] != -1){ 
+					if (aparece(mapeo, grafoGrande, i, grafoChico[i][j]) && !yaEsta(respuesta, i, grafoChico[i][j])) {
+						arista.first = i;
+						arista.second = grafoChico[i][j]; 
+						respuesta.push_back(arista);
+					}
+				}
 			}
 		}
 	}
-	return grafoProvisorio;
+	return respuesta;
+}//O(n1 * ni * (m1+n1))
 
-}
+
 
 vector<int> MCSgoloso(vector<vector<int> > grafoGrande, vector<vector<int> > grafoChico, vector<pair<int, int> > gradosGrafoGrande, vector<pair<int, int> > gradosGrafoChico) {
 
-
 	vector<int> mapeo;
-	vector<int> cola;
 
 	for (int i = 0; i < grafoChico.size(); i++) {
 		mapeo.push_back(-1);
 	}
 
-	mapeo[gradosGrafoChico[0].first] = gradosGrafoGrande[0].first;
-	cola.push_back(gradosGrafoChico[0].first);
-	int j;
-
-	while(cola.size() > 0) { 
-		j = cola.back();
-		cola.pop_back();
-
-		for(int i = 0; i < min(grafoChico[j].size(), grafoGrande[mapeo[j]].size()); i++) {
-			if(mapeo[grafoChico[j][i]] == -1){ 
-				mapeo[grafoChico[j][i]] = grafoGrande[mapeo[j]][i];
-				cola.push_back(grafoChico[j][i]);
-			}
-		}
-		
+	for(int i = 0; i < gradosGrafoChico.size(); i++) {
+		mapeo[gradosGrafoChico[i].first] = gradosGrafoGrande[i].first; 
 	}
 
 	return mapeo;      
-}
+}//O(n1 * n1 * (m1+n1) + n1 + n1)
 
-vector<int> hacerMCSgoloso(vector<vector<int> > grafo1viejo, vector<vector<int> > grafo2viejo, vector<vector<int> > grafo1ordenado, vector<vector<int> > grafo2ordenado, int n1, int n2) {
+
+vector<int> hacerMCSgoloso(vector<vector<int> > grafo1, vector<vector<int> > grafo2, vector<vector<int> > grafo1ordenado, vector<vector<int> > grafo2ordenado, int n1, int n2) {
 	vector<pair<int, int> > gradosGrafo1; //vector que en cada posicion tiene (nodo, grado). Al principio cada posicion i del vector tiene (nodo i, grado), pero luego lo ordenamos y esto se deja de cumplir. Pierdo info de aristas
 	vector<pair<int, int> > gradosGrafo2; //vector que en cada posicion tiene (nodo, grado). Al principio cada posicion i del vector tiene (nodo i, grado), pero luego lo ordenamos y esto se deja de cumplir.
 
 	pair<int, int> nodoGrado;
 
-	for (int i = 0; i < n1; i++) {
+	for (int i = 0; i < n1; i++) {//O(n1)
 		nodoGrado.first = i;
-		nodoGrado.second = grafo1viejo[i].size();
+		nodoGrado.second = grafo1[i].size();
 		gradosGrafo1.push_back(nodoGrado);
 	}
 
-	for (int i = 0; i < n2; i++) {
+	for (int i = 0; i < n2; i++) {//O(n2)
 		nodoGrado.first = i;
-		nodoGrado.second = grafo2viejo[i].size();
+		nodoGrado.second = grafo2[i].size();
 		gradosGrafo2.push_back(nodoGrado);
 	}
 
-	sort (gradosGrafo1.begin(), gradosGrafo1.end(), comparacion); //ordeno los nodos por grado (de mayor a menor)
-	sort (gradosGrafo2.begin(), gradosGrafo2.end(), comparacion); //ordeno los nodos por grado (de mayor a menor)
-
-	vector<vector<int> > grafo1;
-	vector<vector<int> > grafo2;
-
-	grafo1 = ordenarGrafo(grafo1viejo, gradosGrafo1); //cada posicion es un nodo, y adentro tiene la lista de sus vecinos. Ordenamos esa lista por grado. 
-	grafo2 = ordenarGrafo(grafo2viejo, gradosGrafo2); //cada posicion es un nodo, y adentro tiene la lista de sus vecinos. Ordenamos esa lista por grado. 
+	sort (gradosGrafo1.begin(), gradosGrafo1.end(), comparacion); //O(n1^2)//ordeno los nodos por grado (de mayor a menor)
+	sort (gradosGrafo2.begin(), gradosGrafo2.end(), comparacion);//O(n2^2) //ordeno los nodos por grado (de mayor a menor)
 
 	vector<int> mapeoInicial;
 
 	if (n1 > n2) { //el grafo grande es el 1
-		mapeoInicial = MCSgoloso(grafo1, grafo2, gradosGrafo1, gradosGrafo2);
+		mapeoInicial = MCSgoloso(grafo1, grafo2, gradosGrafo1, gradosGrafo2);//O(n1 * n1 * (m1+n1) + n1 + n1)
 	} else {
 		//el grafo grande es el 2
-		mapeoInicial = MCSgoloso(grafo2, grafo1, gradosGrafo2, gradosGrafo1);
+		mapeoInicial = MCSgoloso(grafo2, grafo1, gradosGrafo2, gradosGrafo1);//O(n1 * n1 * (m1+n1) + n1 + n1)
 	}
 	return mapeoInicial;
 
@@ -129,7 +129,7 @@ bool estaTupla(int a, int b, vector<pair<int, int> > lista){
 		}
 	}
 	return res;
-} 
+} //O(lista.size())
 
 vector<vector<int> > calcularVecindadUnoTipoA(vector<int> mapeo) {
 	vector<vector<int> > respuesta;
@@ -137,11 +137,11 @@ vector<vector<int> > calcularVecindadUnoTipoA(vector<int> mapeo) {
 	vector<pair<int, int> > randoms;
 	int r1, r2;
 	pair<int, int> par;
-	for (int i = 0; i < mapeo.size(); i++) {
+	for (int i = 0; i < mapeo.size(); i++) {//O(n1)
 		//peso = randombis() %  (max_peso - min_peso + 1) + min_peso;  
 		r1 = randombis() % (mapeo.size()); // entre 0 y mapeo.size() - 1
 		r2 = randombis() % (mapeo.size()); // entre 0 y mapeo.size() - 1
-		while(r1 == r2 || estaTupla(r1, r2, randoms)) {
+		while(r1 == r2 || estaTupla(r1, r2, randoms)) { //O(n1)
 			r1 = randombis() % (mapeo.size());
 			r2 = randombis() % (mapeo.size());
 		}
@@ -152,8 +152,8 @@ vector<vector<int> > calcularVecindadUnoTipoA(vector<int> mapeo) {
 	
 	vector<int> mapeoVecino;
 	int a, b;
-	for (int i = 0; i < randoms.size(); i++) {
-		for (int j = 0; j < mapeo.size(); j++) { // mapeoVecino = mapeo
+	for (int i = 0; i < randoms.size(); i++) { //O(n1)
+		for (int j = 0; j < mapeo.size(); j++) { //O(n1)// mapeoVecino = mapeo
 			mapeoVecino.push_back(mapeo[j]);
 		}
 
@@ -167,52 +167,8 @@ vector<vector<int> > calcularVecindadUnoTipoA(vector<int> mapeo) {
 	}	
 
 	return respuesta;
+}//O(n1²)
 
-}
-
-bool aparece(vector<int> mapeo, vector<vector<int > > grafoGrande, int i, int j) {
-	int vertice1 = mapeo[i];
-	int vertice2 = mapeo[j];
-	bool respuesta = false;
-	for (int i = 0; i < grafoGrande[vertice1].size(); i++) {
-		if (grafoGrande[vertice1][i] == vertice2) {
-			respuesta = true;
-		}
-	}
-	return respuesta;
-}
-
-bool yaEsta(vector<pair<int, int> > vec, int i, int j) {
-	//esta función es para verificar que no hayamos agregado la arista todavia, es decir, si agregamos (u, v), no queremos que se agregue (v, u) ya que son la misma 
-	bool res = false;
-	for (int k = 0; k < vec.size(); k++) {
-		if ( (vec[k].first == i && vec[k].second == j) || (vec[k].first == j && vec[k].second == i) ) {
-			res = true;
-		}
-	}
-	return res;
-}
-
-vector<pair<int, int> > calcularConjAristas(vector<int> mapeo, vector<vector<int > > grafoChico, vector<vector<int > > grafoGrande) {
-	vector<pair<int, int> > respuesta; //para este mapeo, cual es el subgrafo comun maximo
-	pair<int, int> arista;
-	cerr << "entre a calcularConjAristas" << endl;
-	for (int i = 0; i < mapeo.size(); i++) {
-		cerr << mapeo[i] << " " ;
-	}
-	cerr << endl;
-	for (int i = 0; i < grafoChico.size(); i++) { 
-		for (int j = 0; j < grafoChico[i].size(); j++) {
-			if (aparece(mapeo, grafoGrande, i, grafoChico[i][j]) && !yaEsta(respuesta, i, grafoChico[i][j])) { 
-				arista.first = i;
-				arista.second = grafoChico[i][j]; //cambie j por grafoChico[i][j]
-				respuesta.push_back(arista);
-			}
-		}
-	}
-
-	return respuesta;
-}
 
 vector<vector<int> > calcularVecindadTipoB(vector<int> mapeo, int totalNodosGrafoGrande) {
 	vector<vector<int> > respuesta;
@@ -249,16 +205,14 @@ vector<vector<int> > calcularVecindadTipoB(vector<int> mapeo, int totalNodosGraf
 	}	
 
 	return respuesta;
-}
+}//O(n1²)
+
 
 vector<int> dameElMejor(vector<vector<int> > vecindadA, vector<vector<int> > vecindadB, vector<int> mapeo, vector<vector<int> > grafoChico, vector<vector<int> > grafoGrande){
-	cerr << "entre a dameElMejor" << endl;
 	int esVecindadA;
 	bool esDeLaA = false;
 	int esVecindadB;
-	cerr << "voy a entrar a calcularConjAristas" << endl;
 	vector<pair<int,int> > conjAristas = calcularConjAristas(mapeo, grafoChico, grafoGrande);
-	cerr << "ya calcule conjAristas" << endl;
 	int maximoTamano = conjAristas.size();
 	bool esDelMapeoInicial = true;
 	int cantAristas;
@@ -292,7 +246,8 @@ vector<int> dameElMejor(vector<vector<int> > vecindadA, vector<vector<int> > vec
 			return vecindadB[esVecindadB];
 		}
 	}
-}
+}//O(n1)
+
 bool sonIguales(vector<int> mapeo1, vector<int> mapeo2){
 	bool res = true;
 	for(int i = 0; i < mapeo1.size(); i++){
@@ -301,22 +256,19 @@ bool sonIguales(vector<int> mapeo1, vector<int> mapeo2){
 		}
 	}
 	return res;
-}
+}//O(n1)
+
 
 vector<int> MCSbusquedaLocalUno(vector<int> mapeo, vector<vector<int> > grafoChico, vector<vector<int> > grafoGrande) {
-	cerr << "entre a busqueda local" << endl;
-	vector<vector<int> > vecindadA = calcularVecindadUnoTipoA(mapeo);
-	cerr << "ya hice vecindad A" << endl;
-	vector<vector<int> > vecindadB = calcularVecindadTipoB(mapeo, grafoGrande.size());
+	vector<vector<int> > vecindadA = calcularVecindadUnoTipoA(mapeo);//O(n1²)
+	vector<vector<int> > vecindadB = calcularVecindadTipoB(mapeo, grafoGrande.size());//O(n1²)
 	bool seguir = true;
 	while (seguir) {
-		cerr << "antes del mejor" << endl;
-		vector<int> mapeoNuevo = dameElMejor(vecindadA, vecindadB, mapeo, grafoChico, grafoGrande);
-		cerr << "despues del mejor" << endl;
-		if (sonIguales(mapeoNuevo, mapeo)) {
+		vector<int> mapeoNuevo = dameElMejor(vecindadA, vecindadB, mapeo, grafoChico, grafoGrande);//O(n1)
+		if (sonIguales(mapeoNuevo, mapeo)) {//O(n1)
 			seguir = false;
 		} else {
-			for (int i = 0; i < mapeo.size(); i++) {
+			for (int i = 0; i < mapeo.size(); i++) {//O(n1)
 				mapeo[i] = mapeoNuevo[i];
 			}
 		}
@@ -325,7 +277,14 @@ vector<int> MCSbusquedaLocalUno(vector<int> mapeo, vector<vector<int> > grafoChi
 }
 
 
-int main() {
+int main(int argc, char* argv[]) {
+	bool pidieronTiempo = false; 
+	double tiempo;
+	if (argc > 1) {
+	  if (argv[1] == string("-t")) {
+	    pidieronTiempo = true;
+	  }
+	}
 
 	int m1, n1, m2, n2;
 	cin >> n1 >> m1 >> n2 >> m2;
@@ -360,28 +319,35 @@ int main() {
 		grafo2[v1].push_back(v2);
 		grafo2[v2].push_back(v1);
 	}
-	cerr << "antes de MCSgoloso" << endl;
+
+	init_time();
+
 	vector<int> mejorMapeo;
 	vector<int> mapeoInicial = hacerMCSgoloso(grafo1, grafo2, grafo1ordenado, grafo2ordenado, n1, n2);
 	vector<pair<int, int> > resultado;
-	cerr << "despues de MCSgoloso - antes de busqueda local" << endl;
+	int chico;
 
 	if(n1 < n2) {
-		cerr << "el mas chico es el que tiene " << n1 << " nodos" << endl;
 		mejorMapeo = MCSbusquedaLocalUno(mapeoInicial, grafo1, grafo2);
-
 		resultado = calcularConjAristas(mejorMapeo, grafo1, grafo2);
+		chico = n1;
 	}else{
-		cerr << "el mas chico es el que tiene " << n2 << " nodos" << endl;
 		mejorMapeo = MCSbusquedaLocalUno(mapeoInicial, grafo2, grafo1);
 		resultado = calcularConjAristas(mejorMapeo, grafo2, grafo1);
-
-	}
-	cerr << "despues de busqueda local" << endl;
-	for(int i = 0; i < resultado.size(); i++){
-		cout << resultado[i].first << " " << resultado[i].second << endl;
+		chico = n2;
 	}
 
+
+	tiempo = get_time();
+
+  	if (!pidieronTiempo) { 
+		cout << chico << " " << resultado.size() << endl;
+		for(int i = 0; i < resultado.size(); i++){
+			cout << resultado[i].first << " " << resultado[i].second << endl;
+		}
+	} else {
+    	printf("%.10f ", tiempo);
+	}
 
 	return 0;
 }
