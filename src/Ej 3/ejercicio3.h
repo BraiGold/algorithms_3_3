@@ -20,6 +20,20 @@ struct Cotree { // Representa un nodo del cotree
   vector<int> nodos; // Guarda los nodos que pertenecen al subcografo que representa el cotree cuya raíz es "this"
 };
 
+
+struct AristasNodos {
+  AristasNodos() {
+    aristas = 0;
+    nodos = vector<int>();
+  }
+  AristasNodos(int x, vector<int> y) {
+    aristas = x;
+    nodos = y;
+  }
+  int aristas;
+  vector<int> nodos;
+};
+
 void imprimirCotree(Cotree raiz) { // Imprime el Cotree
   queue<Cotree*> cola;
   cola.push(&raiz);
