@@ -99,7 +99,63 @@ vector<Vertice> complementar(vector<Vertice> g) { // Complementa el grafo g
   return g_complemento;
 }
 
-int generar_solucion(vector<int>* res, Cotree* root, int n) { // Devuelve la cantidad de aristas de la solucion, y modifica res con los nodos de la solucion
+void solucion(Cotree* root, int n, vector<AristasNodos>* res) {
+  if(root->id >= 0) { // Es hoja
+    AristasNodos aux;
+    aux.aristas = 0;
+    vector<int> vec;
+    vec.push_back(root->id);
+    aux.nodos = vec;
+    for(int i = 1; i <= n; i++) {
+      (*res)[i] = aux;
+    }
+  } else { // No es hoja, es join o union
+    vector<AristasNodos> vecIzq = vector<AristasNodos>(n+1);
+    vector<AristasNodos> vecDer = vector<AristasNodos>(n+1);
+    solucion(root->hijos[0], n, &vecIzq);
+    solucion(root->hijos[1], n, &vecDer);
+    for(int i = 1; i <= n; i++) {
+      int maxAristas = 0;
+      vector<int> noditos;
+      for(int j = 0; j <= i; j++) {
+        int aristasI = 0;
+        int aristasD = 0;
+        int aristasTotales;
+        vector<int> vec;
+        if(j != 0) {
+          aristasI = vecIzq[j].aristas;
+          vector<int>::iterator inicio = vecIzq[j].nodos.begin();
+          vector<int>::iterator fin = vecIzq[j].nodos.end();
+          while(inicio != fin) {
+            vec.push_back(*inicio);
+            inicio++;
+          }
+        }
+        if(i-j != 0) {
+          aristasD = vecDer[i-j].aristas;
+          vector<int>::iterator inicio = vecDer[i-j].nodos.begin();
+          vector<int>::iterator fin = vecDer[i-j].nodos.end();
+          while(inicio != fin) {
+            vec.push_back(*inicio);
+            inicio++;
+          }
+        }
+        aristasTotales = aristasI + aristasD;
+        if(root->id == -1) aristasTotales += (vecIzq[j].nodos.size()*vecDer[i-j].nodos.size());
+        if(aristasTotales >= maxAristas && vec.size() >= noditos.size()) {
+          maxAristas = aristasTotales;
+          noditos = vec;
+        }
+      }
+      AristasNodos aux;
+      aux.aristas = maxAristas;
+      aux.nodos = noditos;
+      (*res)[i] = aux;
+    }
+  }
+}
+
+/*int generar_solucion(vector<int>* res, Cotree* root, int n) { // Devuelve la cantidad de aristas de la solucion, y modifica res con los nodos de la solucion
   if(root->id >= 0) {
     res->push_back(root->id);
     return 0;
@@ -138,7 +194,7 @@ int generar_solucion(vector<int>* res, Cotree* root, int n) { // Devuelve la can
     }
     return maxGlobal;
   }
-} 
+} */
 
 void make_cotree(vector<Vertice>* g, Cotree* root) { // Dado el grafo g, arma el cotree y lo guarda en root
   if(obtener_nodos_posta(g) == 1) { // Es un K_1
@@ -335,8 +391,21 @@ int main(int argc, char *argv[]) {
   cout << "Binarizo el cotree y lo imprimo:" << endl;
   binarizar(&raiz);
   imprimirCotree(raiz);
+  
+  int K_n = 6;
+  vector<AristasNodos> sol = vector<AristasNodos>(K_n+1); // Tamanio n+1
+  solucion(&raiz, K_n, &sol); // Tamanio n
+  cout << "Max aristas: " << sol[K_n].aristas << endl; // Tamanio n
+  cout << "Nodos: " << endl;
+  vector<int>::iterator inicio = sol[K_n].nodos.begin(); // Tamanio n
+  vector<int>::iterator fin = sol[K_n].nodos.end(); // Tamanio n
+  while(inicio != fin) {
+    cout << *inicio << ", ";
+    inicio++;
+  }
+  cout << endl;
 
-  cout << "imprimo vector de nodos pertenecientes" << endl;
+  /*cout << "imprimo vector de nodos pertenecientes" << endl;
   vector<int> sol;
   int aristasMax = generar_solucion(&sol, &raiz, 3);
   vector<int>::iterator inicio = sol.begin();
@@ -346,7 +415,7 @@ int main(int argc, char *argv[]) {
     inicio++;
   }
   cout << endl;
-  cout << "aristas max:" << aristasMax << endl;
+  cout << "aristas max:" << aristasMax << endl;*/
 
   //cout << raiz.hijos[1]->hijos[1]->hijos[1]->aristas;
   /*vector<int>::iterator inicio = raiz.hijos[1]->hijos[1]->nodos.begin();
