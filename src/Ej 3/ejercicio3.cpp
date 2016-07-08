@@ -74,11 +74,12 @@ vector<vector<Vertice> > separar_componentes_conexas(vector<Vertice>* g) { // Se
 
 vector<Vertice> complementar(vector<Vertice> g) { // Complementa el grafo g
   vector<Vertice> g_complemento = vector<Vertice>(g.size());
-  bool pertenecen[g.size()];
   for(int i = 0; i < (int)g.size(); i++) {
-      pertenecen[i] = false;
-  }
-  for(int i = 0; i < (int)g.size(); i++) {
+    g_complemento[i].pertenece = false;
+    bool pertenecen[g.size()];
+    for(int k = 0; k < (int)g.size(); k++) {
+        pertenecen[k] = false;
+    }
     if(!g[i].pertenece) continue; // Si ése nodo no pertenece, listo
     list<int>::iterator inicio = g[i].adyacentes.begin();
     list<int>::iterator fin = g[i].adyacentes.end();
@@ -312,56 +313,163 @@ int main(int argc, char *argv[]) {
 
   Vertice v0;
   v0.pertenece = true;
+  v0.adyacentes.push_back(3);
+  v0.adyacentes.push_back(4);
+  v0.adyacentes.push_back(5);
+  v0.adyacentes.push_back(6);
+  v0.adyacentes.push_back(7);
+  v0.adyacentes.push_back(8);
+  v0.adyacentes.push_back(9);
+  v0.adyacentes.push_back(10);
   grafo.push_back(v0);
 
   Vertice v1;
   v1.pertenece = true;
-  v1.adyacentes.push_back(2);
+  v1.adyacentes.push_back(3);
   v1.adyacentes.push_back(4);
   v1.adyacentes.push_back(5);
+  v1.adyacentes.push_back(6);
+  v1.adyacentes.push_back(7);
+  v1.adyacentes.push_back(8);
+  v1.adyacentes.push_back(9);
+  v1.adyacentes.push_back(10);
   grafo.push_back(v1);
 
   Vertice v2;
   v2.pertenece = true;
-  v2.adyacentes.push_back(1);
   v2.adyacentes.push_back(3);
   v2.adyacentes.push_back(4);
+  v2.adyacentes.push_back(5);
+  v2.adyacentes.push_back(6);
+  v2.adyacentes.push_back(7);
+  v2.adyacentes.push_back(8);
+  v2.adyacentes.push_back(9);
+  v2.adyacentes.push_back(10);
   grafo.push_back(v2);
 
   Vertice v3;
   v3.pertenece = true;
+  v3.adyacentes.push_back(0);
+  v3.adyacentes.push_back(1);
   v3.adyacentes.push_back(2);
   v3.adyacentes.push_back(4);
   v3.adyacentes.push_back(5);
+  v3.adyacentes.push_back(6);
+  v3.adyacentes.push_back(7);
+  v3.adyacentes.push_back(8);
+  v3.adyacentes.push_back(9);
+  v3.adyacentes.push_back(10);
   grafo.push_back(v3);
   
   Vertice v4;
   v4.pertenece = true;
+  v4.adyacentes.push_back(0);
   v4.adyacentes.push_back(1);
   v4.adyacentes.push_back(2);
   v4.adyacentes.push_back(3);
-  v4.adyacentes.push_back(5);
+  v4.adyacentes.push_back(7);
+  v4.adyacentes.push_back(8);
+  v4.adyacentes.push_back(9);
+  v4.adyacentes.push_back(10);
   grafo.push_back(v4);
   
   Vertice v5;
   v5.pertenece = true;
+  v5.adyacentes.push_back(0);
   v5.adyacentes.push_back(1);
+  v5.adyacentes.push_back(2);
   v5.adyacentes.push_back(3);
-  v5.adyacentes.push_back(4);
+  v5.adyacentes.push_back(6);
+  v5.adyacentes.push_back(7);
+  v5.adyacentes.push_back(8);
+  v5.adyacentes.push_back(9);
+  v5.adyacentes.push_back(10);
   grafo.push_back(v5);
+  
+  Vertice v6;
+  v6.pertenece = true;
+  v6.adyacentes.push_back(0);
+  v6.adyacentes.push_back(1);
+  v6.adyacentes.push_back(2);
+  v6.adyacentes.push_back(3);
+  v6.adyacentes.push_back(5);
+  v6.adyacentes.push_back(7);
+  v6.adyacentes.push_back(8);
+  v6.adyacentes.push_back(9);
+  v6.adyacentes.push_back(10);
+  grafo.push_back(v6);
+  
+  Vertice v7;
+  v7.pertenece = true;
+  v7.adyacentes.push_back(0);
+  v7.adyacentes.push_back(1);
+  v7.adyacentes.push_back(2);
+  v7.adyacentes.push_back(3);
+  v7.adyacentes.push_back(4);
+  v7.adyacentes.push_back(5);
+  v7.adyacentes.push_back(6);
+  grafo.push_back(v7);
+  
+  Vertice v8;
+  v8.pertenece = true;
+  v8.adyacentes.push_back(0);
+  v8.adyacentes.push_back(1);
+  v8.adyacentes.push_back(2);
+  v8.adyacentes.push_back(3);
+  v8.adyacentes.push_back(4);
+  v8.adyacentes.push_back(5);
+  v8.adyacentes.push_back(6);
+  v8.adyacentes.push_back(9);
+  v8.adyacentes.push_back(10);
+  grafo.push_back(v8);
+  
+  Vertice v9;
+  v9.pertenece = true;
+  v9.adyacentes.push_back(0);
+  v9.adyacentes.push_back(1);
+  v9.adyacentes.push_back(2);
+  v9.adyacentes.push_back(3);
+  v9.adyacentes.push_back(4);
+  v9.adyacentes.push_back(5);
+  v9.adyacentes.push_back(6);
+  v9.adyacentes.push_back(8);
+  grafo.push_back(v9);
+  
+  Vertice v10;
+  v10.pertenece = true;
+  v10.adyacentes.push_back(0);
+  v10.adyacentes.push_back(1);
+  v10.adyacentes.push_back(2);
+  v10.adyacentes.push_back(3);
+  v10.adyacentes.push_back(4);
+  v10.adyacentes.push_back(5);
+  v10.adyacentes.push_back(6);
+  v10.adyacentes.push_back(8);
+  grafo.push_back(v10);
+  
 
-  vector<Vertice> complemento = complementar(grafo);
+  //vector<Vertice> complemento = complementar(grafo);
 
   Cotree raiz;
-  /*raiz.id = -2;
+  /*raiz.id = -1;
   Cotree j1;
   j1.id = -1;
   Cotree j2;
   j2.id = -1;
+  Cotree j3;
+  j3.id = -1;
+  Cotree j4;
+  j4.id = -1;
   Cotree u1;
   u1.id = -2;
   Cotree u2;
   u2.id = -2;
+  Cotree u3;
+  u3.id = -2;
+  Cotree u4;
+  u4.id = -2;
+  Cotree u5;
+  u5.id = -2;
   Cotree v0;
   v0.id = 0;
   Cotree v1;
@@ -374,16 +482,36 @@ int main(int argc, char *argv[]) {
   v4.id = 4;
   Cotree v5;
   v5.id = 5;
-  u2.hijos.push_back(&v5);
-  u2.hijos.push_back(&v2);
-  j2.hijos.push_back(&v4);
-  j2.hijos.push_back(&u2);
-  u1.hijos.push_back(&v1);
-  u1.hijos.push_back(&v3);
-  j1.hijos.push_back(&u1);
+  Cotree v6;
+  v6.id = 6;
+  Cotree v7;
+  v7.id = 7;
+  Cotree v8;
+  v8.id = 8;
+  Cotree v9;
+  v9.id = 9;
+  Cotree v10;
+  v10.id = 10;
+  j4.hijos.push_back(&v5);
+  j4.hijos.push_back(&v6);
+  u5.hijos.push_back(&v9);
+  u5.hijos.push_back(&v10);
+  u4.hijos.push_back(&v4);
+  u4.hijos.push_back(&j4);
+  u3.hijos.push_back(&v1);
+  u3.hijos.push_back(&v2);
+  j3.hijos.push_back(&v8);
+  j3.hijos.push_back(&u5);
+  j2.hijos.push_back(&v3);
+  j2.hijos.push_back(&u4);
+  u2.hijos.push_back(&v0);
+  u2.hijos.push_back(&u3);
+  u1.hijos.push_back(&v7);
+  u1.hijos.push_back(&j3);
+  j1.hijos.push_back(&u2);
   j1.hijos.push_back(&j2);
-  raiz.hijos.push_back(&v0);
-  raiz.hijos.push_back(&j1);*/
+  raiz.hijos.push_back(&j1);
+  raiz.hijos.push_back(&u1);*/
   
   make_cotree(&grafo, &raiz);
   cout << "Imprimo cotree:" << endl;
@@ -392,7 +520,7 @@ int main(int argc, char *argv[]) {
   binarizar(&raiz);
   imprimirCotree(raiz);
   
-  int K_n = 6;
+  int K_n = 8;
   vector<AristasNodos> sol = vector<AristasNodos>(K_n+1); // Tamanio n+1
   solucion(&raiz, K_n, &sol); // Tamanio n
   cout << "Max aristas: " << sol[K_n].aristas << endl; // Tamanio n
