@@ -20,7 +20,6 @@ struct Cotree { // Representa un nodo del cotree
   vector<int> nodos; // Guarda los nodos que pertenecen al subcografo que representa el cotree cuya raíz es "this"
 };
 
-
 struct AristasNodos {
   AristasNodos() {
     aristas = 0;
@@ -56,12 +55,13 @@ void imprimirGrafo(vector<Vertice> grafo) { // Imprime el Grafo
   list<int>::iterator inicio;
   list<int>::iterator fin;
   for(int i = 0; i < (int)grafo.size(); i++) {
-    if(!grafo[i].pertenece) continue;
+    if(!grafo[i].pertenece) cout << "El nodo " << i << " no pertenece. ";
     cout << "Nodos adyacentes a " << i << ": ";
     inicio = grafo[i].adyacentes.begin();
     fin = grafo[i].adyacentes.end();
     while(inicio != fin) {
-      if(grafo[*inicio].pertenece) cout << *inicio << " ";
+      if(!grafo[*inicio].pertenece) cout << "*";
+      cout << *inicio << " ";
       inicio++;
     }
     cout << endl;
