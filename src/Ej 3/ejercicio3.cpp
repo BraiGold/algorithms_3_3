@@ -305,11 +305,91 @@ bool es_cografo(vector<Vertice>* g) { // Devuelve true si g es cografo, false en
 }
 
 int main(int argc, char *argv[]) {
+  int N1, M1, N2, M2;
+  cin >> N1;
+  cin >> M1;
+  cin >> N2;
+  cin >> M2;
+  
+  vector<Vertice> G_1 = vector<Vertice>(N1);
+  vector<Vertice> G_2 = vector<Vertice>(N2);
+  
+  for(int i = 0; i < N1; i++) {
+    G_1[i].pertenece = true;
+  }
+  
+  for(int i = 0; i < N2; i++) {
+    G_2[i].pertenece = true;
+  }
+  
+  for(int i = 0; i < M1; i++) {
+    int u, v;
+    cin >> u;
+    cin >> v;
+    G_1[u].adyacentes.push_back(v);
+    G_1[v].adyacentes.push_back(u);
+  }
+  
+  for(int i = 0; i < M2; i++) {
+    int u, v;
+    cin >> u;
+    cin >> v;
+    G_2[u].adyacentes.push_back(v);
+    G_2[v].adyacentes.push_back(u);
+  }
+  
+  Cotree raiz;
+  make_cotree(&G_1, &raiz); // Asumo que el G_1 es el cografo
+  binarizar(&raiz);
+  
+  int K_n = N2; // Asumo que el G_2 es el grafo completo
+  vector<AristasNodos> sol = vector<AristasNodos>(K_n+1);
+  solucion(&raiz, K_n, &sol);
+  
+  cout << sol[K_n].nodos.size() << " " << sol[K_n].aristas << endl;
+  
+  //ordeno el vector solucion:
+  sort(sol[K_n].nodos.begin(), sol[K_n].nodos.end());
+  
+  for(int i = 0; i < (int)G_1.size(); i++) {
+    G_1[i].pertenece = false;
+  }
+  vector<int>::iterator inicio = sol[K_n].nodos.begin();
+  vector<int>::iterator fin = sol[K_n].nodos.end();
+  while(inicio != fin) {
+    G_1[*inicio].pertenece = true; // pongo true en los nodos de la solucion
+    cout << *inicio << " ";
+    inicio++;
+  }
+  cout << endl;
+  for(int i = 0; i < sol[K_n].nodos.size(); i++) {
+    cout << i << " ";
+  }
+  cout << endl;
+  //ahora tengo que mostrar las adyacencias
+  list<int>::iterator begin;
+  list<int>::iterator end;
+  for(int i = 0; i < (int)G_1.size(); i++) {
+    if(!G_1[i].pertenece) continue;
+    begin = G_1[i].adyacentes.begin();
+    end = G_1[i].adyacentes.end();
+    while(begin != end) {
+      if(!G_1[*begin].pertenece) {
+        *begin++;
+        continue;
+      }
+      cout << i << " " << *begin << endl;
+      // hay que borrar la otra arista, la <*begin,i>
+      G_1[*begin].adyacentes.remove(i);
+      begin++;
+    }
+  }
+  
   // Debería checkear si uno de los dos grafos es cografo, y si el otro grafo es completo, si eso ocurre entonces ejecutar este algoritmo, y sino ejecutar el algoritmo exacto del ejercicio 2.
   // Para este algoritmo, primero hay que ver si el cotree tiene menor o igual cantidad de vértices que el K_n. Si es así, devolver el cografo, y sino...
   // hay que generar el cotree del cografo y luego recorrerlo buscando el subgrafo de n (n = cantidad de nodos del K_n) vertices que mayor cantidad de aristas tiene.
   // Nos falta ver cómo hacer esto último... para el RTP xD
-  vector<Vertice> grafo;
+  /*vector<Vertice> grafo;
 
   Vertice v0;
   v0.pertenece = true;
@@ -445,12 +525,12 @@ int main(int argc, char *argv[]) {
   v10.adyacentes.push_back(5);
   v10.adyacentes.push_back(6);
   v10.adyacentes.push_back(8);
-  grafo.push_back(v10);
+  grafo.push_back(v10);*/
   
 
   //vector<Vertice> complemento = complementar(grafo);
 
-  Cotree raiz;
+  //Cotree raiz;
   /*raiz.id = -1;
   Cotree j1;
   j1.id = -1;
@@ -513,7 +593,7 @@ int main(int argc, char *argv[]) {
   raiz.hijos.push_back(&j1);
   raiz.hijos.push_back(&u1);*/
   
-  make_cotree(&grafo, &raiz);
+  /*make_cotree(&grafo, &raiz);
   cout << "Imprimo cotree:" << endl;
   imprimirCotree(raiz);
   cout << "Binarizo el cotree y lo imprimo:" << endl;
@@ -531,7 +611,7 @@ int main(int argc, char *argv[]) {
     cout << *inicio << ", ";
     inicio++;
   }
-  cout << endl;
+  cout << endl;*/
 
   /*cout << "imprimo vector de nodos pertenecientes" << endl;
   vector<int> sol;
