@@ -4,6 +4,7 @@
 #include <vector>
 #include <queue>
 #include <time.h>
+#include <algorithm>
 
 using namespace std;
 
