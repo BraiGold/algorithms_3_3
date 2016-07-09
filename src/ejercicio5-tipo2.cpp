@@ -149,7 +149,7 @@ bool estaTripla(int a, int b, int c, vector<pair<int, pair<int, int> > > lista){
 	return res;
 } 
 
-vector<vector<int> > calcularVecindadDosTipoA(vector<int> mapeo) {
+vector<vector<int> > calcularVecindadDosTipoA(vector<int> mapeo) {//devuelve una lista con todos los mapeos vecinos
 	vector<vector<int> > respuesta;
 
 	vector<pair<int, pair<int, int> > > randoms;
@@ -198,7 +198,7 @@ vector<vector<int> > calcularVecindadDosTipoA(vector<int> mapeo) {
 }
 
 
-vector<vector<int> > calcularVecindadTipoB(vector<int> mapeo, int totalNodosGrafoGrande) {
+vector<vector<int> > calcularVecindadTipoB(vector<int> mapeo, int totalNodosGrafoGrande) {//devuelve una lista con todos los mapeos vecinos
 	vector<vector<int> > respuesta;
 
 	vector<pair<int, int> > randoms;

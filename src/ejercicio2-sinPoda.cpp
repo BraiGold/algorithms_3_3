@@ -67,7 +67,15 @@ void MCS(vector<int> mapeo, vector<vector<int> > grafoChico, vector<vector<int> 
 		// Nos fijamos si mapeo es mejor que mejorSolucion y si lo es hacemos mejorSolucion = mapeo;
 		vector<pair<int, int> > solucionProvisoria = calcularConjAristas(mapeo, grafoChico, grafoGrande);
 		if (solucionProvisoria.size() > aristasMejorSolucion.size() ) {
-			for (int i = 0; i < aristasMejorSolucion.size(); i++) {
+			
+			aristasMejorSolucion.clear();
+			pair<int, int> arista;
+			for (int i = 0; i < solucionProvisoria.size(); i++) {
+				arista.first = solucionProvisoria[i].first;
+				arista.second = solucionProvisoria[i].second;
+				aristasMejorSolucion.push_back(arista);
+			}
+			/*for (int i = 0; i < aristasMejorSolucion.size(); i++) {
 				aristasMejorSolucion[i].first = solucionProvisoria[i].first;
 				aristasMejorSolucion[i].second = solucionProvisoria[i].second;
 			}
@@ -76,7 +84,7 @@ void MCS(vector<int> mapeo, vector<vector<int> > grafoChico, vector<vector<int> 
 				arista.first = solucionProvisoria[i].first;
 				arista.second = solucionProvisoria[i].second;
 				aristasMejorSolucion.push_back(arista);
-			}
+			}*/
 			int tam = mejorSolucion.size();
 			for (int i = 0; i < tam; i++) {
 				mejorSolucion.pop_back();
@@ -84,9 +92,9 @@ void MCS(vector<int> mapeo, vector<vector<int> > grafoChico, vector<vector<int> 
 			for (int i = 0; i < mapeo.size(); i++) {
 				mejorSolucion.push_back(mapeo[i]);
 			}
-
 		}
 		return;
+
 	}
 
 	for(int i = 0; i < grafoGrande.size(); i++) {

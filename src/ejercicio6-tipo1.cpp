@@ -1,8 +1,12 @@
 #include <vector>
 #include <iostream>
-#include <algorithm> //sort
+#include <algorithm> //sort , min
 #include <sys/time.h>
 #include <stdio.h>      /* printf */
+#include <set>
+#include <queue>
+#include <cstdlib>
+
 
 
 using namespace std;
@@ -207,84 +211,141 @@ vector<vector<int> > calcularVecindadTipoB(vector<int> mapeo, int totalNodosGraf
 	return respuesta;
 }//O(n1²)
 
+set<vector<int> > tabuPorMapeo; //es la lista con los mapeos a los que no puedo entrar ordenada por mapeo, es rapido mirar si uno esta o no.
+queue<vector<int> > tabuCola; //es la lista con los mapeos a los que no puedo entrar ordenada por orden en el que se los visita. Sacar el mas viejo es facil y agregar el nuevo tambien
 
-vector<int> dameElMejor(vector<vector<int> > vecindadA, vector<vector<int> > vecindadB, vector<int> mapeo, vector<vector<int> > grafoChico, vector<vector<int> > grafoGrande){
-	int esVecindadA;
+bool estaEnTabu(vector<int> mapeo){
+	std::set<vector<int> >::iterator it;
+	//iterator it;
+	it = tabuPorMapeo.find(mapeo);
+
+	return (tabuPorMapeo.end() != it);
+}
+
+vector<int> dameElMejorNoTabu(vector<vector<int> > vecindadA, vector<vector<int> > vecindadB, vector<vector<int> > grafoChico, vector<vector<int> > grafoGrande, int cuantosMiro) { //esta funcion devuelve el mejor de las opciones de vecinos pero que no se encuentre en la lista tabu. Como a veces puede tener demasiados vecinos un mapeo hay un maximo que puedo mirar.
+	int indiceVecindadA;
+	int indiceVecindadB;
 	bool esDeLaA = false;
-	int esVecindadB;
-	vector<pair<int,int> > conjAristas = calcularConjAristas(mapeo, grafoChico, grafoGrande);
-	int maximoTamano = conjAristas.size();
-	bool esDelMapeoInicial = true;
-	int cantAristas;
+	vector<pair<int,int> > conjAristas;
+	int maximoTamanoHastaAhora = 0;
+	int cantAristasMapeoNuevo;
+	int cuantosMiroDeA;
+	int cuantosMiroDeB;
 
-	for(int i = 0; i < vecindadA.size(); i++){
-		conjAristas = calcularConjAristas(vecindadA[i], grafoChico, grafoGrande);
-		cantAristas = conjAristas.size();
-		if(cantAristas > maximoTamano) {
-			esDelMapeoInicial = false;
-			esDeLaA = true;
-			esVecindadA = i;
-			maximoTamano = cantAristas;
-		}
-	}
-	for(int i = 0; i < vecindadB.size(); i++){
-		conjAristas = calcularConjAristas(vecindadB[i], grafoChico, grafoGrande);
-		cantAristas = conjAristas.size();
-		if(cantAristas > maximoTamano) {
-			esDelMapeoInicial = false;
-			esDeLaA = false;
-			esVecindadB = i;
-			maximoTamano = cantAristas;
-		}
-	}
-	if(esDelMapeoInicial){
-		return mapeo;
+	if(cuantosMiro >= vecindadA.size()){
+		cuantosMiroDeA = vecindadA.size();
+		int losQueQuedanPorMirar = cuantosMiro - cuantosMiroDeA;
+		int tamVecB = vecindadB.size();
+		cuantosMiroDeB = min(tamVecB, losQueQuedanPorMirar);
 	}else{
-		if(esDeLaA){
-			return vecindadA[esVecindadA];
-		}else{
-			return vecindadB[esVecindadB];
-		}
+		cuantosMiroDeA = cuantosMiro;
+		cuantosMiroDeB = 0;
 	}
-}//O(n1)
-
-bool sonIguales(vector<int> mapeo1, vector<int> mapeo2){
-	bool res = true;
-	for(int i = 0; i < mapeo1.size(); i++){
-		if(mapeo1[i] != mapeo2[i]){
-			res = false;
-		}
-	}
-	return res;
-}//O(n1)
 
 
-vector<int> MCSbusquedaLocalUno(vector<int> mapeo, vector<vector<int> > grafoChico, vector<vector<int> > grafoGrande) {
-	vector<vector<int> > vecindadA = calcularVecindadUnoTipoA(mapeo);//O(n1²)
-	vector<vector<int> > vecindadB = calcularVecindadTipoB(mapeo, grafoGrande.size());//O(n1²)
-	bool seguir = true;
-	while (seguir) {
-		vector<int> mapeoNuevo = dameElMejor(vecindadA, vecindadB, mapeo, grafoChico, grafoGrande);//O(n1)
-		if (sonIguales(mapeoNuevo, mapeo)) {//O(n1)
-			seguir = false;
-		} else {
-			for (int i = 0; i < mapeo.size(); i++) {//O(n1)
-				mapeo[i] = mapeoNuevo[i];
+	for(int i = 0; i < cuantosMiroDeA; i++) {
+		
+		if(!estaEnTabu(vecindadA[i])){
+			conjAristas = calcularConjAristas(vecindadA[i], grafoChico, grafoGrande);
+			cantAristasMapeoNuevo = conjAristas.size();
+			if(cantAristasMapeoNuevo > maximoTamanoHastaAhora) {
+				esDeLaA = true;
+				indiceVecindadA = i;
+				maximoTamanoHastaAhora = cantAristasMapeoNuevo;
 			}
 		}
 	}
-	return mapeo;
+	for(int i = 0; i < cuantosMiroDeB; i++) {
+		if(!estaEnTabu(vecindadB[i])){
+			conjAristas = calcularConjAristas(vecindadB[i], grafoChico, grafoGrande);
+			cantAristasMapeoNuevo = conjAristas.size();
+			if(cantAristasMapeoNuevo > maximoTamanoHastaAhora) {
+				esDeLaA = false;
+				indiceVecindadB = i;
+				maximoTamanoHastaAhora = cantAristasMapeoNuevo;
+			}
+		}
+	}
+
+	if(esDeLaA){
+		return vecindadA[indiceVecindadA];
+	}else{
+		return vecindadB[indiceVecindadB];
+	}
+}//O(n1)
+
+
+vector<int> MCStabu(vector<int> mapeo, vector<vector<int> > grafoChico, vector<vector<int> > grafoGrande, int cuantosVecinosMiro, int maxTamTabu, int k) {//k = No se encontro una mejora en las ultimas k iteraciones.
+	vector<int> mejorMapeo;
+	
+	for(int i = 0; i < mapeo.size(); i++){ //mejorMapeo = mapeo
+		mejorMapeo.push_back(mapeo[i]);
+	}
+
+	vector<pair<int, int> > conjAristasMejorMapeo = calcularConjAristas(mejorMapeo, grafoChico, grafoGrande); 
+
+	vector<vector<int> > vecindadA = calcularVecindadUnoTipoA(mapeo);//O(n1²)
+	vector<vector<int> > vecindadB = calcularVecindadTipoB(mapeo, grafoGrande.size());//O(n1²)
+	
+	vector<int> mejorVecino;
+	vector<pair<int, int> > conjAristasMejorVecino;
+	vector<int> mapeoQueTengoQueSacar;
+
+	int j = 0;
+	while(j < k){
+
+		mejorVecino = dameElMejorNoTabu(vecindadA, vecindadB, grafoChico, grafoGrande, cuantosVecinosMiro);//O(n1)
+
+		conjAristasMejorVecino = calcularConjAristas(mejorVecino, grafoChico, grafoGrande); 
+
+		if(conjAristasMejorVecino.size() > conjAristasMejorMapeo.size()){ //el nuevo mapeo es mejor que lo que tenia antes
+			j = -1;
+			//mejorMapeo = mejorVecino:
+			for(int i = 0; i < mejorMapeo.size(); i++){
+				mejorMapeo[i] = mejorVecino[i];
+			}
+			conjAristasMejorMapeo = calcularConjAristas(mejorMapeo, grafoChico, grafoGrande); 
+
+		}
+
+		if(tabuCola.size() == maxTamTabu){ //me fijo si la lista tabu ya tiene el tamaño máximo
+			mapeoQueTengoQueSacar = tabuCola.front();
+			tabuCola.pop();
+			tabuPorMapeo.erase(mapeoQueTengoQueSacar);
+		}
+		tabuCola.push(mejorVecino);
+		tabuPorMapeo.insert(mejorVecino);
+
+
+		vecindadA = calcularVecindadUnoTipoA(mejorVecino);//O(n1²)
+		vecindadB = calcularVecindadTipoB(mejorVecino, grafoGrande.size());
+
+		j++;
+
+	}
+
+	return mejorMapeo;
 }
 
 
 int main(int argc, char* argv[]) {
 	bool pidieronTiempo = false; 
 	double tiempo;
-	if (argc > 1) {
-	  if (argv[1] == string("-t")) {
+	if (argc > 4) {
+	  if (argv[4] == string("-t")) {
 	    pidieronTiempo = true;
 	  }
 	}
+	if (argc < 4){
+		cerr << "faltan parametros" << endl;
+		return 0;
+	}
+
+	int cuantosVecinosMiro = atoi(argv[1]);
+	int maxTamTabu = atoi(argv[2]); 
+	int k = atoi(argv[3]);
+
+
 
 	int m1, n1, m2, n2;
 	cin >> n1 >> m1 >> n2 >> m2;
@@ -327,12 +388,13 @@ int main(int argc, char* argv[]) {
 	vector<pair<int, int> > resultado;
 	int chico;
 
+
 	if(n1 < n2) {
-		mejorMapeo = MCSbusquedaLocalUno(mapeoInicial, grafo1, grafo2);
+		mejorMapeo = MCStabu(mapeoInicial, grafo1, grafo2, cuantosVecinosMiro, maxTamTabu, k);
 		resultado = calcularConjAristas(mejorMapeo, grafo1, grafo2);
 		chico = n1;
 	}else{
-		mejorMapeo = MCSbusquedaLocalUno(mapeoInicial, grafo2, grafo1);
+		mejorMapeo = MCStabu(mapeoInicial, grafo2, grafo1, cuantosVecinosMiro, maxTamTabu, k);
 		resultado = calcularConjAristas(mejorMapeo, grafo2, grafo1);
 		chico = n2;
 	}
