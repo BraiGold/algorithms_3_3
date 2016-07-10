@@ -271,6 +271,8 @@ vector<int> MCSbusquedaLocalUno(vector<int> mapeo, vector<vector<int> > grafoChi
 			for (int i = 0; i < mapeo.size(); i++) {//O(n1)
 				mapeo[i] = mapeoNuevo[i];
 			}
+			vecindadA = calcularVecindadUnoTipoA(mapeo);//soy lu, agrego esto me parece que deberia estar, como que hay que recalcular las vecindades con el nuevo mapeo. Si no me muevo siempre a lo mismo.
+			vecindadB = calcularVecindadTipoB(mapeo, grafoGrande.size());//soy lu, agrego esto me parece que deberia estar, como que hay que recalcular las vecindades con el nuevo mapeo. Si no me muevo siempre a lo mismo.
 		}
 	}
 	return mapeo;

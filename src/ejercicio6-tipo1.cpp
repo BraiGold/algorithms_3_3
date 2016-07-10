@@ -337,7 +337,7 @@ int main(int argc, char* argv[]) {
 	  }
 	}
 	if (argc < 4){
-		cerr << "faltan parametros" << endl;
+		cout << "faltan parametros" << endl;
 		return 0;
 	}
 
