@@ -48,7 +48,7 @@ bool aparece(vector<int> mapeo, vector<vector<int > > grafoGrande, int i, int j)
 	int vertice1 = mapeo[i];
 	int vertice2 = mapeo[j];
 	bool respuesta = false;
-	for (int h = 0; h < grafoGrande[vertice1].size(); h++) {
+	for (int h = 0; h < grafoGrande[vertice1].size(); h++) { // a lo sumo n vecinos, no m! porque m puede ser O(n^2)
 		if (grafoGrande[vertice1][h] == vertice2) {  // me voy al grafo grande y busco si esta la arista (vertice1, vertice2)
 			respuesta = true;
 		}
@@ -75,7 +75,7 @@ vector<pair<int, int> > calcularConjAristas(vector<int> mapeo, vector<vector<int
 	}
 
 	return respuesta;
-}//O(n1 * n1 * (m1+n2))
+}//O(n1^2 * (m1+n2))
 
 
 vector<pair<int, int> > MCSgoloso(vector<vector<int> > grafoGrande, vector<vector<int> > grafoChico, vector<pair<int, int> > gradosGrafoGrande, vector<pair<int, int> > gradosGrafoChico) {
@@ -93,7 +93,7 @@ vector<pair<int, int> > MCSgoloso(vector<vector<int> > grafoGrande, vector<vecto
 	vector<pair<int, int> > respuesta;
 	respuesta = calcularConjAristas(mapeo, grafoChico, grafoGrande);//O(n1 * ni * (m1+n1))
 	return respuesta;      
-}//O(n1 * n1 * (m1+n1) + n1 + n1)
+}//O(n1^2 * (m1+n2) + 2n1)
 
 
 
@@ -157,8 +157,8 @@ int main(int argc, char* argv[]) {
 		gradosGrafo2.push_back(nodoGrado);
 	}
 
-	sort (gradosGrafo1.begin(), gradosGrafo1.end(), comparacion); // O(n1^2)//ordeno los nodos por grado (de mayor a menor)
-	sort (gradosGrafo2.begin(), gradosGrafo2.end(), comparacion); //O(n2^2)//ordeno los nodos por grado (de mayor a menor)
+	sort (gradosGrafo1.begin(), gradosGrafo1.end(), comparacion); // O(n1 log n1)//ordeno los nodos por grado (de mayor a menor)
+	sort (gradosGrafo2.begin(), gradosGrafo2.end(), comparacion); //O(n2 log n2)//ordeno los nodos por grado (de mayor a menor)
 
 	vector<pair<int, int> > respuesta;
 	int chico;
