@@ -60,6 +60,7 @@ vector<pair<int, int> > calcularConjAristas(vector<int> mapeo, vector<vector<int
 vector<int> mejorSolucion;
 vector<pair<int, int> > aristasMejorSolucion;
 
+
 void MCS(vector<int> mapeo, vector<vector<int> > grafoChico, vector<vector<int> > grafoGrande) { // O(n2+m2) 
 	// mapeo va a tener las cosas que mapeamos HASTA EL MOMENTO
 	// asumimos G1.size() <= G2.size() para no llenar nuestro codigo de IFs que son FEOS LOS IFs
@@ -75,20 +76,7 @@ void MCS(vector<int> mapeo, vector<vector<int> > grafoChico, vector<vector<int> 
 				arista.second = solucionProvisoria[i].second;
 				aristasMejorSolucion.push_back(arista);
 			}
-			/*for (int i = 0; i < aristasMejorSolucion.size(); i++) {
-				aristasMejorSolucion[i].first = solucionProvisoria[i].first;
-				aristasMejorSolucion[i].second = solucionProvisoria[i].second;
-			}
-			pair<int, int> arista;
-			for (int i = aristasMejorSolucion.size(); i < solucionProvisoria.size(); i++) {
-				arista.first = solucionProvisoria[i].first;
-				arista.second = solucionProvisoria[i].second;
-				aristasMejorSolucion.push_back(arista);
-			}*/
-			int tam = mejorSolucion.size();
-			for (int i = 0; i < tam; i++) {
-				mejorSolucion.pop_back();
-			}
+				mejorSolucion.clear();
 			for (int i = 0; i < mapeo.size(); i++) {
 				mejorSolucion.push_back(mapeo[i]);
 			}
@@ -150,17 +138,7 @@ int main() {
 	}
 
 	vector<int> mapeo;
-/*
-	if (n1 > n2) {
-		for (int i = 0; i < n2; i++) {
-			mapeo.push_back(-1);
-		}
-	} else {
-		for (int i = 0; i < n1; i++) {
-			mapeo.push_back(-1);
-		}
-	}*/
-	
+
 	int chico;
 
 	if (n1 > n2) {
