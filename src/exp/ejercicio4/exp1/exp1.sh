@@ -3,11 +3,11 @@
 LC_NUMERIC="en_US.UTF-8"
 
 iteraciones=1
-n1="$(seq 46 50 1001)"
+n1=30000
 # el minimo n que puedo tener dado el m es: min n {n * (n - 1) /2 >= m} 
-m1="1000" 
-n2=
-m2=
+m1="$(seq 448 5000 100001)"  #este parametro es el que hay que variar
+n2=300000 #El grafo2 queda completamente fijo, el n es el mismo en los dos.
+m2=300000 #Guarda que el grafo2 no sea uno especial, tipo estrella o algo asi. 
 
 while getopts 'ha:' opt; do
   case $opt in
@@ -23,23 +23,23 @@ while getopts 'ha:' opt; do
   esac
 done
 
-#genero archivos de entrada
-for i in $n; do
-  echo "Esta creando el archivo numero"
+#genero archivos de entrada 
+for i in $m1; do
+  echo "Esta creando el archivo numero "
   printf "%d\n " $i
-  printf "%d %d %d \n" $i $m1 $n2 $m2 | $(dirname $0)/generador-GrafoAleatorio #parametros del programa generador de archivos de entrada (n, m, pesomin, pesomax) 
+  printf "%d %d %d \n" $n1 $i $n2 $m2 | $(dirname $0)/generador-GrafoAleatorio 
 done 
 
 printf "%d \n" $iteraciones >> $(dirname $0)/tiempos-exp1.txt
 
-for k in $n; do
+for k in $m1; do
   printf "%d " $k >> $(dirname $0)/tiempos-exp1.txt
   echo "Esta corriendo la instancia numero"
   printf "%d\n " $k
   for h in $(seq 1 $iteraciones); do
     echo "iteracion numero"
     printf "%d\n " $h
-    $(dirname $0)/../../../ejercicio4 < $(dirname $0)/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt -t >> $(dirname $0)/tiempos-exp1.txt
+    $(dirname $0)/../../../ejercicio4 < $(dirname $0)/grafo-n1-$n1-m1-$k-n2-$n2-m2-$m2.txt -t >> $(dirname $0)/tiempos-exp1.txt
   done
   printf "\n" >> $(dirname $0)/tiempos-exp1.txt
 done

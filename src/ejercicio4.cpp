@@ -75,7 +75,7 @@ vector<pair<int, int> > calcularConjAristas(vector<int> mapeo, vector<vector<int
 	}
 
 	return respuesta;
-}//O(n1 * ni * (m1+n1))
+}//O(n1 * n1 * (m1+n2))
 
 
 vector<pair<int, int> > MCSgoloso(vector<vector<int> > grafoGrande, vector<vector<int> > grafoChico, vector<pair<int, int> > gradosGrafoGrande, vector<pair<int, int> > gradosGrafoChico) {
