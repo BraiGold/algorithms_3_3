@@ -12,7 +12,7 @@ while getopts 'ha:' opt; do
   case $opt in
     a) iteraciones=$OPTARG ;;
     h) echo ""
-       echo "    Experimento 1 - Tiempo de ejecución variando cantidad de nodos"
+       echo "    Experimento 2"
        echo ""
        echo "    Opciones disponibles:"
        echo "        -h        Imprime este texto de ayuda."
@@ -64,7 +64,7 @@ for k in $n1; do
   for h in $(seq 1 $iteraciones); do
     echo "iteracion numero"
     printf "%d\n " $h
-    $(dirname $0)/../../../ejercicio4 < $(dirname $0)/f1/grafo-n1-$k-m1-$-n2-$n2-m2-$m2.txt -t >> $(dirname $0)/tiempos-exp2-f1.txt
+    $(dirname $0)/../../../ejercicio4 < $(dirname $0)/f1/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt -t >> $(dirname $0)/tiempos-exp2-f1.txt
   done
   printf "\n" >> $(dirname $0)/tiempos-exp2-f1.txt
 done
@@ -77,7 +77,7 @@ for k in $n1; do
   for h in $(seq 1 $iteraciones); do
     echo "iteracion numero"
     printf "%d\n " $h
-    $(dirname $0)/../../../ejercicio4 < $(dirname $0)/f2/grafo-n1-$k-m1-$-n2-$n2-m2-$m2.txt -t >> $(dirname $0)/tiempos-exp2-f2.txt
+    $(dirname $0)/../../../ejercicio4 < $(dirname $0)/f2/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt -t >> $(dirname $0)/tiempos-exp2-f2.txt
   done
   printf "\n" >> $(dirname $0)/tiempos-exp2-f2.txt
 done
@@ -90,7 +90,7 @@ for k in $n1; do
   for h in $(seq 1 $iteraciones); do
     echo "iteracion numero"
     printf "%d\n " $h
-    $(dirname $0)/../../../ejercicio4 < $(dirname $0)/f3/grafo-n1-$k-m1-$-n2-$n2-m2-$m2.txt -t >> $(dirname $0)/tiempos-exp2-f3.txt
+    $(dirname $0)/../../../ejercicio4 < $(dirname $0)/f3/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt -t >> $(dirname $0)/tiempos-exp2-f3.txt
   done
   printf "\n" >> $(dirname $0)/tiempos-exp2-f3.txt
 done
@@ -103,7 +103,7 @@ for k in $n1; do
   for h in $(seq 1 $iteraciones); do
     echo "iteracion numero"
     printf "%d\n " $h
-    $(dirname $0)/../../../ejercicio4 < $(dirname $0)/f4/grafo-n1-$k-m1-$-n2-$n2-m2-$m2.txt -t >> $(dirname $0)/tiempos-exp2-f4.txt
+    $(dirname $0)/../../../ejercicio4 < $(dirname $0)/f4/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt -t >> $(dirname $0)/tiempos-exp2-f4.txt
   done
   printf "\n" >> $(dirname $0)/tiempos-exp2-f4.txt
 done
