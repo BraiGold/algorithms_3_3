@@ -85,6 +85,7 @@ for k in $n1; do
   printf "\n" >> $(dirname $0)/tiempos-exp2-f2-tipo1.txt
 done
 
+
 for k in $n1; do
   printf "%d " $k >> $(dirname $0)/tiempos-exp2-f3-tipo1.txt
   m1 = 3*$k

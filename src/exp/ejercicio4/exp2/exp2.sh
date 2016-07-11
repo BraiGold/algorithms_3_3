@@ -3,10 +3,10 @@
 LC_NUMERIC="en_US.UTF-8"
 
 iteraciones=1
-n1="$(seq 448 5000 100001)"
+n1="$(seq 100 20 600)"
 # el minimo n que puedo tener dado el m es: min n {n * (n - 1) /2 >= m} 
-n2=300000 #El grafo2 queda completamente fijo, el n es el mismo en los dos.
-m2=300000 #Guarda que el grafo2 no sea uno especial, tipo estrella o algo asi. 
+n2=300 #El grafo2 queda completamente fijo, el n es el mismo en los dos.
+m2=2500 #Guarda que el grafo2 no sea uno especial, tipo estrella o algo asi. 
 
 while getopts 'ha:' opt; do
   case $opt in
@@ -22,33 +22,37 @@ while getopts 'ha:' opt; do
   esac
 done
 
+
 #genero archivos de entrada 
 for i in $n1; do
-  m1 = $i*($i-1))/2 
+  aux=$((i-1))
+  aux2=$((i*aux))
+  m1=$((aux2/2))
   echo "Esta creando el archivo numero "
   printf "%d\n " $i
-  printf "%d %d %d \n" $i $m1 $n2 $m2 | $(dirname $0)/f1/generador-GrafoAleatorio 
+  printf "f1 %d %d %d %d \n" $i $m1 $n2 $m2 | $(dirname $0)/../../../generador-grafo-rapido 
 done
 
 for i in $n1; do
-  m1 = $i-1
+  m1=$((i-1))
   echo "Esta creando el archivo numero "
   printf "%d\n " $i
-  printf "%d %d %d \n" $i $m1 $n2 $m2 | $(dirname $0)/f2/generador-GrafoAleatorio 
+  printf "f2 %d %d %d %d \n" $i $m1 $n2 $m2 | $(dirname $0)/../../../generador-grafo-rapido 
 done
 
 for i in $n1; do
-  m1 = 3*$i
+  m1=$((3*i))
   echo "Esta creando el archivo numero "
   printf "%d\n " $i
-  printf "%d %d %d \n" $i $m1 $n2 $m2 | $(dirname $0)/f3/generador-GrafoAleatorio 
+  printf "f3 %d %d %d %d \n" $i $m1 $n2 $m2 | $(dirname $0)/../../../generador-grafo-rapido 
 done
 
 for i in $n1; do
-  m1 = $i^2/10
+  aux=$((i^2))
+  m1=$((aux/10))
   echo "Esta creando el archivo numero "
   printf "%d\n " $i
-  printf "%d %d %d \n" $i $m1 $n2 $m2 | $(dirname $0)/f4/generador-GrafoAleatorio 
+  printf "f4 %d %d %d %d \n" $i $m1 $n2 $m2 | $(dirname $0)/../../../generador-grafo-rapido
 done
 
 printf "%d \n" $iteraciones >> $(dirname $0)/tiempos-exp2-f1.txt
@@ -58,7 +62,9 @@ printf "%d \n" $iteraciones >> $(dirname $0)/tiempos-exp2-f4.txt
 
 for k in $n1; do
   printf "%d " $k >> $(dirname $0)/tiempos-exp2-f1.txt
-  m1 = $k*($k-1))/2 
+  aux=$((k-1))
+  aux2=$((k*aux))
+  m1=$((aux2/2))
   echo "Esta corriendo la instancia numero"
   printf "%d\n " $k
   for h in $(seq 1 $iteraciones); do
@@ -71,7 +77,7 @@ done
 
 for k in $n1; do
   printf "%d " $k >> $(dirname $0)/tiempos-exp2-f2.txt
-  m1 = $k-1 
+  m1=$((k-1))
   echo "Esta corriendo la instancia numero"
   printf "%d\n " $k
   for h in $(seq 1 $iteraciones); do
@@ -84,7 +90,7 @@ done
 
 for k in $n1; do
   printf "%d " $k >> $(dirname $0)/tiempos-exp2-f3.txt
-  m1 = 3*$k
+  m1=$((3*k))
   echo "Esta corriendo la instancia numero"
   printf "%d\n " $k
   for h in $(seq 1 $iteraciones); do
@@ -97,7 +103,8 @@ done
 
 for k in $n1; do
   printf "%d " $k >> $(dirname $0)/tiempos-exp2-f4.txt
-  m1 = $k^2/10
+  aux=$((k^2))
+  m1=$((aux/10))
   echo "Esta corriendo la instancia numero"
   printf "%d\n " $k
   for h in $(seq 1 $iteraciones); do
