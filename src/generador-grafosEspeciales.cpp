@@ -23,29 +23,29 @@ int randombis() {
 	return rand() % 1000 + (rand() % 1000) * 1000 + (rand() % 1000) * 1000000;
 }
 
-vector<pair<int,int> > union(vector<pair<int,int> > g1, vector<pair<int,int> > g2) {
+vector<pair<int,int> > union1(vector<pair<int,int> > g1, int n1, vector<pair<int,int> > g2, int n2) {
 	vector<pair<int,int> > respuesta = g1;
 	pair<int,int> arista;
 	for(int i = 0; i < g2.size(); i++) {
-		arista.first = g2[i].first;
-		arista.second = g2[i].second;
+		arista.first = g2[i].first + n1;
+		arista.second = g2[i].second + n1;
 		respuesta.push_back(arista);
 	}
 	return respuesta;
 }
 
-vector<pair<int,int> >  join(vector<pair<int,int> > g1, vector<pair<int,int> > g2) {
+vector<pair<int,int> >  join(vector<pair<int,int> > g1, int n1, vector<pair<int,int> > g2, int n2) {
 	vector<pair<int,int> > respuesta = g1;
 	pair<int,int> arista;
 	for(int i = 0; i < g2.size(); i++) {
-		arista.first = g2[i].first + g1.size();
-		arista.second = g2[i].second + g1.size();
+		arista.first = g2[i].first + n1;
+		arista.second = g2[i].second + n1;
 		respuesta.push_back(arista);
 	}
-	for (int i = 0; i < g1.size(); i++) {
-		for(int j = 0; j < g2.size(); j++) {
+	for (int i = 0; i < n1; i++) {
+		for(int j = 0; j < n2; j++) {
 			arista.first = i;
-			arista.second = j + gi.size();
+			arista.second = j + n1;
 			respuesta.push_back(arista);
 		}
 	}
@@ -57,15 +57,15 @@ vector<pair<int,int> > dameCografo(int n) {
     //rand = randombis() %  (max - min + 1) + min; 
  	vector<pair<int,int> >res;
 	if (n != 1){
-		int random = randombis() % (1 + 1); //entre 0 y 1
+		int random = randombis() % 	2; //entre 0 y 1
 		int n1 = randombis() % (n - 1) + 1; //entre 0 y n-1
 		int n2 = n - n1;
 		vector<pair<int,int> > G1 = dameCografo(n1);
 		vector<pair<int,int> > G2 = dameCografo(n2);
 		if(random == 0) {
-			res = join(G1, G2);
+			res = join(G1, n1, G2, n2);
 		} else{
-			res = union(G1, G2);
+			res = union1(G1, n1, G2, n2);
 		}
 	}
 	return res;
@@ -191,6 +191,16 @@ vector<pair<int,int> >  generarBipartito(int n1, int n2, int m) {
         return aristas;
 }
 
+vector<pair<int,int> > dameCompleto(int n1) {
+	vector<pair<int,int> > aristas;
+
+	for(int i=0;i<n1;i++)
+		for(int j=0;j<i;j++)
+			aristas.push_back(make_pair(i,j));
+
+	return aristas;
+}
+
 int main() {
 	FILE * doc;
 	int tipog1, tipog2; //para los tipos de grafos
@@ -199,6 +209,7 @@ int main() {
 	//3 == grafo Cn
 	//4 == grafo estrella
 	//5 == cografo
+	//6 == completo
 
 	cin >> tipog1 >> tipog2;
 	int n1, m1, n2, m2;
@@ -233,6 +244,20 @@ int main() {
 					m1 = v2;
 					aristas1 = generarBipartito(1, v2, m1);
 				}
+				else {
+					if (tipog1 == 5) { // pidieron cografo
+						cin >> n1;
+						aristas1 = dameCografo(n1);
+					}
+					else {
+						if(tipog1 == 6) { // pidieron Kn
+							cin >> n1;
+							aristas1 = dameCompleto(n1);
+						}
+					}
+					m1 = aristas1.size();
+					cerr << m1 << endl;
+				}
 			}
 		}
 	}
@@ -264,6 +289,20 @@ int main() {
 					m2 = v2;
 					aristas2 = generarBipartito(1, v2, m2);
 				}
+				else {
+					if (tipog2 == 5) { // pidieron cografo
+						cin >> n2;
+						aristas2 = dameCografo(n2);
+					}
+					else {
+						if(tipog2 == 6) { // pidieron Kn
+							cin >> n2;
+							aristas2 = dameCompleto(n2);
+						}
+					}
+					m2 = aristas2.size();
+					cerr << m2 << endl;
+				}
 			}
 		}
 	}
@@ -284,7 +323,6 @@ int main() {
 		for (int i = 0; i < m2 ; i++) {
 			fprintf(doc, "%d %d\n", aristas2[i].first, aristas2[i].second);
 		}
-    	
 
     	fclose(doc);
 	}
