@@ -23,6 +23,56 @@ int randombis() {
 	return rand() % 1000 + (rand() % 1000) * 1000 + (rand() % 1000) * 1000000;
 }
 
+vector<pair<int,int> > union(vector<pair<int,int> > g1, vector<pair<int,int> > g2) {
+	vector<pair<int,int> > respuesta = g1;
+	pair<int,int> arista;
+	for(int i = 0; i < g2.size(); i++) {
+		arista.first = g2[i].first;
+		arista.second = g2[i].second;
+		respuesta.push_back(arista);
+	}
+	return respuesta;
+}
+
+vector<pair<int,int> >  join(vector<pair<int,int> > g1, vector<pair<int,int> > g2) {
+	vector<pair<int,int> > respuesta = g1;
+	pair<int,int> arista;
+	for(int i = 0; i < g2.size(); i++) {
+		arista.first = g2[i].first + g1.size();
+		arista.second = g2[i].second + g1.size();
+		respuesta.push_back(arista);
+	}
+	for (int i = 0; i < g1.size(); i++) {
+		for(int j = 0; j < g2.size(); j++) {
+			arista.first = i;
+			arista.second = j + gi.size();
+			respuesta.push_back(arista);
+		}
+	}
+	return respuesta;
+
+}
+
+vector<pair<int,int> > dameCografo(int n) {
+    //rand = randombis() %  (max - min + 1) + min; 
+ 	vector<pair<int,int> >res;
+	if (n != 1){
+		int random = randombis() % (1 + 1); //entre 0 y 1
+		int n1 = randombis() % (n - 1) + 1; //entre 0 y n-1
+		int n2 = n - n1;
+		vector<pair<int,int> > G1 = dameCografo(n1);
+		vector<pair<int,int> > G2 = dameCografo(n2);
+		if(random == 0) {
+			res = join(G1, G2);
+		} else{
+			res = union(G1, G2);
+		}
+	}
+	return res;
+}
+
+
+
 vector<pair<int,int> > generarArbol(int n) {
 	
 	vector<bool> loUse;

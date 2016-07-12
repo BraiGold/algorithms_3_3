@@ -57,12 +57,20 @@ bool yaEsta(vector<pair<int, int> > vec, int i, int j) {
 vector<pair<int, int> > calcularConjAristas(vector<int> mapeo, vector<vector<int > > grafoChico, vector<vector<int > > grafoGrande) {
 	vector<pair<int, int> > respuesta; //para este mapeo, cual es el subgrafo comun maximo
 	pair<int, int> arista;
+	cerr << "primer for" << endl;
+	cerr << "grafo chico. size = " << grafoChico.size() << endl;
+	cerr << "mapeo. size = " << mapeo.size() << endl;
 
 	for (int i = 0; i < grafoChico.size(); i++) { //nos fijamos si la arista que esta en el grafoChico, aparece en el grafoGrande (con este mapeo)
+		cerr << "i: " << i << endl;
 		if (mapeo[i] != -1) { 
+			cerr << "mapeo [i]=" << mapeo[i] << endl;
 			for (int j = 0; j < grafoChico[i].size(); j++) {
+				cerr << "entro al for" << endl;
 				if(mapeo[grafoChico[i][j]] != -1){ 
+					cerr << "mapeo[grafoChico[i][j]] = " << mapeo[grafoChico[i][j]] << endl;
 					if (aparece(mapeo, grafoGrande, i, grafoChico[i][j]) && !yaEsta(respuesta, i, grafoChico[i][j])) {
+						cerr << "entre al if" << endl;
 						arista.first = i;
 						arista.second = grafoChico[i][j]; 
 						respuesta.push_back(arista);
@@ -144,7 +152,6 @@ vector<vector<int> > calcularVecindadUnoTipoA(vector<int> mapeo, int cuantosVeci
 	pair<int, int> par;
 	int tamMapeo = mapeo.size();
 	int c = min(tamMapeo, cuantosVecinosMiro);
-	cerr << "cuantosMiro: " << cuantosVecinosMiro << " " << "tamMapeo" << tamMapeo << endl;
 	for (int i = 0; i < c; i++) {//O(n1)
 		//peso = randombis() %  (max_peso - min_peso + 1) + min_peso;  
 		r1 = randombis() % (mapeo.size()); // entre 0 y mapeo.size() - 1
@@ -173,12 +180,11 @@ vector<vector<int> > calcularVecindadUnoTipoA(vector<int> mapeo, int cuantosVeci
 
 		respuesta.push_back(mapeoVecino);
 	}	
-	cerr << "por salir de calcularVecA" << endl;
 	return respuesta;
 }//O(n1²)
 
 
-vector<vector<int> > calcularVecindadTipoB(vector<int> mapeo, int totalNodosGrafoGrande) {//devuelve una lista con todos los mapeos vecinos
+vector<vector<int> > calcularVecindadTipoB(vector<int> mapeo, int totalNodosGrafoGrande, int cuantosVecinosMiro) {//devuelve una lista con todos los mapeos vecinos
 	vector<vector<int> > respuesta;
 
 	vector<pair<int, int> > randoms;
@@ -227,14 +233,17 @@ bool estaEnTabu(vector<int> mapeo){
 }
 
 vector<int> dameElMejorNoTabu(vector<vector<int> > vecindadA, vector<vector<int> > vecindadB, vector<vector<int> > grafoChico, vector<vector<int> > grafoGrande, int cuantosMiro) { //esta funcion devuelve el mejor de las opciones de vecinos pero que no se encuentre en la lista tabu. Como a veces puede tener demasiados vecinos un mapeo hay un maximo que puedo mirar.
+	cerr << "entro a damemejor no tabu" << endl;
+
 	vector<vector<int> > vecindadEntera = vecindadA;
 	for(int i=0;i<vecindadB.size();i++) {
 		vecindadEntera.push_back(vecindadB[i]);
 	}
 	random_shuffle(vecindadEntera.begin(), vecindadEntera.end());
 	vecindadEntera.resize(cuantosMiro);
-	cerr << "ya tengo el vecindadEntera" << endl;
 	int indice;
+	cerr << "pasa el for 1" << endl;
+
 	//int indiceVecindadA;
 	//int indiceVecindadB;
 	//bool esDeLaA = false;
@@ -253,14 +262,14 @@ vector<int> dameElMejorNoTabu(vector<vector<int> > vecindadA, vector<vector<int>
 		cuantosMiroDeA = cuantosMiro;
 		cuantosMiroDeB = 0;
 	}*/
-		cerr << "tam vecindad entera: " << " " << vecindadEntera.size() << endl;
+	cerr << "por ir al for 2" << endl;
+
 	for(int i = 0; i < vecindadEntera.size(); i++) {
-		cerr << "i: " << " " << i << endl;
 		cerr << estaEnTabu(vecindadEntera[i]) << endl;
 		if(!estaEnTabu(vecindadEntera[i])){
-			cerr << "entre al if" << endl;
+			cerr << "entro a conj aristas" << endl;
 			conjAristas = calcularConjAristas(vecindadEntera[i], grafoChico, grafoGrande);
-			cerr << "calcule conj aristas" << endl;
+			cerr << "sale de conj aristas" << endl;
 			cantAristasMapeoNuevo = conjAristas.size();
 			if(cantAristasMapeoNuevo > maximoTamanoHastaAhora) {
 				//esDeLaA = true;
@@ -270,6 +279,8 @@ vector<int> dameElMejorNoTabu(vector<vector<int> > vecindadA, vector<vector<int>
 			}
 		}
 	}
+	cerr << "pasa el for 2" << endl;
+
 	/*
 	for(int i = 0; i < cuantosMiroDeB; i++) {
 		if(!estaEnTabu(vecindadB[i])){
@@ -295,6 +306,7 @@ vector<int> dameElMejorNoTabu(vector<vector<int> > vecindadA, vector<vector<int>
 }//O(n1)
 
 vector<int> MCStabu(vector<int> mapeo, vector<vector<int> > grafoChico, vector<vector<int> > grafoGrande, int cuantosVecinosMiro, int maxTamTabu, int k) {//k = No se encontro una mejora en las ultimas k iteraciones.
+	cerr << "entro a mcs tabu" << endl;
 	vector<int> mejorMapeo;
 	
 	for(int i = 0; i < mapeo.size(); i++){ //mejorMapeo = mapeo
@@ -305,15 +317,19 @@ vector<int> MCStabu(vector<int> mapeo, vector<vector<int> > grafoChico, vector<v
 
 	vector<vector<int> > vecindadA = calcularVecindadUnoTipoA(mapeo, cuantosVecinosMiro);//O(n1²)
 	vector<vector<int> > vecindadB = calcularVecindadTipoB(mapeo, grafoGrande.size());//O(n1²)
+	cerr << "ya calcule vecindades" << endl;
 	
 	vector<int> mejorVecino;
 	vector<pair<int, int> > conjAristasMejorVecino;
 	vector<int> mapeoQueTengoQueSacar;
+	cerr << "por entrar al ciclo" << endl;
 
 	int j = 0;
 	while(j < k){
 
 		mejorVecino = dameElMejorNoTabu(vecindadA, vecindadB, grafoChico, grafoGrande, cuantosVecinosMiro);//O(n1)
+		cerr << "me dio en mejor no tabu" << endl;
+
 
 		conjAristasMejorVecino = calcularConjAristas(mejorVecino, grafoChico, grafoGrande); 
 
@@ -344,6 +360,7 @@ vector<int> MCStabu(vector<int> mapeo, vector<vector<int> > grafoChico, vector<v
 	}
 
 	return mejorMapeo;
+	cerr << "salgo de mcs tabu" << endl;
 }
 
 

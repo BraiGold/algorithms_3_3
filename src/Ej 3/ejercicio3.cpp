@@ -1,5 +1,18 @@
 #include "ejercicio3.h"
 
+timeval timeStart, timeEnd;
+
+void init_time()
+{
+    gettimeofday(&timeStart,NULL);
+}
+
+double get_time()
+{
+    gettimeofday(&timeEnd,NULL);
+    return (1000000*(timeEnd.tv_sec-timeStart.tv_sec)+(timeEnd.tv_usec-timeStart.tv_usec))/1000000.0;
+}
+
 int primer_indice(bool vec[], vector<Vertice>* g) { // Devuelve el número de nodo para elegir, -3 si todos los nodos fueron recorridos
   int indice = 0;
   int n = (*g).size();
@@ -305,6 +318,13 @@ bool es_cografo(vector<Vertice>* g) { // Devuelve true si g es cografo, false en
 }
 
 int main(int argc, char *argv[]) {
+  bool pidieronTiempo = false; 
+  double tiempo;
+  if (argc > 1) {
+    if (argv[1] == string("-t")) {
+      pidieronTiempo = true;
+    }
+  }
   int N1, M1, N2, M2;
   cin >> N1;
   cin >> M1;
@@ -338,6 +358,9 @@ int main(int argc, char *argv[]) {
     G_2[v].adyacentes.push_back(u);
   }
   
+  init_time();
+
+
   Cotree raiz;
   make_cotree(&G_1, &raiz); // Asumo que el G_1 es el cografo
   binarizar(&raiz);
@@ -345,6 +368,8 @@ int main(int argc, char *argv[]) {
   int K_n = N2; // Asumo que el G_2 es el grafo completo
   vector<AristasNodos> sol = vector<AristasNodos>(K_n+1);
   solucion(&raiz, K_n, &sol);
+  
+  tiempo = get_time();
   
   cout << sol[K_n].nodos.size() << " " << sol[K_n].aristas << endl;
   
@@ -354,6 +379,7 @@ int main(int argc, char *argv[]) {
   for(int i = 0; i < (int)G_1.size(); i++) {
     G_1[i].pertenece = false;
   }
+  
   vector<int>::iterator inicio = sol[K_n].nodos.begin();
   vector<int>::iterator fin = sol[K_n].nodos.end();
   while(inicio != fin) {
