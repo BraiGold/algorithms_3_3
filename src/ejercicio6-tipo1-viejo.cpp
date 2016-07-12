@@ -346,7 +346,6 @@ int main(int argc, char* argv[]) {
 	int k = atoi(argv[3]);
 
 
-
 	int m1, n1, m2, n2;
 	cin >> n1 >> m1 >> n2 >> m2;
 
