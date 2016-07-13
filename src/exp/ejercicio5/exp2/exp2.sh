@@ -8,6 +8,7 @@ n1="$(seq 100 20 600)"
 n2=600 #El grafo2 queda completamente fijo, el n es el mismo en los dos.
 m2=400 #Guarda que el grafo2 no sea uno especial, tipo estrella o algo asi. 
 
+
 while getopts 'ha:' opt; do
   case $opt in
     a) iteraciones=$OPTARG ;;

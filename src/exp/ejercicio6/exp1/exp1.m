@@ -1,5 +1,5 @@
 % Procesado de los datos
-[planetas_x, tiempo_y, e, cant] = leer_datos_float('tiempos-exp1.txt');
+[m_x, tiempo_y, e, cant] = leer_datos_float('tiempos-exp1.txt');
 
 
 % Creación de los gráficos
@@ -7,51 +7,36 @@ filetype='-dpng';
 %mkdir('graficos');
 figure;
 
-m = 1000; %CANTIDAD DE ARISTAS CONSTANTE	
-
-n = size(planetas_x);
-ult = planetas_x(n);
+% COMPLEJIDAD $\mathcal{O}(((n_1+m_1)*m_2*n_1+n_1*log(t)+t)*K* min\{m_1,m_2\})$
+m1 = size(m_x); 
+ult = m_x(m1);
 ultimo = ult(1);
-primero = planetas_x(1);
-
-%disp(primero);
-%disp(ultimo);
-
-% COMPLEJIDAD O(m + n + n log m)
-
-
+primero = m_x(1);
 dim = ultimo-primero+1; %+1 porque matlab no me cuenta el cero -.-
-%disp(dim);
 
+%=============================calculo n1 = 200
+n1_vec(1:dim)=200;
 
-eje_x = (primero:ult);
-%disp('x');
-%disp(eje_x);
+%=============================calculo m1
+m1_vec = (primero:ult);
 
-auxm(1:dim) = m;
-disp('M:');
-disp(m);
+%=============================calculo n2 = 200 Y m2 = 2500
+n2_vec(1:dim)=200; 
+m2_vec(1:dim)=2500;
 
-auxlog = log2(auxm);
-disp('log');
-disp(auxlog);
+complejidad=times(times(times(n1_vec+m1_vec,m2_vec),n1_vec),MINIMO)+times(n2_vec,log2(n2_vec));
 
-aux_y = (auxm + eje_x + times(eje_x, auxlog));
-disp(aux_y);
-eje_y = times(aux_y, 1/4000000) 
-
-%eje_y(1:dim) = (log2(m) * m) *(1/5000000);
-disp('y');
+complejidad_por_constante=times(complejidad,1/1600000000);
 
 hold on;
 x = gca;
 xlim([0 dim]);
 %ylim([0.0005 0.0022]);
-plot(eje_x,eje_y,'r'); 
-errorbar(planetas_x, tiempo_y, e, 'b');
-xlabel('Cantidad de Planetas','FontSize',12); %CAMBIAR M
+h=plot(m1_vec,complejidad_por_constante,'r');  %complejidad
+errorbar(m_x, tiempo_y, e, 'b');
+xlabel('m','FontSize',12); %CAMBIAR M
 ylabel('Tiempo de ejecucion en segundos','FontSize',10);
-legend('Complejidad O(n + m + n log m)','Tiempo de ejecucion del algoritmo','Location','northwest')
-%set(get(h, 'Parent'), 'YScale', 'log');
+legend('Complejidad O((n2^n1) x (n1+m1) x m2)','Tiempo de ejecucion del algoritmo','Location','southeast')
+set(get(h, 'Parent'), 'YScale', 'log');
 hold off;
 print('exp1', filetype);
