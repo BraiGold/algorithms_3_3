@@ -3,9 +3,9 @@
 LC_NUMERIC="en_US.UTF-8"
 
 iteraciones=1
-n1="$(seq 100 20 600)"
+n1="$(seq 100 20 320)"
 # el minimo n que puedo tener dado el m es: min n {n * (n - 1) /2 >= m} 
-n2=600 #El grafo2 queda completamente fijo, el n es el mismo en los dos.
+n2=320 #El grafo2 queda completamente fijo, el n es el mismo en los dos.
 m2=2500 #Guarda que el grafo2 no sea uno especial, tipo estrella o algo asi. 
 
 while getopts 'ha:' opt; do

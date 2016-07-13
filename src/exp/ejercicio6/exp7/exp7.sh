@@ -45,6 +45,19 @@ for i in $k; do
   printf "\n" >> $(dirname $0)/tiempos-exp7.txt
 done
 
+#==================aristas=======================================================
+
+printf "%d \n" 1 >> $(dirname $0)/aristas-exp7.txt
+
+for i in $k; do
+  printf "%d " $i >> $(dirname $0)/aristas-exp7.txt
+  echo "Esta corriendo la instancia numero"
+  printf "%d\n " $i
+  $(dirname $0)/../../../ejercicio6-tipo1 < $(dirname $0)/grafosDeEntrada/grafo-n1-$n1-m1-$m1-n2-$n2-m2-$m2.txt $cuanosMiro $tamTabu $i | $(dirname $0)/../../../dameCantAristas >> $(dirname $0)/aristas-exp7.txt
+  printf "\n" >> $(dirname $0)/aristas-exp7.txt
+done
+
+
 #aca voy a tener dos archivos con tiempo. El eje x es "k" que varia y el eje y el tiempo de ejecucion. Vamos a tener dos curvas, una por cada vecindad.
 
 #octave -q $(dirname $0)/exp1.m
