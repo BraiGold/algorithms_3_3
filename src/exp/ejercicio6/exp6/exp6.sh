@@ -3,14 +3,13 @@
 LC_NUMERIC="en_US.UTF-8"
 
 iteraciones=1
-n1=200
-n2=200
-m1=1000
-m2=1000
-tamTabu=n1
-cuantosMiro="$(seq 100 50 1000)"
-k=n1
-# el minimo n que puedo tener dado el m es: min n {n * (n - 1) /2 >= m} 
+n1=100
+n2=100
+m1=200
+m2=200
+tamTabu=20
+cuantosMiro="$(seq 5 5 30)"
+k=10
 
 while getopts 'ha:' opt; do
   case $opt in
