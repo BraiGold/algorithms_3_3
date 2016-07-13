@@ -17,22 +17,13 @@ dim = ultimo-primero+1; %+1 porque matlab no me cuenta el cero -.-
 
 %=============================calculo n1 = 8
 n1_vec(1:dim)=8;
-disp('N1:');
-disp(n1_vec);
 
 %=============================calculo m1
 m1_vec = (primero:ult);
-disp('M1:');
-disp(m1_vec);
-
 
 %=============================calculo n2 = 8 Y m2 = 17
 n2_vec(1:dim)=8; 
-disp('N2:');
-disp(n2_vec);
 m2_vec(1:dim)=17;
-disp('M2:');
-disp(m2_vec);
 
 %======= calculo N1+M1
 aux1=n1_vec+m1_vec;
