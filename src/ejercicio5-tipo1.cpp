@@ -68,7 +68,7 @@ vector<pair<int, int> > calcularConjAristas(vector<int> mapeo, vector<vector<int
 		}
 	}
 	return respuesta;
-}//O(n1 * ni * (m1+n1))
+}
 
 
 
@@ -85,7 +85,7 @@ vector<int> MCSgoloso(vector<vector<int> > grafoGrande, vector<vector<int> > gra
 	}
 
 	return mapeo;      
-}//O(n1 * n1 * (m1+n1) + n1 + n1)
+}
 
 
 vector<int> hacerMCSgoloso(vector<vector<int> > grafo1, vector<vector<int> > grafo2, vector<vector<int> > grafo1ordenado, vector<vector<int> > grafo2ordenado, int n1, int n2) {
@@ -137,11 +137,11 @@ vector<vector<int> > calcularVecindadUnoTipoA(vector<int> mapeo) {//devuelve una
 	vector<pair<int, int> > randoms;
 	int r1, r2;
 	pair<int, int> par;
-	for (int i = 0; i < mapeo.size(); i++) {//O(n1)
+	for (int i = 0; i < mapeo.size(); i++) {
 		//peso = randombis() %  (max_peso - min_peso + 1) + min_peso;  
 		r1 = randombis() % (mapeo.size()); // entre 0 y mapeo.size() - 1
 		r2 = randombis() % (mapeo.size()); // entre 0 y mapeo.size() - 1
-		while(r1 == r2 || estaTupla(r1, r2, randoms)) { //O(n1)
+		while(r1 == r2 || estaTupla(r1, r2, randoms)) { 
 			r1 = randombis() % (mapeo.size());
 			r2 = randombis() % (mapeo.size());
 		}
@@ -167,7 +167,7 @@ vector<vector<int> > calcularVecindadUnoTipoA(vector<int> mapeo) {//devuelve una
 	}	
 
 	return respuesta;
-}//O(n1²)
+}
 
 
 vector<vector<int> > calcularVecindadTipoB(vector<int> mapeo, int totalNodosGrafoGrande) {//devuelve una lista con todos los mapeos vecinos
@@ -246,7 +246,7 @@ vector<int> dameElMejor(vector<vector<int> > vecindadA, vector<vector<int> > vec
 			return vecindadB[esVecindadB];
 		}
 	}
-}//O(n1)
+}
 
 bool sonIguales(vector<int> mapeo1, vector<int> mapeo2){
 	bool res = true;
@@ -256,7 +256,7 @@ bool sonIguales(vector<int> mapeo1, vector<int> mapeo2){
 		}
 	}
 	return res;
-}//O(n1)
+}
 
 
 vector<int> MCSbusquedaLocalUno(vector<int> mapeo, vector<vector<int> > grafoChico, vector<vector<int> > grafoGrande) {

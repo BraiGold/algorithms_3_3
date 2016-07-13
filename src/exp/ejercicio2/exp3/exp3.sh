@@ -3,7 +3,7 @@
 LC_NUMERIC="en_US.UTF-8"
 
 iteraciones=1
-n="$(seq 5 5 35)"
+n="$(seq 1 1 8)"
 # el minimo n que puedo tener dado el m es: min n {n * (n - 1) /2 >= m} 
 
 while getopts 'ha:' opt; do

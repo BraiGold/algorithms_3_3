@@ -23,12 +23,12 @@ while getopts 'ha:' opt; do
   esac
 done
 
-genero archivos de entrada 
-for i in $m1; do
-  echo "Esta creando el archivo numero "
-  printf "%d\n " $i
-  printf "grafosDeEntrada %d %d %d %d \n" $n1 $i $n2 $m2 | $(dirname $0)/../../../generador-grafo-rapido
-done 
+#genero archivos de entrada 
+#for i in $m1; do
+#  echo "Esta creando el archivo numero "
+#  printf "%d\n " $i
+#  printf "grafosDeEntrada %d %d %d %d \n" $n1 $i $n2 $m2 | $(dirname $0)/../../../generador-grafo-rapido
+#done 
 
 printf "%d \n" $iteraciones >> $(dirname $0)/tiempos-exp1.txt
 

@@ -3,10 +3,12 @@
 LC_NUMERIC="en_US.UTF-8"
 
 iteraciones=1
-n1="$(seq 5 5 35)"
+n1="$(seq 1 1 10)"
 # el minimo n que puedo tener dado el m es: min n {n * (n - 1) /2 >= m} 
-n2=15 #El grafo2 queda completamente fijo, el n es el mismo en los dos.
-m2=250 #Guarda que el grafo2 no sea uno especial, tipo estrella o algo asi. 
+n2=6 #El grafo2 queda completamente fijo, el n es el mismo en los dos.
+m2=10 #Guarda que el grafo2 no sea uno especial, tipo estrella o algo asi.  
+#a la hora de correr este experimento, acordarse de reutilizar los grafos de entrada del exp2
+
 
 while getopts 'ha:' opt; do
   case $opt in
@@ -24,36 +26,36 @@ done
 
 
 #genero archivos de entrada 
-for i in $n1; do
-  aux=$((i-1))
-  aux2=$((i*aux))
-  m1=$((aux2/2))
-  echo "Esta creando el archivo numero "
-  printf "%d\n " $i
-  printf "f1 %d %d %d %d \n" $i $m1 $n2 $m2 | $(dirname $0)/../../../generador-grafo-rapido 
-done
-
-for i in $n1; do
-  m1=$((i-1))
-  echo "Esta creando el archivo numero "
-  printf "%d\n " $i
-  printf "f2 %d %d %d %d \n" $i $m1 $n2 $m2 | $(dirname $0)/../../../generador-grafo-rapido 
-done
-
-for i in $n1; do
-  m1=$((3*i))
-  echo "Esta creando el archivo numero "
-  printf "%d\n " $i
-  printf "f3 %d %d %d %d \n" $i $m1 $n2 $m2 | $(dirname $0)/../../../generador-grafo-rapido 
-done
-
-for i in $n1; do
-  aux=$((i^2))
-  m1=$((aux/10))
-  echo "Esta creando el archivo numero "
-  printf "%d\n " $i
-  printf "f4 %d %d %d %d \n" $i $m1 $n2 $m2 | $(dirname $0)/../../../generador-grafo-rapido
-done
+#for i in $n1; do
+#  aux=$((i-1))
+#  aux2=$((i*aux))
+#  m1=$((aux2/2))
+#  echo "Esta creando el archivo numero "
+#  printf "%d\n " $i
+#  printf "f1 %d %d %d %d \n" $i $m1 $n2 $m2 | $(dirname $0)/../../../generador-grafo-rapido 
+#done
+#
+#for i in $n1; do
+#  m1=$((i-1))
+#  echo "Esta creando el archivo numero "
+#  printf "%d\n " $i
+#  printf "f2 %d %d %d %d \n" $i $m1 $n2 $m2 | $(dirname $0)/../../../generador-grafo-rapido 
+#done
+#
+#for i in $n1; do
+#  m1=$((3*i))
+#  echo "Esta creando el archivo numero "
+#  printf "%d\n " $i
+#  printf "f3 %d %d %d %d \n" $i $m1 $n2 $m2 | $(dirname $0)/../../../generador-grafo-rapido 
+#done
+#
+#for i in $n1; do
+#  aux=$((i^2))
+#  m1=$((aux/10))
+#  echo "Esta creando el archivo numero "
+#  printf "%d\n " $i
+#  printf "f4 %d %d %d %d \n" $i $m1 $n2 $m2 | $(dirname $0)/../../../generador-grafo-rapido
+#done
 
 printf "%d \n" $iteraciones >> $(dirname $0)/tiempos-exp4-f1.txt
 printf "%d \n" $iteraciones >> $(dirname $0)/tiempos-exp4-f2.txt
@@ -114,5 +116,7 @@ for k in $n1; do
   done
   printf "\n" >> $(dirname $0)/tiempos-exp4-f4.txt
 done
+
+
 
 #octave -q $(dirname $0)/exp1.m

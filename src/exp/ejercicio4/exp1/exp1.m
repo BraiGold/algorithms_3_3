@@ -1,5 +1,5 @@
 % Procesado de los datos
-[planetas_x, tiempo_y, e, cant] = leer_datos_float('tiempos-exp1.txt');
+[m_x, tiempo_y, e, cant] = leer_datos_float('tiempos-exp1.txt');
 
 
 % Creación de los gráficos
@@ -7,51 +7,66 @@ filetype='-dpng';
 %mkdir('graficos');
 figure;
 
-m = 1000; %CANTIDAD DE ARISTAS CONSTANTE	
-
-n = size(planetas_x);
-ult = planetas_x(n);
+% COMPLEJIDAD O((n1+m1) x m2 + n2 x log(n2) )
+m1 = size(m_x); 
+ult = m_x(m1);
 ultimo = ult(1);
-primero = planetas_x(1);
-
-%disp(primero);
-%disp(ultimo);
-
-% COMPLEJIDAD O(m + n + n log m)
-
+primero = m_x(1);
 
 dim = ultimo-primero+1; %+1 porque matlab no me cuenta el cero -.-
-%disp(dim);
+
+%=============================calculo n1 = 200
+n1_vec(1:dim)=200;
+%disp('N1:');
+%disp(n1_vec);
+
+%=============================calculo m1
+m1_vec = (primero:ult);
+%disp('M1:');
+%disp(m1_vec);
 
 
-eje_x = (primero:ult);
-%disp('x');
-%disp(eje_x);
+%=============================calculo n2 = 200 Y m2 = 2500
+n2_vec(1:dim)=200; 
+%disp('N2:');
+%disp(n2_vec);
+m2_vec(1:dim)=2500;
+%disp('M2:');
+%disp(m2_vec);
 
-auxm(1:dim) = m;
-disp('M:');
-disp(m);
+%======= calculo N1+M1
+aux1=n1_vec+m1_vec;
+%disp('N1 + M1');
+%disp(aux1);
 
-auxlog = log2(auxm);
-disp('log');
-disp(auxlog);
+%======= calculo (N1+M1) x M2
+aux2=times(aux1,m2_vec);
+%disp('(N1+M1) x M2 : ');
+%disp(aux2);
 
-aux_y = (auxm + eje_x + times(eje_x, auxlog));
-disp(aux_y);
-eje_y = times(aux_y, 1/4000000) 
+%======= calculo log(N2)
+aux3=log2(n2_vec);
+%disp('log(N2): ');
+%disp(aux3);
 
-%eje_y(1:dim) = (log2(m) * m) *(1/5000000);
-disp('y');
+%======= calculo N2 x log(N2) 
+aux4=times(aux3, n2_vec)
+%disp('N2 x log(N2): ');
+%disp(aux4);
+
+complejidad=aux2+aux4;
+
+complejidad_por_constante=times(complejidad,1/25000000);
 
 hold on;
 x = gca;
 xlim([0 dim]);
 %ylim([0.0005 0.0022]);
-plot(eje_x,eje_y,'r'); 
-errorbar(planetas_x, tiempo_y, e, 'b');
-xlabel('Cantidad de Planetas','FontSize',12); %CAMBIAR M
+plot(m1_vec,complejidad_por_constante,'r');  %complejidad
+errorbar(m_x, tiempo_y, e, 'b');
+xlabel('m','FontSize',12); %CAMBIAR M
 ylabel('Tiempo de ejecucion en segundos','FontSize',10);
-legend('Complejidad O(n + m + n log m)','Tiempo de ejecucion del algoritmo','Location','northwest')
+legend('Complejidad O((n1+m1) x m2 + n2 x log2(n2))','Tiempo de ejecucion del algoritmo','Location','northwest')
 %set(get(h, 'Parent'), 'YScale', 'log');
 hold off;
 print('exp1', filetype);

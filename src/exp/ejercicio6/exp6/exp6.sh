@@ -3,13 +3,13 @@
 LC_NUMERIC="en_US.UTF-8"
 
 iteraciones=1
-n1=200000
-n2=200000
-m1=2000
-m2=2000
-maxTamTabu=40000
-cantVec="$(seq 448 5000 100001)"
-k=400000
+n1=200
+n2=200
+m1=1000
+m2=1000
+tamTabu=n1
+cuantosMiro="$(seq 100 50 1000)"
+k=n1
 # el minimo n que puedo tener dado el m es: min n {n * (n - 1) /2 >= m} 
 
 while getopts 'ha:' opt; do
@@ -32,14 +32,14 @@ printf "grafosDeEntrada %d %d %d %d \n" $n1 $m1 $n2 $m2 | $(dirname $0)/../../..
 
 printf "%d \n" $iteraciones >> $(dirname $0)/tiempos-exp6.txt
 
-for i in $cantVec; do
+for i in $cuantosMiro; do
   printf "%d " $i >> $(dirname $0)/tiempos-exp6.txt
   echo "Esta corriendo la instancia numero"
   printf "%d\n " $i
   for h in $(seq 1 $iteraciones); do
     echo "iteracion numero"
     printf "%d\n " $h
-    $(dirname $0)/../../../ejercicio6-tipo1 < $(dirname $0)/grafosDeEntrada/grafo-n1-$n1-m1-$m1-n2-$n2-m2-$m2.txt $maxTamTabu $i $k -t >> $(dirname $0)/tiempos-exp6.txt
+    $(dirname $0)/../../../ejercicio6-tipo1 < $(dirname $0)/grafosDeEntrada/grafo-n1-$n1-m1-$m1-n2-$n2-m2-$m2.txt $i $tamTabu $k -t >> $(dirname $0)/tiempos-exp6.txt
   done
   printf "\n" >> $(dirname $0)/tiempos-exp6.txt
 done

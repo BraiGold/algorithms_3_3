@@ -299,8 +299,9 @@ vector<int> MCSbusquedaLocalDos(vector<int> mapeo, vector<vector<int> > grafoChi
 			}
 			vecindadA = calcularVecindadDosTipoA(mapeo);
 			vecindadB = calcularVecindadTipoB(mapeo, grafoGrande.size());
+		}
+		return mapeo;
 	}
-	return mapeo;
 }
 
 

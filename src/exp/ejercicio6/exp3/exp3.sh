@@ -4,6 +4,9 @@ LC_NUMERIC="en_US.UTF-8"
 
 iteraciones=1
 n="$(seq 100 50 1200)"
+tamTabu=n
+cuantosMiro=n
+k=n
 # el minimo n que puedo tener dado el m es: min n {n * (n - 1) /2 >= m} 
 
 while getopts 'ha:' opt; do
@@ -40,7 +43,7 @@ for k in $n; do
   for h in $(seq 1 $iteraciones); do
     echo "iteracion numero"
     printf "%d\n " $h
-    $(dirname $0)/../../../ejercicio6-tipo1 < $(dirname $0)/grafosDeEntrada/grafo-n1-$k-m1-$m-n2-$k-m2-$m.txt -t >> $(dirname $0)/tiempos-exp3-tipo1.txt
+    $(dirname $0)/../../../ejercicio6-tipo1 < $(dirname $0)/grafosDeEntrada/grafo-n1-$k-m1-$m-n2-$k-m2-$m.txt $cuantosMiro $tamTabu $k -t >> $(dirname $0)/tiempos-exp3-tipo1.txt
   done
   printf "\n" >> $(dirname $0)/tiempos-exp3-tipo1.txt
 done
@@ -57,7 +60,7 @@ for k in $n; do
   for h in $(seq 1 $iteraciones); do
     echo "iteracion numero"
     printf "%d\n " $h
-    $(dirname $0)/../../../ejercicio6-tipo2 < $(dirname $0)/grafosDeEntrada/grafo-n1-$k-m1-$m-n2-$k-m2-$m.txt -t >> $(dirname $0)/tiempos-exp3-tipo2.txt
+    $(dirname $0)/../../../ejercicio6-tipo2 < $(dirname $0)/grafosDeEntrada/grafo-n1-$k-m1-$m-n2-$k-m2-$m.txt $cuantosMiro $tamTabu $k -t >> $(dirname $0)/tiempos-exp3-tipo2.txt
   done
   printf "\n" >> $(dirname $0)/tiempos-exp3-tipo2.txt
 done

@@ -203,6 +203,8 @@ vector<pair<int,int> > dameCompleto(int n1) {
 
 int main() {
 	FILE * doc;
+	string nombreDeLaCarpeta;
+	cin >> nombreDeLaCarpeta;
 	int tipog1, tipog2; //para los tipos de grafos
 	//1 == grafo bipartito
 	//2 == grafo arbol
@@ -308,17 +310,36 @@ int main() {
 	}
 
 	char filename[64];
-	sprintf(filename, "grafo-n1-%d-m1-%d-n2-%d-m2-%d.txt", n1, m1, n2, m2);
+	char aux[64];
+	if(tipog2 == 5){
+		if(tipog1 == 5){
+			sprintf(aux, "/grafo-n1-%d-n2-%d.txt", n1, n2);
+		} else {
+			sprintf(aux, "/grafo-n1-%d-m1-%d-n2-%d.txt", n1, m1, n2);
+		}
+	}else{
+		if(tipog1 == 5){
+			sprintf(aux, "/grafo-n1-%d-n2-%d-m2-%d.txt", n1, n2, m2);
+		} else {
+			sprintf(aux, "/grafo-n1-%d-m1-%d-n2-%d-m2-%d.txt", n1, m1, n2, m2);
+			
+		}
+	}
+	int i;
+	for(i=0;i<nombreDeLaCarpeta.size();i++)
+		filename[i] = nombreDeLaCarpeta[i];
+	for(i=0;aux[i] != 0;i++)
+		filename[i+nombreDeLaCarpeta.size()] = aux[i];
+	filename[i+nombreDeLaCarpeta.size()] = 0;
 
 	doc = fopen(filename,"w");
 
 	if (doc!=NULL) {
-  	
 		fprintf(doc, "%d %d %d %d\n", n1, m1, n2, m2);
 
 		for (int i = 0; i < m1 ; i++) {
 			fprintf(doc, "%d %d\n", aristas1[i].first, aristas1[i].second);
-		}		
+		}
 
 		for (int i = 0; i < m2 ; i++) {
 			fprintf(doc, "%d %d\n", aristas2[i].first, aristas2[i].second);

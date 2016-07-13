@@ -1,7 +1,22 @@
 #include <vector>
 #include <iostream>
+#include <sys/time.h>
+#include <stdio.h>      /* printf */
 
 using namespace std;
+
+timeval timeStart, timeEnd;
+
+void init_time()
+{
+    gettimeofday(&timeStart,NULL);
+}
+
+double get_time()
+{
+    gettimeofday(&timeEnd,NULL);
+    return (1000000*(timeEnd.tv_sec-timeStart.tv_sec)+(timeEnd.tv_usec-timeStart.tv_usec))/1000000.0;
+}
 
 bool EstaYaMapeado(int j, vector<int> mapeo) {
 	bool respuesta = false;
@@ -117,7 +132,15 @@ n2 tomado de a n1 = n2!/(n2-n1)!(n1)! esta en O(n2!/(n2-n1)!) = n2 (n2-1) (n2-2)
 
 // voy a llamar a MCS(vacio,G1,G2);
 */
-int main() {
+int main(int argc, char* argv[]) {
+	bool pidieronTiempo = false; 
+	double tiempo;
+	if (argc > 1) {
+	  if (argv[1] == string("-t")) {
+	    pidieronTiempo = true;
+	  }
+	}
+
 	int m1, n1, m2, n2;
 	cin >> n1 >> m1 >> n2 >> m2;
 	vector<vector<int> > grafo1(n1,vector<int>(0));
@@ -141,6 +164,8 @@ int main() {
 
 	int chico;
 
+	init_time();
+
 	if (n1 > n2) {
 		MCS(mapeo, grafo2, grafo1);
 		chico = n2;
@@ -149,9 +174,15 @@ int main() {
 		chico = n1;
 	}
 
-	cout << chico << " " << aristasMejorSolucion.size() << endl;
-	for (int i = 0; i < aristasMejorSolucion.size(); i++) {
-		cout << aristasMejorSolucion[i].first << " " << aristasMejorSolucion[i].second << endl; 
+	tiempo = get_time();
+
+  	if (!pidieronTiempo) { 
+		cout << chico << " " << aristasMejorSolucion.size() << endl;
+		for (int i = 0; i < aristasMejorSolucion.size(); i++) {
+			cout << aristasMejorSolucion[i].first << " " << aristasMejorSolucion[i].second << endl; 
+		}
+	} else {
+    	printf("%.10f ", tiempo);
 	}
 
 	return 0;

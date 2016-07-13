@@ -150,13 +150,15 @@ bool estaTripla(int a, int b, int c, vector<pair<int, pair<int, int> > > lista){
 	return res;
 } 
 
-vector<vector<int> > calcularVecindadDosTipoA(vector<int> mapeo) {//devuelve una lista con todos los mapeos vecinos
+vector<vector<int> > calcularVecindadDosTipoA(vector<int> mapeo, int cuantosVecinosMiro) {//devuelve una lista con todos los mapeos vecinos
 	vector<vector<int> > respuesta;
 
 	vector<pair<int, pair<int, int> > > randoms;
 	int r1, r2, r3;
 	pair<int, pair<int, int> > tripla;
-	for (int i = 0; i < mapeo.size(); i++) {
+	int tamMapeo = (mapeo.size() * (mapeo.size() - 1))/2;
+	int h = min(tamMapeo, cuantosVecinosMiro);
+	for (int i = 0; i < h; i++) {
 		//peso = randombis() %  (max_peso - min_peso + 1) + min_peso;  
 		r1 = randombis() % (mapeo.size()); // entre 0 y mapeo.size() - 1
 		r2 = randombis() % (mapeo.size()); // entre 0 y mapeo.size() - 1
@@ -197,6 +199,9 @@ vector<vector<int> > calcularVecindadDosTipoA(vector<int> mapeo) {//devuelve una
 	return respuesta;
 
 }
+
+
+
 //esta es la ultima version de vecindadTipoB
 vector<vector<int> > calcularVecindadTipoB(vector<int> mapeo, int totalNodosGrafoGrande, int cuantosMiro) {//devuelve una lista con todos los mapeos vecinos
 	vector<vector<int> > respuesta;

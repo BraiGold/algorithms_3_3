@@ -51,15 +51,6 @@ bool yaEsta(vector<pair<int, int> > vec, int i, int j) {
 	}
 	return res;
 }//O(n1)
-bool esta(int k, vector<int> mapeo) {
-	bool res = false;
-	for (int i = 0; i < mapeo.size(); i++) {
-		if(mapeo[i] == k){
-			res = true;
-		}
-	}
-	return res;
-}
 
 vector<pair<int, int> > calcularConjAristas(vector<int> mapeo, vector<vector<int > > grafoChico, vector<vector<int > > grafoGrande) {
 	vector<pair<int, int> > respuesta; //para este mapeo, cual es el subgrafo comun maximo
@@ -253,14 +244,15 @@ set<vector<int> > tabuPorMapeo; //es la lista con los mapeos a los que no puedo 
 queue<vector<int> > tabuCola; //es la lista con los mapeos a los que no puedo entrar ordenada por orden en el que se los visita. Sacar el mas viejo es facil y agregar el nuevo tambien
 
 bool estaEnTabu(vector<int> mapeo){
-	//return tabuPorMapeo.find(mapeo) != mapeo.end();
-	std::set<vector<int> >::iterator it;
+	return tabuPorMapeo.find(mapeo) != tabuPorMapeo.end();
+/*	set<vector<int> >::iterator it;
 	//iterator it;
 	it = tabuPorMapeo.find(mapeo);
 
-	return (tabuPorMapeo.end() != it);
+	bool res = (tabuPorMapeo.end() != it);
+	return res;*/
 }
-
+ 
 vector<int> dameElMejorNoTabu(vector<vector<int> > vecindadA, vector<vector<int> > vecindadB, vector<vector<int> > grafoChico, vector<vector<int> > grafoGrande, int cuantosMiro) { //esta funcion devuelve el mejor de las opciones de vecinos pero que no se encuentre en la lista tabu. Como a veces puede tener demasiados vecinos un mapeo hay un maximo que puedo mirar.
 	vector<pair<int,int> > conjAristas;
 	int maximoTamanoHastaAhora = 0;
@@ -281,12 +273,13 @@ vector<int> dameElMejorNoTabu(vector<vector<int> > vecindadA, vector<vector<int>
 				maximoTamanoHastaAhora = cantAristasMapeoNuevo;
 			}
 		}
-	}	
+	}
 	return vecindadEntera[indice];
 }//O(n1)
 
 
 vector<int> MCStabu(vector<int> mapeo, vector<vector<int> > grafoChico, vector<vector<int> > grafoGrande, int cuantosVecinosMiro, int maxTamTabu, int k) {//k = No se encontro una mejora en las ultimas k iteraciones.
+
 	vector<int> mejorMapeo;
 	for(int i = 0; i < mapeo.size(); i++){ //mejorMapeo = mapeo
 		mejorMapeo.push_back(mapeo[i]);
@@ -301,7 +294,7 @@ vector<int> MCStabu(vector<int> mapeo, vector<vector<int> > grafoChico, vector<v
 	vector<pair<int, int> > conjAristasMejorVecino;
 	vector<int> mapeoQueTengoQueSacar;
 	int j = 0;
-	while(j < k){
+	while(j < k){ 
 		mejorVecino = dameElMejorNoTabu(vecindadA, vecindadB, grafoChico, grafoGrande, cuantosVecinosMiro);//O(n1)
 		conjAristasMejorVecino = calcularConjAristas(mejorVecino, grafoChico, grafoGrande); 
 		if(conjAristasMejorVecino.size() > conjAristasMejorMapeo.size()){ //el nuevo mapeo es mejor que lo que tenia antes

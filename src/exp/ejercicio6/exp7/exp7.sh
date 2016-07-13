@@ -3,13 +3,13 @@
 LC_NUMERIC="en_US.UTF-8"
 
 iteraciones=1
-n1=200000
-n2=200000
-m1=2000
-m2=2000
-maxTamTabu=40000
-cantVec=40000
-k="$(seq 448 5000 100001)"
+n1=200
+n2=200
+m1=1000
+m2=1000
+tamTabu=n1
+cuantosMiro=n1
+k="$(seq 100 20 n1)"
 # el minimo n que puedo tener dado el m es: min n {n * (n - 1) /2 >= m} 
 
 while getopts 'ha:' opt; do
@@ -39,7 +39,7 @@ for i in $k; do
   for h in $(seq 1 $iteraciones); do
     echo "iteracion numero"
     printf "%d\n " $h
-    $(dirname $0)/../../../ejercicio6-tipo1 < $(dirname $0)/grafosDeEntrada/grafo-n1-$n1-m1-$m1-n2-$n2-m2-$m2.txt $maxTamTabu $cantVec $i -t >> $(dirname $0)/tiempos-exp7.txt
+    $(dirname $0)/../../../ejercicio6-tipo1 < $(dirname $0)/grafosDeEntrada/grafo-n1-$n1-m1-$m1-n2-$n2-m2-$m2.txt $cuantosMiro $tamTabu $i -t >> $(dirname $0)/tiempos-exp7.txt
   done
   printf "\n" >> $(dirname $0)/tiempos-exp7.txt
 done
