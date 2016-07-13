@@ -3,12 +3,12 @@
 LC_NUMERIC="en_US.UTF-8"
 
 iteraciones=1
-n1="$(seq 10 5 70)"
+n1="$(seq 10 5 30)"
 # el minimo n que puedo tener dado el m es: min n {n * (n - 1) /2 >= m} 
 n2=50 #El grafo2 queda completamente fijo, el n es el mismo en los dos.
-m2=200 #Guarda que el grafo2 no sea uno especial, tipo estrella o algo asi. 
+m2=30 #Guarda que el grafo2 no sea uno especial, tipo estrella o algo asi. 
 tamTabu=10
-cuantosMiro=20
+cuantosMiro=10
 k=10
 
 while getopts 'ha:' opt; do

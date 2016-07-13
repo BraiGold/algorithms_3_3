@@ -3,8 +3,8 @@
 LC_NUMERIC="en_US.UTF-8"
 
 iteraciones=1
-n1=100
-n2=100
+n1=50
+n2=50
 m1=200
 m2=200
 tamTabu="$(seq 5 5 30)"

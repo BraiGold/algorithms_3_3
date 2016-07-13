@@ -3,7 +3,7 @@
 LC_NUMERIC="en_US.UTF-8"
 
 iteraciones=1
-n="$(seq 100 50 1200)"
+n="$(seq 10 20 200)"
 # el minimo n que puedo tener dado el m es: min n {n * (n - 1) /2 >= m} 
 
 while getopts 'ha:' opt; do
@@ -25,20 +25,23 @@ for i in $n; do
   n2=$i
   echo "Esta creando el archivo numero "
   printf "%d\n " $i
-  printf "grafosDeEntrada %d %d %d %d \n" 5 5 $i $i | $(dirname $0)/../../../generador-grafosEspeciales 
+  printf "grafosDeEntrada %d %d %d %d \n" 5 6 $i $i | $(dirname $0)/../../../generador-grafosEspeciales 
 done
 
 printf "%d \n" $iteraciones >> $(dirname $0)/tiempos-exp2.txt
 
 for k in $n; do
   printf "%d " $k >> $(dirname $0)/tiempos-exp2.txt
-  n2=$i
+  n2=$k
+  aux=$((k-1))
+  aux2=$((k*aux))
+  m2=$((aux2/2))
   echo "Esta corriendo la instancia numero"
   printf "%d\n " $k
   for h in $(seq 1 $iteraciones); do
     echo "iteracion numero"
     printf "%d\n " $h
-    $(dirname $0)/../../../ejercicio3 < $(dirname $0)/grafosDeEntrada/grafo-n1-$k-n2-$k.txt -t >> $(dirname $0)/tiempos-exp2.txt
+    $(dirname $0)/../../../ejercicio3 < $(dirname $0)/grafosDeEntrada/grafo-n1-$k-n2-$k-m2-$m2.txt -t >> $(dirname $0)/tiempos-exp2.txt
   done
   printf "\n" >> $(dirname $0)/tiempos-exp2.txt
 done

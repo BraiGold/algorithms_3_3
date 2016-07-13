@@ -8,7 +8,7 @@ n1="$(seq 10 20 200)"
 #m1="$(seq 0 100 19900)"  #este parametro es el que hay que variar
 n2=200 #El grafo2 queda completamente fijo, el n es el mismo en los dos.
 #m2=2500 #Guarda que el grafo2 no sea uno especial, tipo estrella o algo asi. 
-
+m2=19900
 while getopts 'ha:' opt; do
   case $opt in
     a) iteraciones=$OPTARG ;;
@@ -27,7 +27,7 @@ genero archivos de entrada
 for i in $n1; do
   echo "Esta creando el archivo numero "
   printf "%d\n " $i
-  printf "grafosDeEntrada %d %d %d %d \n" 5 5 $i $n2 | $(dirname $0)/../../../generador-grafosEspeciales
+  printf "grafosDeEntrada %d %d %d %d \n" 5 6 $i $n2 | $(dirname $0)/../../../generador-grafosEspeciales
 done 
 
 printf "%d \n" $iteraciones >> $(dirname $0)/tiempos-exp1.txt
@@ -36,10 +36,11 @@ for k in $n1; do
   printf "%d " $k >> $(dirname $0)/tiempos-exp1.txt
   echo "Esta corriendo la instancia numero"
   printf "%d\n " $k
+
   for h in $(seq 1 $iteraciones); do
     echo "iteracion numero"
     printf "%d\n " $h
-    $(dirname $0)/../../../ejercicio3 < $(dirname $0)/grafosDeEntrada/grafo-n1-$k-n2-$n2.txt -t >> $(dirname $0)/tiempos-exp1.txt
+    $(dirname $0)/../../../ejercicio3 < $(dirname $0)/grafosDeEntrada/grafo-n1-$k-n2-$n2-m2-$m2.txt -t >> $(dirname $0)/tiempos-exp1.txt
   done
   printf "\n" >> $(dirname $0)/tiempos-exp1.txt
 done

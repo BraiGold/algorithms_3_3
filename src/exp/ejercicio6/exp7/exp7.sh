@@ -3,12 +3,12 @@
 LC_NUMERIC="en_US.UTF-8"
 
 iteraciones=1
-n1=100
-n2=100
+n1=50
+n2=50
 m1=200
 m2=200
-tamTabu=10
-cuantosMiro=15
+tamTabu=20
+cuantosMiro=10
 k="$(seq 5 5 25)"
 # el minimo n que puedo tener dado el m es: min n {n * (n - 1) /2 >= m} 
 
