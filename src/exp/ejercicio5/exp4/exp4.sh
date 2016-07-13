@@ -3,10 +3,12 @@
 LC_NUMERIC="en_US.UTF-8"
 
 iteraciones=1
-n1="$(seq 100 20 600)"
+n1="$(seq 10 5 70)"
+
 # el minimo n que puedo tener dado el m es: min n {n * (n - 1) /2 >= m} 
 n2=600 #El grafo2 queda completamente fijo, el n es el mismo en los dos.
 m2=2500 #Guarda que el grafo2 no sea uno especial, tipo estrella o algo asi. 
+cuantosVecinosMiro=20
 
 while getopts 'ha:' opt; do
   case $opt in
@@ -53,7 +55,7 @@ for k in $n1; do
   for h in $(seq 1 $iteraciones); do
     echo "iteracion numero"
     printf "%d\n " $h
-    $(dirname $0)/../../../ejercicio5-tipo1 < $(dirname $0)/f3/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt -t >> $(dirname $0)/tiempos-exp4-f3-tipo1.txt
+    $(dirname $0)/../../../ejercicio5-tipo1 < $(dirname $0)/f3/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt $cuantosVecinosMiro -t >> $(dirname $0)/tiempos-exp4-f3-tipo1.txt
   done
   printf "\n" >> $(dirname $0)/tiempos-exp4-f3-tipo1.txt
 done
@@ -67,7 +69,7 @@ for k in $n1; do
   for h in $(seq 1 $iteraciones); do
     echo "iteracion numero"
     printf "%d\n " $h
-    $(dirname $0)/../../../ejercicio5-tipo1 < $(dirname $0)/f4/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt -t >> $(dirname $0)/tiempos-exp4-f4-tipo1.txt
+    $(dirname $0)/../../../ejercicio5-tipo1 < $(dirname $0)/f4/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt $cuantosVecinosMiro -t >> $(dirname $0)/tiempos-exp4-f4-tipo1.txt
   done
   printf "\n" >> $(dirname $0)/tiempos-exp4-f4-tipo1.txt
 done
@@ -86,7 +88,7 @@ for k in $n1; do
   for h in $(seq 1 $iteraciones); do
     echo "iteracion numero"
     printf "%d\n " $h
-    $(dirname $0)/../../../ejercicio5-tipo2 < $(dirname $0)/f3/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt -t >> $(dirname $0)/tiempos-exp4-f3-tipo2.txt
+    $(dirname $0)/../../../ejercicio5-tipo2 < $(dirname $0)/f3/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt $cuantosVecinosMiro -t >> $(dirname $0)/tiempos-exp4-f3-tipo2.txt
   done
   printf "\n" >> $(dirname $0)/tiempos-exp4-f3-tipo2.txt
 done
@@ -100,7 +102,7 @@ for k in $n1; do
   for h in $(seq 1 $iteraciones); do
     echo "iteracion numero"
     printf "%d\n " $h
-    $(dirname $0)/../../../ejercicio5-tipo2 < $(dirname $0)/f4/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt -t >> $(dirname $0)/tiempos-exp4-f4-tipo2.txt
+    $(dirname $0)/../../../ejercicio5-tipo2 < $(dirname $0)/f4/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt $cuantosVecinosMiro -t >> $(dirname $0)/tiempos-exp4-f4-tipo2.txt
   done
   printf "\n" >> $(dirname $0)/tiempos-exp4-f4-tipo2.txt
 done
@@ -116,7 +118,7 @@ for k in $n1; do
   m1=$((3*k))
   echo "Esta corriendo la instancia numero"
   printf "%d\n " $k
-  $(dirname $0)/../../../ejercicio5-tipo1 < $(dirname $0)/f3/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt | dameCantAristas >> $(dirname $0)/aristas-exp4-f3-tipo1.txt
+  $(dirname $0)/../../../ejercicio5-tipo1 < $(dirname $0)/f3/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt $cuantosVecinosMiro | $(dirname $0)/../../../dameCantAristas >> $(dirname $0)/aristas-exp4-f3-tipo1.txt
   printf "\n" >> $(dirname $0)/aristas-exp4-f3-tipo1.txt
 done
 
@@ -126,7 +128,7 @@ for k in $n1; do
   m1=$((aux/10))
   echo "Esta corriendo la instancia numero"
   printf "%d\n " $k
-  $(dirname $0)/../../../ejercicio5-tipo1 < $(dirname $0)/f4/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt | dameCantAristas >> $(dirname $0)/aristas-exp4-f4-tipo1.txt
+  $(dirname $0)/../../../ejercicio5-tipo1 < $(dirname $0)/f4/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt $cuantosVecinosMiro | $(dirname $0)/../../../dameCantAristas >> $(dirname $0)/aristas-exp4-f4-tipo1.txt
   printf "\n" >> $(dirname $0)/aristas-exp4-f4-tipo1.txt
 done
 
@@ -140,7 +142,7 @@ for k in $n1; do
   m1=$((3*k))
   echo "Esta corriendo la instancia numero"
   printf "%d\n " $k
-  $(dirname $0)/../../../ejercicio5-tipo2 < $(dirname $0)/f3/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt | dameCantAristas >> $(dirname $0)/aristas-exp4-f3-tipo2.txt
+  $(dirname $0)/../../../ejercicio5-tipo2 < $(dirname $0)/f3/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt $cuantosVecinosMiro | $(dirname $0)/../../../dameCantAristas >> $(dirname $0)/aristas-exp4-f3-tipo2.txt
 
   printf "\n" >> $(dirname $0)/aristas-exp4-f3-tipo2.txt
 done
@@ -151,7 +153,7 @@ for k in $n1; do
   m1=$((aux/10))
   echo "Esta corriendo la instancia numero"
   printf "%d\n " $k
-  $(dirname $0)/../../../ejercicio5-tipo2 < $(dirname $0)/f4/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt | dameCantAristas >> $(dirname $0)/aristas-exp4-f4-tipo2.txt
+  $(dirname $0)/../../../ejercicio5-tipo2 < $(dirname $0)/f4/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt $cuantosVecinosMiro | $(dirname $0)/../../../dameCantAristas >> $(dirname $0)/aristas-exp4-f4-tipo2.txt
   printf "\n" >> $(dirname $0)/aristas-exp4-f4-tipo2.txt
 done
 

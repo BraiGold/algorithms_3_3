@@ -119,7 +119,7 @@ for k in $n1; do
   m1=$((3*k))
   echo "Esta corriendo la instancia numero"
   printf "%d\n " $k
-  $(dirname $0)/../../../ejercicio6-tipo1 $cuantosMiro $tamTabu $k < $(dirname $0)/f3/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt | dameCantAristas >> $(dirname $0)/aristas-exp4-f3-tipo1.txt
+  $(dirname $0)/../../../ejercicio6-tipo1 $cuantosMiro $tamTabu $k < $(dirname $0)/f3/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt | $(dirname $0)/../../../dameCantAristas >> $(dirname $0)/aristas-exp4-f3-tipo1.txt
   printf "\n" >> $(dirname $0)/aristas-exp4-f3-tipo1.txt
 done
 
@@ -129,7 +129,7 @@ for k in $n1; do
   m1=$((aux/10))
   echo "Esta corriendo la instancia numero"
   printf "%d\n " $k
-  $(dirname $0)/../../../ejercicio6-tipo1 $cuantosMiro $tamTabu $k < $(dirname $0)/f4/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt | dameCantAristas >> $(dirname $0)/aristas-exp4-f4-tipo1.txt
+  $(dirname $0)/../../../ejercicio6-tipo1 $cuantosMiro $tamTabu $k < $(dirname $0)/f4/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt | $(dirname $0)/../../../dameCantAristas >> $(dirname $0)/aristas-exp4-f4-tipo1.txt
   printf "\n" >> $(dirname $0)/aristas-exp4-f4-tipo1.txt
 done
 
@@ -143,7 +143,7 @@ for k in $n1; do
   m1=$((3*k))
   echo "Esta corriendo la instancia numero"
   printf "%d\n " $k
-  $(dirname $0)/../../../ejercicio6-tipo2 $cuantosMiro $tamTabu $k < $(dirname $0)/f3/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt | dameCantAristas >> $(dirname $0)/aristas-exp4-f3-tipo2.txt
+  $(dirname $0)/../../../ejercicio6-tipo2 $cuantosMiro $tamTabu $k < $(dirname $0)/f3/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt | $(dirname $0)/../../../dameCantAristas >> $(dirname $0)/aristas-exp4-f3-tipo2.txt
 
   printf "\n" >> $(dirname $0)/aristas-exp4-f3-tipo2.txt
 done
@@ -154,7 +154,7 @@ for k in $n1; do
   m1=$((aux/10))
   echo "Esta corriendo la instancia numero"
   printf "%d\n " $k
-  $(dirname $0)/../../../ejercicio6-tipo2 $cuantosMiro $tamTabu $k < $(dirname $0)/f4/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt | dameCantAristas >> $(dirname $0)/aristas-exp4-f4-tipo2.txt
+  $(dirname $0)/../../../ejercicio6-tipo2 $cuantosMiro $tamTabu $k < $(dirname $0)/f4/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt | $(dirname $0)/../../../dameCantAristas >> $(dirname $0)/aristas-exp4-f4-tipo2.txt
   printf "\n" >> $(dirname $0)/aristas-exp4-f4-tipo2.txt
 done
 

@@ -243,10 +243,13 @@ vector<int> dameElMejor(vector<vector<int> > vecindadA, vector<vector<int> > vec
 	cerr << "vecindadEntera.size" << vecindadEntera.size() << endl;
 
 	for (int i = 0; i < vecindadEntera.size() ; i++) {
+		cerr << "inice = " << inice << endl;
+		cerr << "maximoTamanoHastaAhora = " << maximoTamanoHastaAhora << endl;
 		//cerr << "i =" << i << endl;
 		//cerr << "maximoTamanoHastaAhora" << maximoTamanoHastaAhora << endl; 
 		conjAristas = calcularConjAristas(vecindadEntera[i], grafoChico, grafoGrande);
 		cantAristasMapeoNuevo = conjAristas.size();
+		cerr << "cantAristasMapeoNuevo = " << emdl;
 		//cerr << "cantAristasMapeoNuevo" << cantAristasMapeoNuevo << endl;
 		if(cantAristasMapeoNuevo > maximoTamanoHastaAhora){
 			indice = i;
