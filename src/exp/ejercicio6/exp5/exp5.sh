@@ -3,11 +3,11 @@
 LC_NUMERIC="en_US.UTF-8"
 
 iteraciones=1
-n1=200
-n2=200
-m1=1000
-m2=1000
-tamTabu="$(seq 10 10 100)"
+n1=100
+n2=100
+m1=200
+m2=200
+tamTabu="$(seq 5 5 30)"
 cuanosMiro=10
 k=10
 # el minimo n que puedo tener dado el m es: min n {n * (n - 1) /2 >= m} 

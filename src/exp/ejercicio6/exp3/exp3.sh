@@ -5,9 +5,9 @@ LC_NUMERIC="en_US.UTF-8"
 iteraciones=1
 #n="$(seq 100 50 1200)"
 n="$(seq 10 5 70)"
-tamTabu=30
+tamTabu=10
 cuantosMiro=20
-k=30
+k=10
 # el minimo n que puedo tener dado el m es: min n {n * (n - 1) /2 >= m} 
 
 while getopts 'ha:' opt; do
