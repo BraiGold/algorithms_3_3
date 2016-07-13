@@ -3,12 +3,12 @@
 LC_NUMERIC="en_US.UTF-8"
 
 iteraciones=1
-n1=200
+n1=100
 # el minimo n que puedo tener dado el m es: min n {n * (n - 1) /2 >= m} 
 m1="$(seq 0 100 19900)"  #este parametro es el que hay que variar
-n2=200 #El grafo2 queda completamente fijo, el n es el mismo en los dos.
+n2=100 #El grafo2 queda completamente fijo, el n es el mismo en los dos.
 m2=2500 #Guarda que el grafo2 no sea uno especial, tipo estrella o algo asi. 
-
+cuantosVecinosMiro=50
 while getopts 'ha:' opt; do
   case $opt in
     a) iteraciones=$OPTARG ;;
@@ -39,7 +39,7 @@ for k in $m1; do
   for h in $(seq 1 $iteraciones); do
     echo "iteracion numero"
     printf "%d\n " $h
-    $(dirname $0)/../../../ejercicio5-tipo1 < $(dirname $0)/grafosDeEntrada/grafo-n1-$n1-m1-$k-n2-$n2-m2-$m2.txt -t >> $(dirname $0)/tiempos-exp1-tipo1.txt
+    $(dirname $0)/../../../ejercicio5-tipo1 < $(dirname $0)/grafosDeEntrada/grafo-n1-$n1-m1-$k-n2-$n2-m2-$m2.txt $cuantosVecinosMiro -t >> $(dirname $0)/tiempos-exp1-tipo1.txt
   done
   printf "\n" >> $(dirname $0)/tiempos-exp1-tipo1.txt
 done
@@ -53,7 +53,7 @@ for k in $m1; do
   for h in $(seq 1 $iteraciones); do
     echo "iteracion numero"
     printf "%d\n " $h
-    $(dirname $0)/../../../ejercicio5-tipo2 < $(dirname $0)/grafosDeEntrada/grafo-n1-$n1-m1-$k-n2-$n2-m2-$m2.txt -t >> $(dirname $0)/tiempos-exp1-tipo2.txt
+    $(dirname $0)/../../../ejercicio5-tipo2 < $(dirname $0)/grafosDeEntrada/grafo-n1-$n1-m1-$k-n2-$n2-m2-$m2.txt $cuantosVecinosMiro -t >> $(dirname $0)/tiempos-exp1-tipo2.txt
   done
   printf "\n" >> $(dirname $0)/tiempos-exp1-tipo2.txt
 done

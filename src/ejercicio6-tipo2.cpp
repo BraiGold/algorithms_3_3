@@ -201,8 +201,6 @@ vector<vector<int> > calcularVecindadDosTipoA(vector<int> mapeo, int cuantosVeci
 }
 
 
-
-//esta es la ultima version de vecindadTipoB
 vector<vector<int> > calcularVecindadTipoB(vector<int> mapeo, int totalNodosGrafoGrande, int cuantosMiro) {//devuelve una lista con todos los mapeos vecinos
 	vector<vector<int> > respuesta;
 
@@ -230,13 +228,10 @@ vector<vector<int> > calcularVecindadTipoB(vector<int> mapeo, int totalNodosGraf
 	for (int i = 0; i < c; i++) {
 		//peso = randombis() %  (max_peso - min_peso + 1) + min_peso;  
 		r1 = randombis() % (mapeo.size()); // entre 0 y mapeo.size() - 1
-		//r2 = randombis() % (totalNodosGrafoGrande - mapeo.size()) + mapeo.size() - 1; // entre mapeo.size() - 1 y totalNodosGrafoGrande
 		r2 = noMapeados[randombis()%noMapeados.size()]; 
 
 		while(estaTupla(r1, r2, randoms)) {
 			r1 = randombis() % (mapeo.size());
-			//r2 = randombis() % (totalNodosGrafoGrande + 1); //entre 0 y totalNodosGrafoGrande
-			//r2 = randombis() % (totalNodosGrafoGrande - mapeo.size() + 1) + mapeo.size(); //(totalNodosGrafoGrande - mapeo.size()) + mapeo.size() - 1; // entre mapeo.size() y totalNodosGrafoGrande //SOY LU CAMBIO ESTO
 			r2 = noMapeados[randombis()%noMapeados.size()]; 
 		}
 		par.first = r1;
