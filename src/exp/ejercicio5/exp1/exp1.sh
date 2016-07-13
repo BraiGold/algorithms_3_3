@@ -3,12 +3,12 @@
 LC_NUMERIC="en_US.UTF-8"
 
 iteraciones=1
-n1=100
+n1=150
 # el minimo n que puedo tener dado el m es: min n {n * (n - 1) /2 >= m} 
-m1="$(seq 0 100 19900)"  #este parametro es el que hay que variar
-n2=100 #El grafo2 queda completamente fijo, el n es el mismo en los dos.
-m2=2500 #Guarda que el grafo2 no sea uno especial, tipo estrella o algo asi. 
-cuantosVecinosMiro=50
+m1="$(seq 0 30 350)"  #este parametro es el que hay que variar
+n2=150 #El grafo2 queda completamente fijo, el n es el mismo en los dos.
+m2=200 #Guarda que el grafo2 no sea uno especial, tipo estrella o algo asi. 
+cuantosVecinosMiro=20
 while getopts 'ha:' opt; do
   case $opt in
     a) iteraciones=$OPTARG ;;
@@ -23,7 +23,7 @@ while getopts 'ha:' opt; do
   esac
 done
 
-genero archivos de entrada 
+#genero archivos de entrada 
 for i in $m1; do
   echo "Esta creando el archivo numero "
   printf "%d\n " $i

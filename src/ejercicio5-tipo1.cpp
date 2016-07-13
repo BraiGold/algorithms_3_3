@@ -229,26 +229,35 @@ vector<vector<int> > calcularVecindadTipoB(vector<int> mapeo, int totalNodosGraf
 
 vector<int> dameElMejor(vector<vector<int> > vecindadA, vector<vector<int> > vecindadB, vector<int> mapeo, vector<vector<int> > grafoChico, vector<vector<int> > grafoGrande, int cuantosVecinosMiro){
 	
-	vector<pair<int,int> > conjAristas;
-	int maximoTamanoHastaAhora = 0;
+	vector<pair<int,int> > conjAristas = calcularConjAristas(mapeo, grafoChico, grafoGrande);
+	int maximoTamanoHastaAhora = conjAristas.size();
 	int cantAristasMapeoNuevo;
-	int indice = 0;
+	int indice = -1;
 	vector<vector<int> > vecindadEntera = vecindadA;
-	for(int i=0;i<vecindadB.size();i++) {
+	for(int i=0; i<vecindadB.size(); i++) {
 		vecindadEntera.push_back(vecindadB[i]);
 	}
 	random_shuffle(vecindadEntera.begin(), vecindadEntera.end());
 	vecindadEntera.resize(cuantosVecinosMiro);
+	//vecindadEntera.push_back(mapeo);
+	cerr << "vecindadEntera.size" << vecindadEntera.size() << endl;
 
 	for (int i = 0; i < vecindadEntera.size() ; i++) {
-			conjAristas = calcularConjAristas(vecindadEntera[i], grafoChico, grafoGrande);
-			cantAristasMapeoNuevo = conjAristas.size();
-			if(cantAristasMapeoNuevo > maximoTamanoHastaAhora){
-				indice = i;
-				maximoTamanoHastaAhora = cantAristasMapeoNuevo;
-			}
+		//cerr << "i =" << i << endl;
+		//cerr << "maximoTamanoHastaAhora" << maximoTamanoHastaAhora << endl; 
+		conjAristas = calcularConjAristas(vecindadEntera[i], grafoChico, grafoGrande);
+		cantAristasMapeoNuevo = conjAristas.size();
+		//cerr << "cantAristasMapeoNuevo" << cantAristasMapeoNuevo << endl;
+		if(cantAristasMapeoNuevo > maximoTamanoHastaAhora){
+			indice = i;
+			maximoTamanoHastaAhora = cantAristasMapeoNuevo;
+		}
 	}
-	return vecindadEntera[indice];
+	if(indice == -1){
+		return mapeo;
+	}else {
+		return vecindadEntera[indice];
+	}
 }
 
 bool sonIguales(vector<int> mapeo1, vector<int> mapeo2){
@@ -266,8 +275,13 @@ vector<int> MCSbusquedaLocalUno(vector<int> mapeo, vector<vector<int> > grafoChi
 	vector<vector<int> > vecindadA = calcularVecindadUnoTipoA(mapeo, cuantosVecinosMiro);
 	vector<vector<int> > vecindadB = calcularVecindadTipoB(mapeo, grafoGrande.size(), cuantosVecinosMiro);
 	bool seguir = true;
+	int mp=1;
 	while (seguir) {
+		cerr << "entre al while: " << mp << endl;
+		mp++;
+
 		vector<int> mapeoNuevo = dameElMejor(vecindadA, vecindadB, mapeo, grafoChico, grafoGrande, cuantosVecinosMiro);
+		
 		if (sonIguales(mapeoNuevo, mapeo)) {
 			seguir = false;
 		} else {
