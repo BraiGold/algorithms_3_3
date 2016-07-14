@@ -1,5 +1,5 @@
 % Procesado de los datos
-[n_x, tiempo_y, e, cant] = leer_datos_float('tiempos-exp3.txt');
+[n_x, tiempo_y, e, cant] = leer_datos_float('tiempos-exp3-tipo2.txt');
 
 
 % Creación de los gráficos
@@ -28,7 +28,7 @@ disp(m_vec);
 complejidad=times(times(times(n_vec+m_vec,m_vec),n_vec),m_vec)+times(n_vec,log2(n_vec));
 
 
-complejidad_por_constante=times(complejidad,1/8000000);
+complejidad_por_constante=times(complejidad,1/300000000);
 
 hold on;
 x = gca;
@@ -41,4 +41,4 @@ ylabel('Tiempo de ejecucion en segundos','FontSize',10);
 legend('Complejidad O((n1+m1) x m2 + n2 x log(n2))','Tiempo de ejecucion del algoritmo','Location','northwest')
 set(get(h, 'Parent'), 'YScale', 'log');
 hold off;
-print('exp3', filetype);
+print('exp3-tipo2', filetype);

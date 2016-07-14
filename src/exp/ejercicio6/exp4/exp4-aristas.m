@@ -11,13 +11,13 @@ figure;
 
 hold on;
 %x = gca;
-%xlim([0 dim]);
-%ylim([0.0005 0.0022]);
+xlim([8 22]);
+ylim([10 48]);
 stem(n1_x_f3_t1, aristas_y_f3_t1, 'LineStyle', 'none', 'Marker', 'o', 'MarkerEdgeColor', 'red');
 stem(n1_x_f3_t2, aristas_y_f3_t2, 'LineStyle', 'none', 'Marker', 'o', 'MarkerEdgeColor', 'blue');
 xlabel('n1','FontSize',12); %CAMBIAR M
 ylabel('Cantidad de aristas','FontSize',10);
-legend('Tipo1','Tipo2','Location','northeast')
+legend('Tipo1','Tipo2','Location','northwest')
 %set(get(h, 'Parent'), 'YScale', 'log');
 hold off;
 print('exp4aristas-f3', filetype);
@@ -28,7 +28,7 @@ figure;
 hold on;
 %x = gca;
 %xlim([0 dim]);
-ylim([-0.2 1.2]);
+%ylim([-0.2 1.2]);
 stem(n1_x_f4_t1, aristas_y_f4_t1, 'LineStyle', 'none', 'Marker', 'o', 'MarkerEdgeColor', 'red');
 stem(n1_x_f4_t2, aristas_y_f4_t2, 'LineStyle', 'none', 'Marker', 'o', 'MarkerEdgeColor', 'blue');
 xlabel('n1','FontSize',12); %CAMBIAR M

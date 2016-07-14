@@ -1,5 +1,6 @@
 % Procesado de los datos
-[planetas_x, tiempo_y, e, cant] = leer_datos_float('tiempos-exp1.txt');
+[n_x_t1, tiempo_y_t1, e_t1, cant_t1] = leer_datos_float('tiempos-exp3-tipo1.txt');
+[n_x_t2, tiempo_y_t2, e_t2, cant_t2] = leer_datos_float('tiempos-exp3-tipo2.txt');
 
 
 % Creación de los gráficos
@@ -7,51 +8,36 @@ filetype='-dpng';
 %mkdir('graficos');
 figure;
 
-m = 1000; %CANTIDAD DE ARISTAS CONSTANTE	
+% COMPLEJIDAD $\mathcal{O}(((n_1+m_1)*m_2*n_1+n_1*log(t)+t)*K* min\{m_1,m_2\})$
+%n = size(n_x_t1); 
+%ult = n_x_t1(n);
+%ultimo = ult(1);
+%primero = n_x_t1(1);
 
-n = size(planetas_x);
-ult = planetas_x(n);
-ultimo = ult(1);
-primero = planetas_x(1);
+%dim = ultimo-primero+1; %+1 porque matlab no me cuenta el cero -.-
 
-%disp(primero);
-%disp(ultimo);
+%=============================calculo n
+n_vec=n_x_t1;
 
-% COMPLEJIDAD O(m + n + n log m)
+%=============================calculo m = n * 3
+m_vec = times(n_vec,3);
+k=10;
+t=10;
 
+complejidad=times(times(times(times(n_vec+m_vec,m_vec),n_vec)+times(n_vec,log2(t))+t,k),m_vec); %M es el minimo
 
-dim = ultimo-primero+1; %+1 porque matlab no me cuenta el cero -.-
-%disp(dim);
-
-
-eje_x = (primero:ult);
-%disp('x');
-%disp(eje_x);
-
-auxm(1:dim) = m;
-disp('M:');
-disp(m);
-
-auxlog = log2(auxm);
-disp('log');
-disp(auxlog);
-
-aux_y = (auxm + eje_x + times(eje_x, auxlog));
-disp(aux_y);
-eje_y = times(aux_y, 1/4000000) 
-
-%eje_y(1:dim) = (log2(m) * m) *(1/5000000);
-disp('y');
+complejidad_por_constante=times(complejidad,1/5000000);
 
 hold on;
 x = gca;
-xlim([0 dim]);
-%ylim([0.0005 0.0022]);
-plot(eje_x,eje_y,'r'); 
-errorbar(planetas_x, tiempo_y, e, 'b');
-xlabel('Cantidad de Planetas','FontSize',12); %CAMBIAR M
+xlim([10 25]);
+%ylim([0 0.5]);
+h=plot(n_vec,complejidad_por_constante,'r');  %complejidad
+errorbar(n_x_t1, tiempo_y_t1, e_t1, 'b');
+errorbar(n_x_t2, tiempo_y_t2, e_t2, 'g');
+xlabel('n','FontSize',14); 
 ylabel('Tiempo de ejecucion en segundos','FontSize',10);
-legend('Complejidad O(n + m + n log m)','Tiempo de ejecucion del algoritmo','Location','northwest')
-%set(get(h, 'Parent'), 'YScale', 'log');
+legend('O( ((n+m) x m x n + n x log(t) + t) x K x m )','Tipo 1','Tipo 2','Location','northwest')
+set(get(h, 'Parent'), 'YScale', 'log');
 hold off;
-print('exp1', filetype);
+print('exp3', filetype);

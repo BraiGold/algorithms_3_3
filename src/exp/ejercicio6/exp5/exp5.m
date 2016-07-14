@@ -1,57 +1,49 @@
 % Procesado de los datos
-[planetas_x, tiempo_y, e, cant] = leer_datos_float('tiempos-exp1.txt');
-
+[tabu_x_aristas, y_aristas, e_aristas, cant_aristas] = leer_datos_float('aristas-exp5.txt');
+[tabu_x_t, tiempo_y_t, e_t, cant_t] = leer_datos_float('tiempos-exp5.txt');
 
 % Creación de los gráficos
 filetype='-dpng';
 %mkdir('graficos');
 figure;
 
-m = 1000; %CANTIDAD DE ARISTAS CONSTANTE	
-
-n = size(planetas_x);
-ult = planetas_x(n);
+% COMPLEJIDAD $\mathcal{O}(((n_1+m_1)*m_2*n_1+n_1*log(t)+t)*K* min\{m_1,m_2\})$
+t = size(tabu_x_t); 
+ult = tabu_x_t(t);
 ultimo = ult(1);
-primero = planetas_x(1);
-
-%disp(primero);
-%disp(ultimo);
-
-% COMPLEJIDAD O(m + n + n log m)
-
-
+primero = tabu_x_t(1);
 dim = ultimo-primero+1; %+1 porque matlab no me cuenta el cero -.-
-%disp(dim);
 
+n_vec=50;
+m_vec=200;
+k=10;
+t_vec=tabu_x_t;
+complejidad=times(times(times(times(n_vec+m_vec,m_vec),n_vec)+times(n_vec,log2(t_vec))+t_vec,k),m_vec); %M1 es el minimo
 
-eje_x = (primero:ult);
-%disp('x');
-%disp(eje_x);
-
-auxm(1:dim) = m;
-disp('M:');
-disp(m);
-
-auxlog = log2(auxm);
-disp('log');
-disp(auxlog);
-
-aux_y = (auxm + eje_x + times(eje_x, auxlog));
-disp(aux_y);
-eje_y = times(aux_y, 1/4000000) 
-
-%eje_y(1:dim) = (log2(m) * m) *(1/5000000);
-disp('y');
+complejidad_por_constante=times(complejidad,1/2000000000);
 
 hold on;
-x = gca;
-xlim([0 dim]);
-%ylim([0.0005 0.0022]);
-plot(eje_x,eje_y,'r'); 
-errorbar(planetas_x, tiempo_y, e, 'b');
-xlabel('Cantidad de Planetas','FontSize',12); %CAMBIAR M
+%x = gca;
+xlim([5 30]);
+%ylim([0 5]);
+h=plot(t_vec,complejidad_por_constante,'r');  %complejidad
+errorbar(tabu_x_t, tiempo_y_t, e_t, 'b');
+xlabel('Tam. de lista tabu','FontSize',12); %CAMBIAR M
 ylabel('Tiempo de ejecucion en segundos','FontSize',10);
-legend('Complejidad O(n + m + n log m)','Tiempo de ejecucion del algoritmo','Location','northwest')
+legend('O( ((n1+m1) x m2 x n1 + n1 x log(t) + t) x K x m1 )','Tiempo de ejecucion del algoritmo','Location','northwest')
+set(get(h, 'Parent'), 'YScale', 'log');
+hold off;
+print('exp4-tiempos', filetype);
+
+figure;
+
+hold on;
+%x = gca;
+%xlim([0 dim]);
+ylim([0 80]);
+stem(tabu_x_aristas, y_aristas, 'LineStyle', 'none', 'Marker', 'o', 'MarkerEdgeColor', 'red');
+xlabel('Tam. de lista tabu','FontSize',12); %CAMBIAR M
+ylabel('Cantidad de aristas','FontSize',10);
 %set(get(h, 'Parent'), 'YScale', 'log');
 hold off;
-print('exp1', filetype);
+print('exp4-aristas', filetype);
