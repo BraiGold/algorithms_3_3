@@ -59,8 +59,8 @@ printf "%d \n" 1 >> $(dirname $0)/aristas-combinacion1-ej6-exp4-tipo1.txt
 
   for k in $n1; do
     printf "%d " $k >> $(dirname $0)/aristas-combinacion1-ej3-exp4.txt
-    aux=$((i-1))
-    aux2=$((i*aux))
+    aux=$((k-1))
+    aux2=$((k*aux))
     m2=$((aux2/2))
     echo "EL M2 ES"
     printf "%d\n " $m2
@@ -72,8 +72,8 @@ printf "%d \n" 1 >> $(dirname $0)/aristas-combinacion1-ej6-exp4-tipo1.txt
 
   for k in $n1; do
     printf "%d " $k >> $(dirname $0)/aristas-combinacion1-ej4-exp4.txt
-    aux=$((i-1))
-    aux2=$((i*aux))
+    aux=$((k-1))
+    aux2=$((k*aux))
     m2=$((aux2/2))
     echo "Esta corriendo la instancia numero"
     printf "%d\n " $k
@@ -83,8 +83,8 @@ printf "%d \n" 1 >> $(dirname $0)/aristas-combinacion1-ej6-exp4-tipo1.txt
 
   for k in $n1; do
     printf "%d " $k >> $(dirname $0)/aristas-combinacion1-ej5-exp4-tipo1.txt
-    aux=$((i-1))
-    aux2=$((i*aux))
+    aux=$((k-1))
+    aux2=$((k*aux))
     mCompleto=$((aux2/2))
     echo "Esta corriendo la instancia numero"
     printf "%d\n " $k
@@ -94,8 +94,8 @@ printf "%d \n" 1 >> $(dirname $0)/aristas-combinacion1-ej6-exp4-tipo1.txt
 
   for k in $n1; do
     printf "%d " $k >> $(dirname $0)/aristas-combinacion1-ej5-exp4-tipo1.txt
-    aux=$((i-1))
-    aux2=$((i*aux))
+    aux=$((k-1))
+    aux2=$((k*aux))
     mCompleto=$((aux2/2))
     echo "Esta corriendo la instancia numero"
     printf "%d\n " $k
