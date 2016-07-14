@@ -120,10 +120,10 @@ printf "%d \n" 1 >> $(dirname $0)/aristas-combinacion2-ej6-exp4-tipo1.txt
     printf "%d " $k >> $(dirname $0)/aristas-combinacion2-ej4-exp4.txt
     m1=$k
     n2=$((30+k))
-    m2=$((n1*30))
+    m2=$((k*30))
     echo "Esta corriendo la instancia numero"
     printf "%d\n " $k
-    $(dirname $0)/../../../ejercicio4 < $(dirname $0)/combinacion2/grafo-n1-$k-m1-$m1-n2-$k-m2-$m2.txt | $(dirname $0)/../../../dameCantAristas >> $(dirname $0)/aristas-combinacion2-ej4-exp4.txt
+    $(dirname $0)/../../../ejercicio4 < $(dirname $0)/combinacion2/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt | $(dirname $0)/../../../dameCantAristas >> $(dirname $0)/aristas-combinacion2-ej4-exp4.txt
     printf "\n" >> $(dirname $0)/aristas-combinacion2-ej4-exp4.txt
   done
 
@@ -131,10 +131,10 @@ printf "%d \n" 1 >> $(dirname $0)/aristas-combinacion2-ej6-exp4-tipo1.txt
     printf "%d " $k >> $(dirname $0)/aristas-combinacion2-ej5-exp4-tipo1.txt
     m1=$k
     n2=$((30+k))
-    m2=$((n1*30))
+    m2=$((k*30))
     echo "Esta corriendo la instancia numero"
     printf "%d\n " $k
-    $(dirname $0)/../../../ejercicio5-tipo1 < $(dirname $0)/combinacion2/grafo-n1-$k-m1-$m1-n2-$k-m2-$m2.txt $cuantosMiro | $(dirname $0)/../../../dameCantAristas >> $(dirname $0)/aristas-combinacion2-ej5-exp4-tipo1.txt
+    $(dirname $0)/../../../ejercicio5-tipo1 < $(dirname $0)/combinacion2/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt $cuantosMiro | $(dirname $0)/../../../dameCantAristas >> $(dirname $0)/aristas-combinacion2-ej5-exp4-tipo1.txt
     printf "\n" >> $(dirname $0)/aristas-combinacion2-ej5-exp4-tipo1.txt
   done
 
@@ -142,10 +142,10 @@ printf "%d \n" 1 >> $(dirname $0)/aristas-combinacion2-ej6-exp4-tipo1.txt
     printf "%d " $k >> $(dirname $0)/aristas-combinacion2-ej5-exp4-tipo1.txt
     m1=$k
     n2=$((30+k))
-    m2=$((n1*30))
+    m2=$((k*30))
     echo "Esta corriendo la instancia numero"
     printf "%d\n " $k
-    $(dirname $0)/../../../ejercicio6-tipo1 < $(dirname $0)/combinacion2/grafo-n1-$k-m1-$m1-n2-$k-m2-$m2.txt $cuantosMiro $tamTabu $z | $(dirname $0)/../../../dameCantAristas >> $(dirname $0)/aristas-combinacion2-ej6-exp4-tipo1.txt
+    $(dirname $0)/../../../ejercicio6-tipo1 < $(dirname $0)/combinacion2/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt $cuantosMiro $tamTabu $z | $(dirname $0)/../../../dameCantAristas >> $(dirname $0)/aristas-combinacion2-ej6-exp4-tipo1.txt
     printf "\n" >> $(dirname $0)/aristas-combinacion2-ej6-exp4-tipo1.txt
   done
 
