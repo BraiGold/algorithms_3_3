@@ -170,9 +170,9 @@ vector<vector<int> > calcularVecindadDosTipoA(vector<int> mapeo, int cuantosVeci
 		randoms.push_back(tripla);
 	}
 	
-	vector<int> mapeoVecino;
 	int a, b, c;
 	for (int i = 0; i < randoms.size(); i++) {
+		vector<int> mapeoVecino;
 		for (int j = 0; j < mapeo.size(); j++) { // mapeoVecino = mapeo
 			mapeoVecino.push_back(mapeo[j]);
 		}
