@@ -374,6 +374,25 @@ int main(int argc, char* argv[]) {
 
   	if (!pidieronTiempo) { 
 		cout << chico << " " << resultado.size() << endl;
+		if(chico == n1){
+			for(int i = 0; i < n1; i++){
+				cout << i << " ";
+			}
+			cout << endl;
+			for(int i = 0; i < n1; i++){
+				cout << mejorMapeo[i] << " ";
+			}
+			cout << endl;
+		}else{
+			for(int i = 0; i < n2; i++){
+				cout << mejorMapeo[i] << " ";
+			}
+			cout << endl;
+			for(int i = 0; i < n2; i++){
+				cout << i << " ";
+			}
+			cout << endl;
+		}
 		for(int i = 0; i < resultado.size(); i++){
 			cout << resultado[i].first << " " << resultado[i].second << endl;
 		}

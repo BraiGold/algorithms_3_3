@@ -412,20 +412,20 @@ int main(int argc, char* argv[]) {
 			for(int i = 0; i < n1; i++){
 				cout << i << " ";
 			}
-			cerr << endl;
+			cout << endl;
 			for(int i = 0; i < n1; i++){
 				cout << mejorMapeo[i] << " ";
 			}
-			cerr << endl;
+			cout << endl;
 		}else{
-			for(int i = 0; i < n1; i++){
+			for(int i = 0; i < n2; i++){
 				cout << mejorMapeo[i] << " ";
 			}
-			cerr << endl;
-			for(int i = 0; i < n1; i++){
+			cout << endl;
+			for(int i = 0; i < n2; i++){
 				cout << i << " ";
 			}
-			cerr << endl;
+			cout << endl;
 		}
 		for(int i = 0; i < resultado.size(); i++){
 			cout << resultado[i].first << " " << resultado[i].second << endl;

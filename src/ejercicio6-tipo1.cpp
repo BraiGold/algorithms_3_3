@@ -42,7 +42,7 @@ bool aparece(vector<int> mapeo, vector<vector<int > > grafoGrande, int i, int j)
 }
 
 bool yaEsta(vector<pair<int, int> > vec, int i, int j) {
-	//esta función es para verificar que no hayamos agregado la arista todavia, es decir, si agregamos (u, v), no queremos que se agregue (v, u) ya que son la misma 
+	//esta función es para verificar que no hayamos agregado la arista todavia, es decir, si agregamos (u, v), no queremos que se agregue (v, u) ya que son la misma
 	bool res = false;
 	for (int k = 0; k < vec.size(); k++) {
 		if ( (vec[k].first == i && vec[k].second == j) || (vec[k].first == j && vec[k].second == i) ) {
@@ -56,12 +56,12 @@ vector<pair<int, int> > calcularConjAristas(vector<int> mapeo, vector<vector<int
 	vector<pair<int, int> > respuesta; //para este mapeo, cual es el subgrafo comun maximo
 	pair<int, int> arista;
 	for (int i = 0; i < grafoChico.size(); i++) { //nos fijamos si la arista que esta en el grafoChico, aparece en el grafoGrande (con este mapeo)
-		if (mapeo[i] != -1) { 
+		if (mapeo[i] != -1) {
 			for (int j = 0; j < grafoChico[i].size(); j++) {
-				if(mapeo[grafoChico[i][j]] != -1){ 
+				if(mapeo[grafoChico[i][j]] != -1){
 					if (aparece(mapeo, grafoGrande, i, grafoChico[i][j]) && !yaEsta(respuesta, i, grafoChico[i][j])) {
 						arista.first = i;
-						arista.second = grafoChico[i][j]; 
+						arista.second = grafoChico[i][j];
 						respuesta.push_back(arista);
 					}
 				}
@@ -82,10 +82,10 @@ vector<int> MCSgoloso(vector<vector<int> > grafoGrande, vector<vector<int> > gra
 	}
 
 	for(int i = 0; i < gradosGrafoChico.size(); i++) {
-		mapeo[gradosGrafoChico[i].first] = gradosGrafoGrande[i].first; 
+		mapeo[gradosGrafoChico[i].first] = gradosGrafoGrande[i].first;
 	}
 
-	return mapeo;      
+	return mapeo;
 }//O(n1 * n1 * (m1+n1) + n1 + n1)
 
 
@@ -140,7 +140,7 @@ bool estaTripla(int a, int b, int c, vector<pair<int, pair<int, int> > > lista){
 		}
 	}
 	return res;
-} 
+}
 
 vector<vector<int> > calcularVecindadUnoTipoA(vector<int> mapeo, int cuantosVecinosMiro) {//devuelve una lista con todos los mapeos vecinos
 	vector<vector<int> > respuesta;
@@ -151,7 +151,7 @@ vector<vector<int> > calcularVecindadUnoTipoA(vector<int> mapeo, int cuantosVeci
 	int tamMapeo = (mapeo.size() * (mapeo.size() - 1))/2;
 	int c = min(tamMapeo, cuantosVecinosMiro);
 	for (int i = 0; i < c; i++) {//O(n1)
-		//peso = randombis() %  (max_peso - min_peso + 1) + min_peso;  
+		//peso = randombis() %  (max_peso - min_peso + 1) + min_peso;
 		r1 = randombis() % (mapeo.size()); // entre 0 y mapeo.size() - 1
 		r2 = randombis() % (mapeo.size()); // entre 0 y mapeo.size() - 1
 		while(r1 == r2 || estaTupla(r1, r2, randoms)) { //O(n1)
@@ -162,7 +162,7 @@ vector<vector<int> > calcularVecindadUnoTipoA(vector<int> mapeo, int cuantosVeci
 		par.second = r2;
 		randoms.push_back(par);
 	}
-	
+
 	int a, b;
 	for (int i = 0; i < randoms.size(); i++) { //O(n1)
 		vector<int> mapeoVecino;
@@ -177,7 +177,7 @@ vector<vector<int> > calcularVecindadUnoTipoA(vector<int> mapeo, int cuantosVeci
 		mapeoVecino[b] = mapeo[a];
 
 		respuesta.push_back(mapeoVecino);
-	}	
+	}
 	return respuesta;
 }//O(n1^2)
 
@@ -246,7 +246,7 @@ bool estaEnTabu(vector<int> mapeo){
 	bool res = (tabuPorMapeo.end() != it);
 	return res;*/
 }
- 
+
 vector<int> dameElMejorNoTabu(vector<vector<int> > vecindadA, vector<vector<int> > vecindadB, vector<vector<int> > grafoChico, vector<vector<int> > grafoGrande, int cuantosMiro) { //esta funcion devuelve el mejor de las opciones de vecinos pero que no se encuentre en la lista tabu. Como a veces puede tener demasiados vecinos un mapeo hay un maximo que puedo mirar.
 	vector<pair<int,int> > conjAristas;
 	int maximoTamanoHastaAhora = 0;
@@ -279,18 +279,26 @@ vector<int> MCStabu(vector<int> mapeo, vector<vector<int> > grafoChico, vector<v
 		mejorMapeo.push_back(mapeo[i]);
 	}
 
-	vector<pair<int, int> > conjAristasMejorMapeo = calcularConjAristas(mejorMapeo, grafoChico, grafoGrande); 
+	vector<pair<int, int> > conjAristasMejorMapeo = calcularConjAristas(mejorMapeo, grafoChico, grafoGrande);
 
 	vector<vector<int> > vecindadA = calcularVecindadUnoTipoA(mapeo, cuantosVecinosMiro);//O(n1²)
+
+
+
 	vector<vector<int> > vecindadB = calcularVecindadTipoB(mapeo, grafoGrande.size(), cuantosVecinosMiro);//O(n1²)
-	
+
+
+
+
 	vector<int> mejorVecino;
 	vector<pair<int, int> > conjAristasMejorVecino;
 	vector<int> mapeoQueTengoQueSacar;
 	int j = 0;
-	while(j < k){ 
+	while(j < k){
 		mejorVecino = dameElMejorNoTabu(vecindadA, vecindadB, grafoChico, grafoGrande, cuantosVecinosMiro);//O(n1)
-		conjAristasMejorVecino = calcularConjAristas(mejorVecino, grafoChico, grafoGrande); 
+
+
+		conjAristasMejorVecino = calcularConjAristas(mejorVecino, grafoChico, grafoGrande);
 		if(conjAristasMejorVecino.size() > conjAristasMejorMapeo.size()){ //el nuevo mapeo es mejor que lo que tenia antes
 			j = -1;
 			//mejorMapeo = mejorVecino:
@@ -316,7 +324,7 @@ vector<int> MCStabu(vector<int> mapeo, vector<vector<int> > grafoChico, vector<v
 
 
 int main(int argc, char* argv[]) {
-	bool pidieronTiempo = false; 
+	bool pidieronTiempo = false;
 	double tiempo;
 	if (argc > 4) {
 	  if (argv[4] == string("-t")) {
@@ -329,7 +337,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	int cuantosVecinosMiro = atoi(argv[1]);
-	int maxTamTabu = atoi(argv[2]); 
+	int maxTamTabu = atoi(argv[2]);
 	int k = atoi(argv[3]);
 
 
@@ -350,7 +358,7 @@ int main(int argc, char* argv[]) {
 
 	for (int i = 0; i < n2; i++) {
 		grafo2.push_back(vacio);
-		grafo2ordenado.push_back(vacio);	
+		grafo2ordenado.push_back(vacio);
 	}
 
 	int v1, v2;
@@ -388,27 +396,28 @@ int main(int argc, char* argv[]) {
 
 	tiempo = get_time();
 
-  	if (!pidieronTiempo) { 
+  	if (!pidieronTiempo) {
 		cout << chico << " " << resultado.size() << endl;
 		//imprimo mapeo:
+
 		if(chico == n1){
 			for(int i = 0; i < n1; i++){
 				cout << i << " ";
 			}
-			cerr << endl;
+			cout << endl;
 			for(int i = 0; i < n1; i++){
 				cout << mejorMapeo[i] << " ";
 			}
-			cerr << endl;
+			cout << endl;
 		}else{
-			for(int i = 0; i < n1; i++){
+			for(int i = 0; i < n2; i++){
 				cout << mejorMapeo[i] << " ";
 			}
-			cerr << endl;
-			for(int i = 0; i < n1; i++){
+			cout << endl;
+			for(int i = 0; i < n2; i++){
 				cout << i << " ";
 			}
-			cerr << endl;
+			cout << endl;
 		}
 		for(int i = 0; i < resultado.size(); i++){
 			cout << resultado[i].first << " " << resultado[i].second << endl;
