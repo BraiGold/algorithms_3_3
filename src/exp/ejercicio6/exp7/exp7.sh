@@ -3,12 +3,12 @@
 LC_NUMERIC="en_US.UTF-8"
 
 iteraciones=1
-n1=50
-n2=50
+n1=1000
+n2=150
 m1=200
 m2=200
 tamTabu=20
-cuantosMiro=10
+cuantosMiro=20
 k="$(seq 5 5 25)"
 # el minimo n que puedo tener dado el m es: min n {n * (n - 1) /2 >= m} 
 
@@ -56,7 +56,6 @@ for i in $k; do
   $(dirname $0)/../../../ejercicio6-tipo1 < $(dirname $0)/grafosDeEntrada/grafo-n1-$n1-m1-$m1-n2-$n2-m2-$m2.txt $cuanosMiro $tamTabu $i | $(dirname $0)/../../../dameCantAristas >> $(dirname $0)/aristas-exp7.txt
   printf "\n" >> $(dirname $0)/aristas-exp7.txt
 done
-
 
 #aca voy a tener dos archivos con tiempo. El eje x es "k" que varia y el eje y el tiempo de ejecucion. Vamos a tener dos curvas, una por cada vecindad.
 

@@ -178,6 +178,21 @@ int main(int argc, char* argv[]) {
 
   	if (!pidieronTiempo) { 
 		cout << chico << " " << aristasMejorSolucion.size() << endl;
+		if(chico == n1){
+			for(int i = 0; i < n1; i++){
+				cout << i << " " << endl;
+			}
+			for(int i = 0; i < n1; i++){
+				cout << mejorMapeo[i] << endl;
+			}
+		}else{
+			for(int i = 0; i < n1; i++){
+				cout << mejorMapeo[i] << endl;
+			}
+			for(int i = 0; i < n1; i++){
+				cout << i << " " << endl;
+			}
+		}
 		for (int i = 0; i < aristasMejorSolucion.size(); i++) {
 			cout << aristasMejorSolucion[i].first << " " << aristasMejorSolucion[i].second << endl; 
 		}

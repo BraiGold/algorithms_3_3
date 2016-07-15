@@ -200,7 +200,6 @@ vector<vector<int> > calcularVecindadDosTipoA(vector<int> mapeo, int cuantosVeci
 
 }
 
-
 vector<vector<int> > calcularVecindadTipoB(vector<int> mapeo, int totalNodosGrafoGrande, int cuantosMiro) {//devuelve una lista con todos los mapeos vecinos
 	vector<vector<int> > respuesta;
 
@@ -212,33 +211,31 @@ vector<vector<int> > calcularVecindadTipoB(vector<int> mapeo, int totalNodosGraf
 		tamMapeo = 0;
 	int c = min(tamMapeo, cuantosMiro);
 
-	vector<int> auxiliar = mapeo;
-	sort(auxiliar.begin(),auxiliar.end());
 
-	vector<int> noMapeados;
-	int indice1 = 0;
-	for(int i=0;i<totalNodosGrafoGrande;i++) {
-		if(indice1 < auxiliar.size() || auxiliar[indice1] != i) {
-			noMapeados.push_back(i);
-		} else {
-			indice1++;
-		}
-	}
+vector<int> noMapeados;
+  for (int i = 0; i < totalNodosGrafoGrande; i++) {
+    bool esta=false;
+    for (int j = 0; j < mapeo.size(); j++) {
+      if(mapeo[j]==i){esta=true;}
+    }
+    if(!esta){
+      noMapeados.push_back(i);
+    }
+  }
 
 	for (int i = 0; i < c; i++) {
-		//peso = randombis() %  (max_peso - min_peso + 1) + min_peso;  
 		r1 = randombis() % (mapeo.size()); // entre 0 y mapeo.size() - 1
-		r2 = noMapeados[randombis()%noMapeados.size()]; 
+		r2 = noMapeados[randombis()%noMapeados.size()];
 
 		while(estaTupla(r1, r2, randoms)) {
 			r1 = randombis() % (mapeo.size());
-			r2 = noMapeados[randombis()%noMapeados.size()]; 
+			r2 = noMapeados[randombis()%noMapeados.size()];
 		}
 		par.first = r1;
 		par.second = r2;
 		randoms.push_back(par);
 	}
-	
+
 	int a, b;
 	for (int i = 0; i < randoms.size(); i++) {
 	vector<int> mapeoVecino;
@@ -252,7 +249,7 @@ vector<vector<int> > calcularVecindadTipoB(vector<int> mapeo, int totalNodosGraf
 		mapeoVecino[a] = b;
 
 		respuesta.push_back(mapeoVecino);
-	}	
+	}
 
 	return respuesta;
 }
@@ -411,6 +408,25 @@ int main(int argc, char* argv[]) {
 
   	if (!pidieronTiempo) { 
 		cout << chico << " " << resultado.size() << endl;
+		if(chico == n1){
+			for(int i = 0; i < n1; i++){
+				cout << i << " ";
+			}
+			cerr << endl;
+			for(int i = 0; i < n1; i++){
+				cout << mejorMapeo[i] << " ";
+			}
+			cerr << endl;
+		}else{
+			for(int i = 0; i < n1; i++){
+				cout << mejorMapeo[i] << " ";
+			}
+			cerr << endl;
+			for(int i = 0; i < n1; i++){
+				cout << i << " ";
+			}
+			cerr << endl;
+		}
 		for(int i = 0; i < resultado.size(); i++){
 			cout << resultado[i].first << " " << resultado[i].second << endl;
 		}

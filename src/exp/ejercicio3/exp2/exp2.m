@@ -33,4 +33,4 @@ ylabel('Tiempo de ejecucion en segundos','FontSize',10);
 legend('Complejidad O(N* (N^2+n^3))','Tiempo de ejecucion del algoritmo','Location','northwest')
 %set(get(h, 'Parent'), 'YScale', 'log');
 hold off;
-print('exp1', filetype);
+print('exp2', filetype);

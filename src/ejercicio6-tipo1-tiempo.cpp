@@ -192,36 +192,31 @@ vector<vector<int> > calcularVecindadTipoB(vector<int> mapeo, int totalNodosGraf
 		tamMapeo = 0;
 	int c = min(tamMapeo, cuantosMiro);
 
-	vector<int> auxiliar = mapeo;
-	sort(auxiliar.begin(),auxiliar.end());
 
-	vector<int> noMapeados;
-	int indice1 = 0;
-	for(int i=0;i<totalNodosGrafoGrande;i++) {
-		if(indice1 < auxiliar.size() || auxiliar[indice1] != i) {
-			noMapeados.push_back(i);
-		} else {
-			indice1++;
-		}
-	}
+vector<int> noMapeados;
+  for (int i = 0; i < totalNodosGrafoGrande; i++) {
+    bool esta=false;
+    for (int j = 0; j < mapeo.size(); j++) {
+      if(mapeo[j]==i){esta=true;}
+    }
+    if(!esta){
+      noMapeados.push_back(i);
+    }
+  }
 
 	for (int i = 0; i < c; i++) {
-		//peso = randombis() %  (max_peso - min_peso + 1) + min_peso;  
 		r1 = randombis() % (mapeo.size()); // entre 0 y mapeo.size() - 1
-		//r2 = randombis() % (totalNodosGrafoGrande - mapeo.size()) + mapeo.size() - 1; // entre mapeo.size() - 1 y totalNodosGrafoGrande
-		r2 = noMapeados[randombis()%noMapeados.size()]; 
+		r2 = noMapeados[randombis()%noMapeados.size()];
 
 		while(estaTupla(r1, r2, randoms)) {
 			r1 = randombis() % (mapeo.size());
-			//r2 = randombis() % (totalNodosGrafoGrande + 1); //entre 0 y totalNodosGrafoGrande
-			//r2 = randombis() % (totalNodosGrafoGrande - mapeo.size() + 1) + mapeo.size(); //(totalNodosGrafoGrande - mapeo.size()) + mapeo.size() - 1; // entre mapeo.size() y totalNodosGrafoGrande //SOY LU CAMBIO ESTO
-			r2 = noMapeados[randombis()%noMapeados.size()]; 
+			r2 = noMapeados[randombis()%noMapeados.size()];
 		}
 		par.first = r1;
 		par.second = r2;
 		randoms.push_back(par);
 	}
-	
+
 	int a, b;
 	for (int i = 0; i < randoms.size(); i++) {
 	vector<int> mapeoVecino;
@@ -235,11 +230,10 @@ vector<vector<int> > calcularVecindadTipoB(vector<int> mapeo, int totalNodosGraf
 		mapeoVecino[a] = b;
 
 		respuesta.push_back(mapeoVecino);
-	}	
+	}
 
 	return respuesta;
 }
-
 set<vector<int> > tabuPorMapeo; //es la lista con los mapeos a los que no puedo entrar ordenada por mapeo, es rapido mirar si uno esta o no.
 queue<vector<int> > tabuCola; //es la lista con los mapeos a los que no puedo entrar ordenada por orden en el que se los visita. Sacar el mas viejo es facil y agregar el nuevo tambien
 

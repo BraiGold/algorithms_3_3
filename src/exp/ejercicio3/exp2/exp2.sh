@@ -22,26 +22,27 @@ done
 
 #genero archivos de entrada 
 for i in $n; do
-  n2=$i
+  n2=$((i/2))
   echo "Esta creando el archivo numero "
   printf "%d\n " $i
-  printf "grafosDeEntrada %d %d %d %d \n" 5 6 $i $i | $(dirname $0)/../../../generador-grafosEspeciales 
+  printf "grafosDeEntrada %d %d %d %d \n" 5 6 $i $n2 | $(dirname $0)/../../../generador-grafosEspeciales 
 done
 
 printf "%d \n" $iteraciones >> $(dirname $0)/tiempos-exp2.txt
 
 for k in $n; do
   printf "%d " $k >> $(dirname $0)/tiempos-exp2.txt
-  n2=$k
-  aux=$((k-1))
-  aux2=$((k*aux))
+  n2=$((k/2))
+  aux=$((n2-1))
+  aux2=$((n2*aux))
   m2=$((aux2/2))
   echo "Esta corriendo la instancia numero"
+  echo $(dirname $0)/grafosDeEntrada/grafo-n1-$k-n2-$n2-m2-$m2.txt
   printf "%d\n " $k
   for h in $(seq 1 $iteraciones); do
     echo "iteracion numero"
     printf "%d\n " $h
-    $(dirname $0)/../../../ejercicio3 < $(dirname $0)/grafosDeEntrada/grafo-n1-$k-n2-$k-m2-$m2.txt -t >> $(dirname $0)/tiempos-exp2.txt
+    $(dirname $0)/../../../ejercicio3 < $(dirname $0)/grafosDeEntrada/grafo-n1-$k-n2-$n2-m2-$m2.txt -t >> $(dirname $0)/tiempos-exp2.txt
   done
   printf "\n" >> $(dirname $0)/tiempos-exp2.txt
 done

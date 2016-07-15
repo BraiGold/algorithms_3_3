@@ -10,7 +10,8 @@ m2=200 #Guarda que el grafo2 no sea uno especial, tipo estrella o algo asi.
 tamTabu=10
 cuantosMiro=20
 z=10
-cuantoDejoCorrer=3000
+cuantoDejoCorrer=3e-06
+
 while getopts 'ha:' opt; do
   case $opt in
     a) iteraciones=$OPTARG ;;

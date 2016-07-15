@@ -78,26 +78,21 @@ vector<pair<int, int> > calcularConjAristas(vector<int> mapeo, vector<vector<int
 }//O(n1^2 * (m1+n2))
 
 
-vector<pair<int, int> > MCSgoloso(vector<vector<int> > grafoGrande, vector<vector<int> > grafoChico, vector<pair<int, int> > gradosGrafoGrande, vector<pair<int, int> > gradosGrafoChico) {
-
+vector<int> MCSgoloso(vector<vector<int> > grafoGrande, vector<vector<int> > grafoChico, vector<pair<int, int> > gradosGrafoGrande, vector<pair<int, int> > gradosGrafoChico) {
+	init_time();
 	vector<int> mapeo;
 
-	for (int i = 0; i < grafoChico.size(); i++) {//O(n1)
+	for (int i = 0; i < grafoChico.size(); i++) {
 		mapeo.push_back(-1);
 	}
 
-	for(int i = 0; i < gradosGrafoChico.size(); i++) {//O(n1)
+	for(int i = 0; i < gradosGrafoChico.size(); i++) {
 		mapeo[gradosGrafoChico[i].first] = gradosGrafoGrande[i].first; 
 	}
 
-	vector<pair<int, int> > respuesta;
-	respuesta = calcularConjAristas(mapeo, grafoChico, grafoGrande);//O(n1 * ni * (m1+n1))
-	return respuesta;      
-}//O(n1^2 * (m1+n2) + 2n1)
-
-
-
-
+	double tiempo = get_time();
+	return mapeo;
+}
 
 
 int main(int argc, char* argv[]) {
@@ -160,23 +155,45 @@ int main(int argc, char* argv[]) {
 	sort (gradosGrafo1.begin(), gradosGrafo1.end(), comparacion); // O(n1 log n1)//ordeno los nodos por grado (de mayor a menor)
 	sort (gradosGrafo2.begin(), gradosGrafo2.end(), comparacion); //O(n2 log n2)//ordeno los nodos por grado (de mayor a menor)
 
-	vector<pair<int, int> > respuesta;
+	vector<int> mapeo;
 	int chico;
+	vector<pair<int, int> > respuesta;
 
 	if (n1 > n2) { //el grafo grande es el 1
-		respuesta = MCSgoloso(grafo1, grafo2, gradosGrafo1, gradosGrafo2);
+		mapeo = MCSgoloso(grafo1, grafo2, gradosGrafo1, gradosGrafo2);
+		respuesta = calcularConjAristas(mapeo, grafo2, grafo1);
 		chico = n2;
 	} else {
 		//el grafo grande es el 2
-		respuesta = MCSgoloso(grafo2, grafo1, gradosGrafo2, gradosGrafo1);
+		mapeo = MCSgoloso(grafo2, grafo1, gradosGrafo2, gradosGrafo1);
+		respuesta = calcularConjAristas(mapeo, grafo1, grafo2);
 		chico = n1;
 	}
-
 
 	tiempo = get_time();
 
   	if (!pidieronTiempo) { 
 		cout << chico << " " << respuesta.size() << endl;
+		if(chico == n1){
+			for(int i = 0; i < n1; i++){
+				cout << i << " ";
+			}
+			cerr << endl;
+			for(int i = 0; i < n1; i++){
+				cout << mapeo[i] << " ";
+			}
+			cerr << endl;
+		}else{
+			for(int i = 0; i < n1; i++){
+				cout << mapeo[i] << " ";
+			}
+			cerr << endl;
+			for(int i = 0; i < n1; i++){
+				cout << i << " ";
+			}
+			cerr << endl;
+		}
+
 		for(int i = 0; i < respuesta.size(); i++){
 			cout << respuesta[i].first << " " << respuesta[i].second << endl;
 		}
