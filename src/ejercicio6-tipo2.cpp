@@ -170,11 +170,11 @@ vector<vector<int> > calcularVecindadDosTipoA(vector<int> mapeo, int cuantosVeci
 			r3 = randombis() % (mapeo.size());
 
 		}
-		cerr << "TAM MAPEO" << mapeo.size() << endl;
-		cerr << endl;
-		cerr << endl;
+		//cerr << "TAM MAPEO" << mapeo.size() << endl;
+		//cerr << endl;
+		//cerr << endl;
 
-		cerr << "RANDOMS::" << r1 << " " << r2 << " " << r3 << endl;
+		//cerr << "RANDOMS::" << r1 << " " << r2 << " " << r3 << endl;
 		
 		tripla.first = r1;
 		tripla.second.first = r2;
@@ -306,23 +306,24 @@ vector<int> MCStabu(vector<int> mapeo, vector<vector<int> > grafoChico, vector<v
 	vector<pair<int, int> > conjAristasMejorMapeo = calcularConjAristas(mejorMapeo, grafoChico, grafoGrande);
 
 	vector<vector<int> > vecindadA = calcularVecindadDosTipoA(mapeo, cuantosVecinosMiro);//O(n1²)
-
+/*
   std::cerr << "vecindadA" << std::endl;
   for (int i = 0; i < vecindadA.size(); i++) {
     for (int j = 0; j < mapeo.size(); j++) {
       std::cerr << vecindadA[i][j]<<" ";
     }std::cerr << std::endl;
   }std::cerr <<  std::endl;
+  */
 
 	vector<vector<int> > vecindadB = calcularVecindadTipoB(mapeo, grafoGrande.size(), cuantosVecinosMiro);//O(n1²)
-
+/*
   std::cerr << "vecindadB" << std::endl;
   for (int i = 0; i < vecindadB.size(); i++) {
     for (int j = 0; j < mapeo.size(); j++) {
       std::cerr << vecindadB[i][j]<<" ";
     }std::cerr << std::endl;
   }std::cerr <<  std::endl;
-
+*/
 	vector<int> mejorVecino;
 	vector<pair<int, int> > conjAristasMejorVecino;
 	vector<int> mapeoQueTengoQueSacar;
