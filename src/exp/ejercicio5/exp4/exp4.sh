@@ -34,18 +34,8 @@ for i in $n1; do
   printf "f3 %d %d %d %d \n" $i $m1 $n2 $m2 | $(dirname $0)/../../../generador-grafo-rapido 
 done
 
-for i in $n1; do
-  aux=$((i^2))
-  m1=$((aux/10))
-  echo "Esta creando el archivo numero "
-  printf "%d\n " $i
-  printf "f4 %d %d %d %d \n" $i $m1 $n2 $m2 | $(dirname $0)/../../../generador-grafo-rapido
-done
-
-
 #==============================tipo1=tiempos=======================================================
 printf "%d \n" $iteraciones >> $(dirname $0)/tiempos-exp4-f3-tipo1.txt
-printf "%d \n" $iteraciones >> $(dirname $0)/tiempos-exp4-f4-tipo1.txt
 
 for k in $n1; do
   printf "%d " $k >> $(dirname $0)/tiempos-exp4-f3-tipo1.txt
@@ -60,25 +50,9 @@ for k in $n1; do
   printf "\n" >> $(dirname $0)/tiempos-exp4-f3-tipo1.txt
 done
 
-for k in $n1; do
-  printf "%d " $k >> $(dirname $0)/tiempos-exp4-f4-tipo1.txt
-  aux=$((k^2))
-  m1=$((aux/10))
-  echo "Esta corriendo la instancia numero"
-  printf "%d\n " $k
-  for h in $(seq 1 $iteraciones); do
-    echo "iteracion numero"
-    printf "%d\n " $h
-    $(dirname $0)/../../../ejercicio5-tipo1 < $(dirname $0)/f4/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt $cuantosVecinosMiro -t >> $(dirname $0)/tiempos-exp4-f4-tipo1.txt
-  done
-  printf "\n" >> $(dirname $0)/tiempos-exp4-f4-tipo1.txt
-done
-
-
 #==============================tipo2=tiempos=======================================================
 
 printf "%d \n" $iteraciones >> $(dirname $0)/tiempos-exp4-f3-tipo2.txt
-printf "%d \n" $iteraciones >> $(dirname $0)/tiempos-exp4-f4-tipo2.txt
 
 for k in $n1; do
   printf "%d " $k >> $(dirname $0)/tiempos-exp4-f3-tipo2.txt
@@ -93,25 +67,9 @@ for k in $n1; do
   printf "\n" >> $(dirname $0)/tiempos-exp4-f3-tipo2.txt
 done
 
-for k in $n1; do
-  printf "%d " $k >> $(dirname $0)/tiempos-exp4-f4-tipo2.txt
-  aux=$((k^2))
-  m1=$((aux/10))
-  echo "Esta corriendo la instancia numero"
-  printf "%d\n " $k
-  for h in $(seq 1 $iteraciones); do
-    echo "iteracion numero"
-    printf "%d\n " $h
-    $(dirname $0)/../../../ejercicio5-tipo2 < $(dirname $0)/f4/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt $cuantosVecinosMiro -t >> $(dirname $0)/tiempos-exp4-f4-tipo2.txt
-  done
-  printf "\n" >> $(dirname $0)/tiempos-exp4-f4-tipo2.txt
-done
-#ahora voy a tener 8 archivos con tiempo. 4 para tipo1, 4 para tipo2. Los graficos van a tener en el eje x a n1 (que va variando) y en el eje y el tiempo de ejecucion correspondiente. Vamos a graficar 4 curvas para cada tipo, todas de distintos colores pero con el mismo tipo de linea (por ejemplo punteada para tipo 1, rayitas para tipo2)
-
 
 #==============================tipo1=aristas=======================================================
 printf "%d \n" 1 >> $(dirname $0)/aristas-exp4-f3-tipo1.txt
-printf "%d \n" 1 >> $(dirname $0)/aristas-exp4-f4-tipo1.txt
 
 for k in $n1; do
   printf "%d " $k >> $(dirname $0)/aristas-exp4-f3-tipo1.txt
@@ -122,20 +80,9 @@ for k in $n1; do
   printf "\n" >> $(dirname $0)/aristas-exp4-f3-tipo1.txt
 done
 
-for k in $n1; do
-  printf "%d " $k >> $(dirname $0)/aristas-exp4-f4-tipo1.txt
-  aux=$((k^2))
-  m1=$((aux/10))
-  echo "Esta corriendo la instancia numero"
-  printf "%d\n " $k
-  $(dirname $0)/../../../ejercicio5-tipo1 < $(dirname $0)/f4/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt $cuantosVecinosMiro | $(dirname $0)/../../../dameCantAristas >> $(dirname $0)/aristas-exp4-f4-tipo1.txt
-  printf "\n" >> $(dirname $0)/aristas-exp4-f4-tipo1.txt
-done
-
 
 #==============================tipo2=aristas=======================================================
 printf "%d \n" 1 >> $(dirname $0)/aristas-exp4-f3-tipo2.txt
-printf "%d \n" 1 >> $(dirname $0)/aristas-exp4-f4-tipo2.txt
 
 for k in $n1; do
   printf "%d " $k >> $(dirname $0)/aristas-exp4-f3-tipo2.txt
@@ -145,16 +92,6 @@ for k in $n1; do
   $(dirname $0)/../../../ejercicio5-tipo2 < $(dirname $0)/f3/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt $cuantosVecinosMiro | $(dirname $0)/../../../dameCantAristas >> $(dirname $0)/aristas-exp4-f3-tipo2.txt
 
   printf "\n" >> $(dirname $0)/aristas-exp4-f3-tipo2.txt
-done
-
-for k in $n1; do
-  printf "%d " $k >> $(dirname $0)/aristas-exp4-f4-tipo2.txt
-  aux=$((k^2))
-  m1=$((aux/10))
-  echo "Esta corriendo la instancia numero"
-  printf "%d\n " $k
-  $(dirname $0)/../../../ejercicio5-tipo2 < $(dirname $0)/f4/grafo-n1-$k-m1-$m1-n2-$n2-m2-$m2.txt $cuantosVecinosMiro | $(dirname $0)/../../../dameCantAristas >> $(dirname $0)/aristas-exp4-f4-tipo2.txt
-  printf "\n" >> $(dirname $0)/aristas-exp4-f4-tipo2.txt
 done
 
 #octave -q $(dirname $0)/exp1.m

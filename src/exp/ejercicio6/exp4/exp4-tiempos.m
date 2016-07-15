@@ -30,7 +30,7 @@ complejidad_por_constante=times(complejidad,1/80000000);
 
 hold on;
 %x = gca;
-xlim([10 20]);
+xlim([10 19]);
 %ylim([0.0005 0.0022]);
 h=plot(n1_vec,complejidad_por_constante,'c');  %complejidad
 errorbar(n1_x_f3_t1, tiempo_y_f3_t1, e_f3_t1, 'b');

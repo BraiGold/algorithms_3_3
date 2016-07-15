@@ -11,7 +11,7 @@ figure;
 
 hold on;
 %x = gca;
-xlim([8 22]);
+xlim([8 20]);
 ylim([10 48]);
 stem(n1_x_f3_t1, aristas_y_f3_t1, 'LineStyle', 'none', 'Marker', 'o', 'MarkerEdgeColor', 'red');
 stem(n1_x_f3_t2, aristas_y_f3_t2, 'LineStyle', 'none', 'Marker', 'o', 'MarkerEdgeColor', 'blue');

@@ -271,13 +271,13 @@ vector<int> MCSbusquedaLocalUno(vector<int> mapeo, vector<vector<int> > grafoChi
 	vector<vector<int> > vecindadA = calcularVecindadUnoTipoA(mapeo, cuantosVecinosMiro);
 	vector<vector<int> > vecindadB = calcularVecindadTipoB(mapeo, grafoGrande.size(), cuantosVecinosMiro);
 	bool seguir = true;
-	int mp=1;
+	//int mp=1;
 	double tiempo;
 	init_time();
 	
 	while (seguir) {
-		cerr << "entre al while: " << mp << endl;
-		mp++;
+		//cerr << "entre al while: " << mp << endl;
+		//mp++;
 
 		vector<int> mapeoNuevo = dameElMejor(vecindadA, vecindadB, mapeo, grafoChico, grafoGrande, cuantosVecinosMiro);
 		

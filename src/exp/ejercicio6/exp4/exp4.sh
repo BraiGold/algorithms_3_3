@@ -4,7 +4,7 @@ LC_NUMERIC="en_US.UTF-8"
 
 iteraciones=1
 #n1="$(seq 100 20 600)"
-n1="$(seq 10 5 20)"
+n1="$(seq 5 2 20)"
 # el minimo n que puedo tener dado el m es: min n {n * (n - 1) /2 >= m} 
 n2=50 #El grafo2 queda completamente fijo, el n es el mismo en los dos.
 m2=200 #Guarda que el grafo2 no sea uno especial, tipo estrella o algo asi. 

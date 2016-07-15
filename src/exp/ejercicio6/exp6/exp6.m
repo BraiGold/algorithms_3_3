@@ -7,7 +7,7 @@ filetype='-dpng';
 %mkdir('graficos');
 figure;
 
-% COMPLEJIDAD $\mathcal{O}(((n_1+m_1)*m_2*n_1+n_1*log(t)+t)*K* min\{m_1,m_2\})$
+$\mathcal{O}(((n_1+m_1)*m_2*n_1+n_1*log(t)+t)*K* min\{m_1,m_2\})$
 CM = size(cuantosMiro_x_t); 
 ult = cuantosMiro_x_t(CM);
 ultimo = ult(1);
@@ -27,7 +27,7 @@ hold on;
 %x = gca;
 xlim([5 30]);
 %ylim([0 5]);
-%h=plot(cuantosMiro_x_t,complejidad_por_constante_vec,'r');  %complejidad
+h=plot(cuantosMiro_x_t,complejidad_por_constante_vec,'r');  %complejidad
 errorbar(cuantosMiro_x_t, tiempo_y_t, e_t, 'b');
 xlabel('Cantidad de vecinos que toma cada iteracion','FontSize',12); %CAMBIAR M
 ylabel('Tiempo de ejecucion en segundos','FontSize',10);
