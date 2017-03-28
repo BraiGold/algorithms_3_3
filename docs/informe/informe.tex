@@ -1,0 +1,203 @@
+ \documentclass[11pt, a4paper, spanish]{article}
+     
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{sidecap}
+\usepackage{subcaption}
+
+\usepackage[a4paper, margin=2.5cm, top=3.5cm, bottom=3.5cm]{geometry} % Define los márgenes
+\usepackage{amsmath, amscd, amssymb, amsthm, latexsym, gensymb} % Paquetes matemáticos
+\usepackage[spanish]{babel} % Traduce los paquetes a español
+\usepackage{ dsfont } %para usar simbolo de Naturales
+\usepackage[utf8]{inputenc} % Codificación UTF8
+\usepackage{fancyhdr} % Encabezados y pies de página
+    \pagestyle{fancyplain}
+\usepackage{enumerate}
+\usepackage{xspace}
+
+
+%\usepackage[page, toc]{appendix} % Apéndices
+%\usepackage[nottoc]{tocbibind} % Referencias en la TDC
+\usepackage{scrextend} % Para usar addmargin
+\usepackage{listings} % Código
+    \lstdefinestyle{customcpp}{
+        belowcaptionskip=1\baselineskip,
+        breaklines=true,
+        xleftmargin=3em,
+        language=C++,
+        basicstyle=\small\ttfamily
+    }
+\usepackage[onelanguage, spanish]{algorithm2e}
+    % \NoCaptionOfAlgo
+    \LinesNumbered\RestyleAlgo{ruled}\IncMargin{1em}\DontPrintSemicolon\SetArgSty{}\SetCommentSty{textsf}\SetFuncSty{textsf}
+    \SetKwProg{For}{para}{ hacer}{fin}
+    \SetKwProg{Fn}{función}{:}{fin}
+%\usepackage[pdflatex]{graphicx} % Imágenes
+\usepackage[usenames,dvipsnames]{color} % Autoexplicativo
+%\usepackage{caption} % Captions sin números
+%\usepackage{multirow}
+\usepackage{caratula} % Carátula del DC
+\usepackage{url}
+\usepackage{tikz}
+
+%para las flechas de las aristas
+\tikzset{
+every picture/.append style={
+  execute at begin picture={\deactivatequoting},
+  execute at end picture={\activatequoting}
+  }
+}
+
+
+
+
+\usepackage{xspace}
+\usepackage{xargs}
+\usepackage{ifthen}
+
+
+
+\let\NombreFuncion=\textsc
+\let\TipoVariable=\texttt
+\let\tipo=\texttt
+\let\ModificadorArgumento=\textbf
+\newcommand{\res}{$res$\xspace}
+\newcommand{\tab}{\hspace*{7mm}}
+
+
+\newcommandx{\TipoFuncion}[3]{%
+  \NombreFuncion{#1}(#2) \ifx#3\empty\else $\to$ \res\,: \TipoVariable{#3}\fi%
+}
+
+\newcommand{\In}[2]{\ModificadorArgumento{in} \ensuremath{#1}\,: \TipoVariable{#2}\xspace}
+\newcommand{\Out}[2]{\ModificadorArgumento{out} \ensuremath{#1}\,: \TipoVariable{#2}\xspace}
+\newcommand{\Inout}[2]{\ModificadorArgumento{in/out} \ensuremath{#1}\,: \TipoVariable{#2}\xspace}
+\newcommand{\Aplicar}[2]{\NombreFuncion{#1}(#2)}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Macros de diseño propias %
+
+\usepackage{scrextend} % Para poder indentar bloques
+
+\newenvironment{paramFormales}{
+  \textbf{par\'ametros formales}
+  \vspace{-0.5em}
+  \list{}{\leftmargin8em \topsep0.2em \itemsep0.25em \labelsep2em}
+}{
+  \endlist 
+}
+
+\newcommand{\servUsados}[1]{\textbf{Servicios usados:} #1 \\}
+
+\newcommand{\paramGeneros}[1]{\item[\textbf{g\'eneros}] #1}
+
+\newcommand{\paramFuncion}[1]{\item[\textbf{funci\'on}] \parbox[t]{\textwidth-2\parindent-1.7cm}{#1}}
+
+\newcommand{\seExplicaCon}[1]{\parbox{3cm}{\textbf{se explica con}:} \tadNombre{#1}}
+
+\newcommand{\generos}[1]{\parbox{3cm}{\textbf{g\'eneros}:} #1}
+
+\newcommand{\campoTupla}[2]{\textrm{\textit{#1:}} \TipoVariable{#2}}
+
+%\usepackage[noresetcount]{algorithm2e}
+%\usepackage{float}
+
+\NoCaptionOfAlgo\LinesNumbered\RestyleAlgo{ruled}\IncMargin{1em}\DontPrintSemicolon\SetArgSty{}\SetCommentSty{textsf}\SetFuncSty{textsf}
+
+\newenvironment{algoritmo}[3]{
+  \setcounter{AlgoLine}{0}
+  \begin{algorithm}[H]\SetAlgoLined\SetAlgoLongEnd
+  \caption{\TipoFuncion{#1}{#2}{#3}}
+}{
+  \end{algorithm}
+  \vspace{0em}
+}
+
+\newenvironment{contAlgoritmo}[1]{
+  \begin{algorithm}[H]\SetAlgoLined\SetAlgoLongEnd
+  \caption{\NombreFuncion{#1} \emph{(cont.)}}
+}{
+  \end{algorithm}
+}
+
+\newcommand{\datosAlgoritmo}[5]{
+  \ifx#1\empty\else \textbf{Descripci\'on:} #1
+
+  \fi \ifx#2\empty\else\textbf{Pre} $\equiv$ \{#2\}
+
+  \fi \ifx#3\empty\else\textbf{Post} $\equiv$ \{#3\}
+
+  \fi \textbf{Complejidad:} #4 
+
+  \ifx#5\empty\else\textbf{Justificaci\'on:} #5 \fi \vspace{1em}
+}
+
+\SetKwComment{com}{ $\triangleright$ }{}
+\def\new{\textbf{\&}}
+\def\NULL{\textrm{NULL}}
+
+
+% Encabezado
+\lhead{Algoritmos y estructuras de datos III}
+\rhead{Trabajo Práctico Nº 3}
+% Pie de pagina
+\renewcommand{\footrulewidth}{0.4pt}
+% \lfoot{FCEN}
+% \rfoot{UBA}
+
+
+\begin{document}
+
+\lstset{language=c++}
+\lstdefinestyle{customc}{
+  belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  frame=L,
+  xleftmargin=\parindent,
+  language=C,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+}
+
+% Datos de carátula
+\materia{Algoritmos y estructuras de datos III}
+\titulo{Trabajo Práctico Nº 3}
+\fecha{Primer cuatrimestre de 2016}
+
+\integrante{Goldstein, Brian}{027/14}{brai.goldstein@gmail.com}
+\integrante{Martínez, Manuela}{160/14}{martinez.manuela.22@gmail.com}
+\integrante{Rabinowicz, Lucía}{105/14}{lu.rabinowicz@gmail.com}
+\integrante{Ginsberg, Mario Ezequiel}{145/14}{ezequielginsberg@gmail.com}
+
+
+% Carátula
+\maketitle
+\newpage
+
+
+% Índice
+\tableofcontents
+\clearpage
+
+% Contenido
+\input{secciones/ejercicio1}
+\clearpage
+\input{secciones/ejercicio2}
+\clearpage
+\input{secciones/ejercicio3}
+\clearpage
+\input{secciones/ejercicio4}
+\clearpage
+\input{secciones/ejercicio5}
+\clearpage
+\input{secciones/ejercicio6}
+\clearpage
+\input{secciones/ejercicio7}
+\clearpage
+
+
+\end{document}
